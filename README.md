@@ -1,12 +1,16 @@
-# Nu primesc notă pentru că nu am pus titlu și descriere
+# Flight Dispatcher
+### Description
 
-### Folosiți template-ul corespunzător grupei voastre!
+Flight Dispatcher is a flight planning application inspired by SimBrief, the most popular online platform for creating
+flight plans for simulators. It is designed for aviation enthusiasts and flight simulator players, offering the ability to select 
+a departure and an arrival airport, as well as an alternate destination. The app supports automatic selection of existing waypoints
+or manual entry of custom waypoints, taking weather conditions into account as well. Flight Dispatcher is compatible with specific 
+aircraft types, including the A20n series (such as Airbus A320neo and A321neo) and the B748 (Boeing 747-800i, 
+also known as “The Queen of the Skies”). It can automatically calculate required fuel and onboard weight, 
+while also allowing manual input for flexibility.
 
-| Laborant  | Link template                                |
-|-----------|----------------------------------------------|
-| Dragoș B  | https://github.com/Ionnier/oop-template      |
-| Tiberiu M | https://github.com/MaximTiberiu/oop-template |
-| Marius MC | https://github.com/mcmarius/oop-template     |
+About SimBrief: [Official SimBrief Website](https://www.simbrief.com/home/?page=about)
+
 
 ### Important!
 

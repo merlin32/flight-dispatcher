@@ -21,15 +21,11 @@ std::ostream& operator<<(std::ostream& os, const Runway& rw)
             os << "Runway condition: WET\n";
             break;
     }
-    switch (rw.runwayInUse)
-    {
-        case true:
-            os << "Runway status: IN USE\n\n";
-            break;
-        case false:
-            os << "Runway status: NOT IN USE\n\n";
-            break;
-    }
+    if (rw.runwayInUse)
+        os << "Runway status: IN USE\n\n";
+    else
+        os << "Runway status: NOT IN USE\n\n";
+
     return os;
 }
 

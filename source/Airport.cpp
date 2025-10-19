@@ -37,3 +37,8 @@ unsigned int Airport::getLongestRunway() const{
     }
     return rwPos;
 }
+Runway Airport::getRunway(const int& index) const
+{
+    return this->airportRunways[index];
+}
+

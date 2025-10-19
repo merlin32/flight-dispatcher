@@ -22,6 +22,7 @@ public:
     ~Airport();
     friend std::ostream& operator<<(std::ostream& os, const Airport& ap);
     unsigned int getLongestRunway() const;
+    Runway getRunway(const int& index) const;
 
 };
 

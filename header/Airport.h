@@ -15,14 +15,14 @@ private:
     std::vector<Runway> airportRunways;
     Weather airportWeather;
 public:
-    Airport(std::string airportName_, std::string icaoCode_, std::string iataCode_,
+    explicit Airport(std::string airportName_, std::string icaoCode_, std::string iataCode_,
             const double& airportLongitude_, const double& airportLatitude_,
             std::vector<Runway> airportRunways_, const Weather& airportWeather_);
     Airport(const Airport& other);
     ~Airport();
     friend std::ostream& operator<<(std::ostream& os, const Airport& ap);
-    unsigned int getLongestRunway() const;
-    Runway getRunway(const int& index) const;
+    [[nodiscard]] unsigned int getLongestRunway() const;
+    [[nodiscard]] Runway getRunway(const unsigned int& index) const;
 
 };
 

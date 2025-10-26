@@ -56,6 +56,10 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         source/Runway.cpp
         header/Weather.h
         source/Weather.cpp
+        header/Aircraft.h
+        source/Aircraft.cpp
+        header/Waypoint.h
+        source/Waypoint.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

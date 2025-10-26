@@ -16,8 +16,8 @@ std::ostream& operator<<(std::ostream& os, const Airport& ap)
     os << "IATA/ICAO: " << ap.iataCode << "/" << ap.icaoCode << "\n";
     os << "Airport longitude: " << ap.airportLongitude << "\n";
     os << "Airport latitude: " << ap.airportLatitude << "\n\n";
-    for (auto i = ap.airportRunways.begin(); i != ap.airportRunways.end(); ++i)
-        std::cout << *i;
+    for (const auto& rw : ap.airportRunways)
+        std::cout << rw;
     std::cout << ap.airportWeather;
     return os;
 }
@@ -26,18 +26,18 @@ unsigned int Airport::getLongestRunway() const{
     int longestRw = 0;
     unsigned int index = 0;
     unsigned int rwPos = 0;
-    for (auto i = this->airportRunways.begin(); i != this->airportRunways.end(); ++i)
+    for (const auto& rw : airportRunways)
     {
-        if (longestRw < i->getLength())
+        if (longestRw < rw.getLength())
         {
-            longestRw = i->getLength();
+            longestRw = rw.getLength();
             rwPos = index;
         }
         index++;
     }
     return rwPos;
 }
-Runway Airport::getRunway(const int& index) const
+Runway Airport::getRunway(const unsigned int& index) const
 {
     return this->airportRunways[index];
 }

@@ -1,6 +1,6 @@
 #include "../header/Runway.h"
 
-Runway::Runway(std::string runwayID_, const int& runwayLength_, RwCond runwayCondition_, bool runwayInUse_) :
+Runway::Runway(std::string runwayID_, const int& runwayLength_, RwCond runwayCondition_, const bool& runwayInUse_) :
                 runwayID{std::move(runwayID_)},
                 runwayLength{runwayLength_},
                 runwayCondition{runwayCondition_},
@@ -9,7 +9,7 @@ Runway::Runway(const Runway& other) = default;
 Runway::~Runway() = default;
 std::ostream& operator<<(std::ostream& os, const Runway& rw)
 {
-    os << "Runway " << rw.runwayID << " information\n";
+    os << "Runway " << rw.runwayID << "\n";
     os << "==========================================\n";
     os << "Runway length: " << rw.runwayLength << " m\n";
     switch (rw.runwayCondition)

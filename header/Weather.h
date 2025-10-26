@@ -11,9 +11,9 @@ private:
     std::string weatherReportEnd;
     std::string weatherMetar;
 public:
-    Weather(std::string weatherReportStart_, std::string weatherReportEnd_, std::string weatherMetar_);
-    Weather(const Weather& other);
+    explicit Weather(std::string weatherReportStart_, std::string weatherReportEnd_, std::string weatherMetar_);
     ~Weather();
+    Weather(const Weather& other);
     Weather& operator=(const Weather& other);
     friend std::ostream& operator<<(std::ostream& os, const Weather& wh);
 };

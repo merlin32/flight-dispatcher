@@ -10,14 +10,14 @@ class Runway
 {
 private:
     std::string runwayID;
-    const int runwayLength;
+    int runwayLength;
     RwCond runwayCondition;
     bool runwayInUse = false;
 public:
-    explicit Runway(std::string runwayID_, const int& runwayLength_, RwCond runwayCondition_, bool runwayInUse_);
+    explicit Runway(std::string runwayID_, const int& runwayLength_, RwCond runwayCondition_, const bool& runwayInUse_);
     Runway(const Runway& other);
     ~Runway();
     friend std::ostream& operator<<(std::ostream& os, const Runway& rw);
-    int getLength() const;
+    [[nodiscard]] int getLength() const;
 };
 #endif //RUNWAY_H

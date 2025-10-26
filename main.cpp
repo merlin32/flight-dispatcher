@@ -1,5 +1,6 @@
-#include <iostream>
 #include "header/Airport.h"
+#include "header/Aircraft.h"
+#include "header/Waypoint.h"
 
 int main() {
     Runway rw1("08L", 3500, Wet, true);
@@ -10,5 +11,11 @@ int main() {
     std::cout << ap1;
     unsigned int rwPos = ap1.getLongestRunway();
     std::cout << "Longest runway: \n" << ap1.getRunway(rwPos);
+    Aircraft ac1(100, 210.145, 12045.1, 125, 50,
+        10, 1, 6816, 1925, 1251,
+        1205412, 12051, 12501, 5751, 1258, "YR-FSA");
+    std::cout << ac1 << '\n';
+    Waypoint wp1("POLUN", 44.237978, 25.223372, 0, 0, false);
+    std::cout << wp1 << '\n';
     return 0;
 }

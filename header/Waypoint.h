@@ -10,8 +10,8 @@ class Waypoint
 private:
     std::string waypointCode;
     double longitude, latitude;
-    unsigned int maxAltitude;
-    unsigned int minAltitude;
+    unsigned int maxAltitude = 0;
+    unsigned int minAltitude = 0;
     bool weatherAffected;
 public:
     explicit Waypoint(std::string waypointCode_, const double& longitude_, const double& latitude_,

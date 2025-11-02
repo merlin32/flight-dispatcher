@@ -2,28 +2,28 @@
 #define AIRCRAFT_H
 
 #include <string>
-#include <iostream>
+#include "FuelManagement.h"
 
 class Aircraft
 {
     double range;
     double cruisingSpeed, wingSpan, maxTakeoffWeight;
     double maxPayload, emptyWeight, fuelCapacity;
-    double fuelConsumptionClimb, fuelConsumptionCruise, fuelConsumptionDescent;
+    double fuelBurnClimb, fuelBurnCruise, fuelBurnDescent;
     double takeoffDistance, landingDistance;
-    int cruisingAltitude, climbRate, descentRate;
+    int maxCruisingAltitude;
     std::string registrationNumber;
+    FuelManagement fuelPlanning; //not in constructor yet
 public:
     explicit Aircraft(const double& range_, const double& cruisingSpeed_, const double& wingSpan_, const double& maxTakeoffWeight_,
             const double& maxPayload_, const double& emptyWeight_, const double& fuelCapacity_,
-            const double& fuelConsumptionClimb_, const double& fuelConsumptionCruise_, const double& fuelConsumptionDescent_,
+            const double& fuelBurnClimb_, const double& fuelBurnCruise_, const double& fuelBurnDescent_,
             const double& takeoffDistance_, const double& landingDistance_,
-            const int& cruisingAltitude_, const int& climbRate_, const int& descentRate_,
+            const int& maxCruisingAltitude_,
             std::string registrationNumber_);
     Aircraft(const Aircraft& other);
     ~Aircraft();
     friend std::ostream& operator<<(std::ostream& os, const Aircraft& ac);
-    //[[nodiscard]] double fuelCalculation(const double& taxiFuel, const double& blockFuel);
 };
 
 #endif //AIRCRAFT_H

@@ -60,6 +60,10 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         source/Aircraft.cpp
         header/Waypoint.h
         source/Waypoint.cpp
+        header/Metar.h
+        source/Metar.cpp
+        header/FuelManagement.h
+        source/FuelManagement.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

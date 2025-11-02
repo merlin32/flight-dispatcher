@@ -1,18 +1,19 @@
 #include "../header/Weather.h"
 
-Weather::Weather(std::string weatherReportStart_, std::string weatherReportEnd_, std::string weatherMetar_):
+Weather::Weather(std::string weatherReportStart_, std::string weatherReportEnd_, const Metar& weatherMetar_):
                 weatherReportStart{std::move(weatherReportStart_)},
                 weatherReportEnd{std::move(weatherReportEnd_)},
-                weatherMetar{std::move(weatherMetar_)}{}
+                weatherMetar{weatherMetar_}{}
 Weather::~Weather() = default;
 Weather::Weather(const Weather& other) = default;
+Weather::Weather(Weather&& other) noexcept = default;
 Weather& Weather::operator=(const Weather& other)
 {
     if (this != &other)
     {
         weatherReportStart = other.weatherReportStart;
         weatherReportEnd = other.weatherReportEnd;
-        weatherMetar = other.weatherMetar;
+        weatherMetar = Metar(other.weatherMetar);
     }
     return *this;
 }

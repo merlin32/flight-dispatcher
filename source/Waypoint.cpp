@@ -2,7 +2,7 @@
 #include <cmath>
 
 Waypoint::Waypoint(std::string waypointCode_, const double& longitude_, const double& latitude_,
-                   const unsigned int& maxAltitude_, const unsigned int& minAltitude_, const bool& weatherAffected_):
+                   const int& maxAltitude_, const int& minAltitude_, const bool& weatherAffected_):
                         waypointCode{std::move(waypointCode_)}, longitude{longitude_}, latitude{latitude_},
                         maxAltitude{maxAltitude_}, minAltitude{minAltitude_}, weatherAffected{weatherAffected_}{}
 Waypoint::Waypoint(const Waypoint& other) = default;
@@ -28,7 +28,7 @@ void Waypoint::setDistanceToPrevious(const Waypoint& other)
     this->distanceToPrevious = distance;
 }
 double Waypoint::getDistanceToPrevious() const{return this->distanceToPrevious;}
-unsigned int Waypoint::getMinAltitude() const{return this->minAltitude;}
+int Waypoint::getMinAltitude() const{return this->minAltitude;}
 std::ostream& operator<<(std::ostream& os, const Waypoint& wp)
 {
     os << "Waypoint code: " << wp.waypointCode << '\n';

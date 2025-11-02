@@ -29,7 +29,7 @@ public:
               unsigned short int qnh_,
               std::string additionalChanges_);
     Metar(const Metar& other);
-    Metar::Metar(Metar&& other) noexcept;
+    Metar(Metar&& other) noexcept;
     Metar& operator=(Metar&& other) noexcept;
     ~Metar();
     [[nodiscard]] unsigned short int getTemperature() const;

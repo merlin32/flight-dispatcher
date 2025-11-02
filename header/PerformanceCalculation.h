@@ -26,7 +26,7 @@ public:
     void setTotalWeight(const double& blockFuel);
     void setTakeoffDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight,
                             const unsigned short int& qnh, const unsigned short int& temperature);
-    void PerformanceCalculation::setLandingDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight,
+    void setLandingDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight,
                          const unsigned short int& qnh, const unsigned short int& temperature, const unsigned short int& windSpeed,
                          const unsigned short int& windDirection, const int& runwayDirection, const int& runwayConditon);
     [[nodiscard]] bool maxPayloadExceeded(const double& maxPayload) const;

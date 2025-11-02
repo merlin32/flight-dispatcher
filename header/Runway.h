@@ -19,7 +19,7 @@ public:
     Runway(const Runway& other);
     Runway& operator=(const Runway& other);
     Runway(Runway&& other) noexcept;
-    Runway& Runway::operator=(Runway&& other) noexcept;
+    Runway& operator=(Runway&& other) noexcept;
     ~Runway();
     friend std::ostream& operator<<(std::ostream& os, const Runway& rw);
     [[nodiscard]] double getLength() const;

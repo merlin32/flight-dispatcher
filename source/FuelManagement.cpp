@@ -16,7 +16,7 @@ FuelManagement::FuelManagement(const double& contingencyPct_, const int& reserve
     else this->blockFuel = 0;
 }
 FuelManagement::FuelManagement(const FuelManagement& other) = default;
-FuelManagement::FuelManagement(FuelManagement&& other) = default;
+FuelManagement::FuelManagement(FuelManagement&& other) noexcept = default;
 FuelManagement::~FuelManagement() = default;
 void FuelManagement::setTripFuel(const double& climbDuration, const double& cruiseDuration, const double& descentDuration,
                  const double& fuelBurnClimb, const double& fuelBurnCruise, const double& fuelBurnDescent)

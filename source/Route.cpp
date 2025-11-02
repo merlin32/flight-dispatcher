@@ -7,7 +7,7 @@ Route::Route(const int& cruisingAltitude_, const std::string& flightNumber_, con
                     departure{departure_}, arrival{arrival_}, departureRunway{departureRunway_},
                     arrivalRunway{arrivalRunway_}, waypoints{waypoints_}, plane{plane_}{}
 Route::Route(const Route& other) = default;
-Route::Route(Route&& other) = default;
+Route::Route(Route&& other) noexcept = default;
 Route::~Route() = default;
 void Route::setRouteDistance()
 {

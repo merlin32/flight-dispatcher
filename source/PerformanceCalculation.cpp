@@ -8,7 +8,7 @@ PerformanceCalculation::PerformanceCalculation(const double& freight_, const int
     else this->freight = 0;
 }
 PerformanceCalculation::PerformanceCalculation(const PerformanceCalculation& other) = default;
-PerformanceCalculation::PerformanceCalculation(PerformanceCalculation&& other) = default;
+PerformanceCalculation::PerformanceCalculation(PerformanceCalculation&& other) noexcept = default;
 PerformanceCalculation::~PerformanceCalculation() = default;
 //on average, a passenger is estimated to weight around 75 kg
 void PerformanceCalculation::setPayload(){this->payload = 75 * passengerNumber + this->freight;}

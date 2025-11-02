@@ -70,5 +70,23 @@ std::ostream& operator<<(std::ostream& os, const Runway& rw)
 }
 
 double Runway::getLength() const {return this->runwayLength;}
+double Runway::getWidth() const {return this->runwayWidth;}
+std::string Runway::getRunwayID() const{return this->runwayID;}
+int Runway::getRwDirection() const
+{
+    std::string rwDirection = this->runwayID.substr(2, 2);
+    int direction = std::stoi(rwDirection);
+    return direction;
+}
+int Runway::getRwCondition() const
+{
+    switch (this->runwayCondition)
+    {
+        case Dry: return 0;
+        case Wet: return 1;
+        default: return -1;
+    }
+}
+
 
 

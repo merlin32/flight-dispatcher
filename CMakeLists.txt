@@ -64,6 +64,10 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         source/Metar.cpp
         header/FuelManagement.h
         source/FuelManagement.cpp
+        source/PerformanceCalculation.cpp
+        header/PerformanceCalculation.h
+        header/Route.h
+        source/Route.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

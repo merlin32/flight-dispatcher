@@ -41,6 +41,7 @@ void FuelManagement::setMinTakeoffFuel(){this->minimumTakeoffFuel = this->tripFu
 void FuelManagement::setTakeoffFuel(){this->takeoffFuel = this->blockFuel - this->taxiFuel;}
 //making sure that we have enough fuel to complete the trip
 bool FuelManagement::isFuelSufficient() const{return this->calculatedBlockFuel > this->blockFuel;}
+bool FuelManagement::fuelCapacityExceeded(const double& fuelCapacity) const {return this->blockFuel > fuelCapacity;}
 std::ostream& operator<<(std::ostream& os, const FuelManagement& flm)
 {
     os << "============================\n";

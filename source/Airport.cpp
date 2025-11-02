@@ -36,8 +36,15 @@ double Airport::getLongestRunway() const{
     }
     return rwPos;
 }
-Runway Airport::getRunway(const unsigned int& index) const
+Runway Airport::getRunway(const unsigned int& index) const{return this->airportRunways[index];}
+const Runway& Airport::getRunway(const std::string& runwayID) const
 {
-    return this->airportRunways[index];
+    for (const auto& rw : airportRunways)
+        if (rw.getRunwayID() == runwayID)
+            return rw;
+
+    throw std::runtime_error("Runway not found");
 }
+unsigned short int Airport::getElevation() const{return this->elevation;}
+
 

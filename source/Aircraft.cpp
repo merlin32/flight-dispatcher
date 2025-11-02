@@ -1,16 +1,49 @@
 #include "../header/Aircraft.h"
 
-Aircraft::Aircraft(const double& range_, const double& cruisingSpeed_, const double& wingSpan_, const double& maxTakeoffWeight_,
-            const double& maxPayload_, const double& emptyWeight_, const double& fuelCapacity_,
-            const double& fuelBurnClimb_, const double& fuelBurnCruise_, const double& fuelBurnDescent_,
-            const double& takeoffDistance_, const double& landingDistance_,
-            const int& maxCruisingAltitude_, std::string registrationNumber_):
-                        range{range_}, cruisingSpeed{cruisingSpeed_}, wingSpan{wingSpan_}, maxTakeoffWeight{maxTakeoffWeight_},
-                        maxPayload{maxPayload_}, emptyWeight{emptyWeight_}, fuelCapacity{fuelCapacity_},
-                        fuelBurnClimb{fuelBurnClimb_}, fuelBurnCruise{fuelBurnCruise_},
-                        fuelBurnDescent{fuelBurnDescent_}, takeoffDistance{takeoffDistance_},
-                        landingDistance{landingDistance_}, maxCruisingAltitude{maxCruisingAltitude_},
-                        registrationNumber{std::move(registrationNumber_)}{}
+Aircraft::Aircraft(double range_,
+             double cruisingSpeed_,
+             double wingSpan_,
+             double maxTakeoffWeight_,
+             double maxPayload_,
+             double emptyWeight_,
+             double fuelCapacity_,
+             double fuelBurnClimb_,
+             double fuelBurnCruise_,
+             double fuelBurnDescent_,
+             int maxCruisingAltitude_,
+             const FuelManagement& fuelPlanning_,
+             const PerformanceCalculation& perfCalc_,
+             double fuelBurnIdle_,
+             double fuelBurnLowAltitude_,
+             double maxFreight_,
+             int maxPassengerCount_,
+             double takeoffReferenceDist_,
+             int climbRate_,
+             int descentRate_,
+             double climbSpeed_,
+             int minimumFlightDuration_)
+        : range{range_},
+          cruisingSpeed{cruisingSpeed_},
+          wingSpan{wingSpan_},
+          maxTakeoffWeight{maxTakeoffWeight_},
+          maxPayload{maxPayload_},
+          emptyWeight{emptyWeight_},
+          fuelCapacity{fuelCapacity_},
+          fuelBurnClimb{fuelBurnClimb_},
+          fuelBurnCruise{fuelBurnCruise_},
+          fuelBurnDescent{fuelBurnDescent_},
+          maxCruisingAltitude{maxCruisingAltitude_},
+          fuelPlanning{fuelPlanning_},
+          perfCalc{perfCalc_},
+          fuelBurnIdle{fuelBurnIdle_},
+          fuelBurnLowAltitude{fuelBurnLowAltitude_},
+          maxFreight{maxFreight_},
+          maxPassengerCount{maxPassengerCount_},
+          takeoffReferenceDist{takeoffReferenceDist_},
+          climbRate{climbRate_},
+          descentRate{descentRate_},
+          climbSpeed{climbSpeed_},
+          minimumFlightDuration(minimumFlightDuration_){}
 Aircraft::Aircraft(const Aircraft& other) = default;
 Aircraft::~Aircraft() = default;
 std::ostream& operator<<(std::ostream& os, const Aircraft& ac)
@@ -21,13 +54,31 @@ std::ostream& operator<<(std::ostream& os, const Aircraft& ac)
     os << "Maximum Takeoff Weight: " << ac.maxTakeoffWeight << '\n';
     os << "Maximum Payload: " << ac.maxPayload << '\n';
     os << "Empty Weight: " << ac.emptyWeight << '\n';
-    os << "Fuel capacity: " << ac.fuelCapacity << '\n';
-    os << "Fuel consumption (Climb): " << ac.fuelBurnClimb << '\n';
-    os << "Fuel consumption (Cruise): " << ac.fuelBurnCruise << '\n';
-    os << "Fuel consumption (Descent): " << ac.fuelBurnDescent << '\n';
-    os << "Takeoff distance: " << ac.takeoffDistance << '\n';
-    os << "Landing distance: " << ac.landingDistance << '\n';
-    os << "Maximum Cruising Altitude: " << ac.maxCruisingAltitude << '\n';
-    os << "Registration number: " << ac.registrationNumber << '\n';
+    os << "Fuel Capacity: " << ac.fuelCapacity << '\n';
+    os << "Fuel Burn Climb: " << ac.fuelBurnClimb << '\n';
+    os << "Fuel Burn Cruise: " << ac.fuelBurnCruise << '\n';
+    os << "Fuel Burn Descent: " << ac.fuelBurnDescent << '\n';
+    os << "Fuel Burn Idle: " << ac.fuelBurnIdle << '\n';
+    os << "Fuel Burn Low Altitude: " << ac.fuelBurnLowAltitude << '\n';
+    os << "Max Freight: " << ac.maxFreight << '\n';
+    os << "Max Passenger Count: " << ac.maxPassengerCount << '\n';
+    os << "Takeoff Reference Distance: " << ac.takeoffReferenceDist << '\n';
+    os << "Climb Rate: " << ac.climbRate << '\n';
+    os << "Descent Rate: " << ac.descentRate << '\n';
+    os << "Climb Speed: " << ac.climbSpeed << '\n';
+    os << "Minimum Flight Duration: " << ac.minimumFlightDuration << '\n';
+    os << ac.fuelPlanning;
+    os << ac.perfCalc;
+
     return os;
- }
+}
+int Aircraft::getMaxCruisingAltitude() const {return this->maxCruisingAltitude;}
+int Aircraft::getClimbRate() const {return this->climbRate;}
+int Aircraft::getDescentRate() const {return this->descentRate;}
+double Aircraft::getCruisingSpeed() const{return this->cruisingSpeed;}
+double Aircraft::getClimbSpeed() const{return this->climbSpeed;}
+int Aircraft::getMinimumFlightDuration() const{return this->minimumFlightDuration;}
+PerformanceCalculation Aircraft::getPerfCalc() const{return this->perfCalc;}
+double Aircraft::getRange() const{return this->range;}
+
+

@@ -36,6 +36,7 @@ public:
     void setMinTakeoffFuel();
     void setTakeoffFuel();
     [[nodiscard]] bool isFuelSufficient() const;
+    [[nodiscard]] bool fuelCapacityExceeded(const double& fuelCapacity) const;
     friend std::ostream& operator<<(std::ostream& os, const FuelManagement& flm);
 };
 

@@ -23,5 +23,9 @@ public:
     ~Runway();
     friend std::ostream& operator<<(std::ostream& os, const Runway& rw);
     [[nodiscard]] double getLength() const;
+    [[nodiscard]] double getWidth() const;
+    [[nodiscard]] std::string getRunwayID() const;
+    [[nodiscard]] int getRwDirection() const;
+    [[nodiscard]] int getRwCondition() const;
 };
 #endif //RUNWAY_H

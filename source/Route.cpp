@@ -2,10 +2,12 @@
 
 Route::Route(const int& cruisingAltitude_, const std::string& flightNumber_, const std::string& callsign_,
                     const Airport& departure_, const Airport& arrival_, const std::string& departureRunway_, const std::string& arrivalRunway_,
-                    const std::vector<Waypoint>& waypoints_, const Aircraft& plane_):
+                    const std::vector<Waypoint>& waypoints_, const Aircraft& plane_,
+                    const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_):
                     cruisingAltitude{cruisingAltitude_}, flightNumber{flightNumber_}, callsign{callsign_},
                     departure{departure_}, arrival{arrival_}, departureRunway{departureRunway_},
-                    arrivalRunway{arrivalRunway_}, waypoints{waypoints_}, plane{plane_}{}
+                    arrivalRunway{arrivalRunway_}, waypoints{waypoints_}, plane{plane_},
+                    fuelPlanning{fuelPlanning_}, perfCalc{perfCalc_}{}
 Route::Route(const Route& other) = default;
 Route::Route(Route&& other) noexcept = default;
 Route::~Route() = default;
@@ -63,11 +65,11 @@ bool Route::flightTooShort() const{return this->airTime < plane.getMinimumFlight
 //bool Route::rwTooNarrowArrival() const{}
 bool Route::rwTooShortDepar() const
 {
-    return this->plane.getPerfCalc().getTakeoffDistance() > this->departure.getRunway(departureRunway).getLength();
+    return this->perfCalc.getTakeoffDistance() > this->departure.getRunway(departureRunway).getLength();
 }
 bool Route::rwTooShortArrival() const
 {
-    return this->plane.getPerfCalc().getLandingDistance() > this->arrival.getRunway(arrivalRunway).getLength();
+    return this->perfCalc.getLandingDistance() > this->arrival.getRunway(arrivalRunway).getLength();
 }
 bool Route::aircraftRangeExceeded() const
 {

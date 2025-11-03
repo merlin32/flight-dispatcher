@@ -22,20 +22,20 @@ include(cmake/CopyHelper.cmake)
 ###############################################################################
 
 # external dependencies with FetchContent
-# include(FetchContent)
-#
-# set(FETCHCONTENT_QUIET OFF)
-# set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
-#
+include(FetchContent)
+
+set(FETCHCONTENT_QUIET OFF)
+set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
+
 # NOTE: Also update env vars used for caching in
 #         - .github/actions/configure-cmake/action.yml
 #         - .github/workflows/cmake.yml
-# FetchContent_Declare(
-#         SomeLib
-#         GIT_REPOSITORY https://github.com/<SomeUser>/<SomeLib>.git
-#         GIT_TAG        <some_git_hash> # <which tag/branch @ <some_date>>
-#         GIT_SHALLOW    1  # works only with branches or tags, not with arbitrary commit hashes
-# )
+FetchContent_Declare(
+        json
+        URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+)
+
+FetchContent_MakeAvailable(json)
 #
 # FetchContent_MakeAvailable(SomeLib)
 
@@ -68,6 +68,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         header/PerformanceCalculation.h
         header/Route.h
         source/Route.cpp
+        source/Menu.cpp
+        header/Menu.h
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
@@ -84,7 +86,9 @@ set_compiler_flags(RUN_SANITIZERS TRUE TARGET_NAMES ${MAIN_EXECUTABLE_NAME})
 # target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ${<SomeLib>_SOURCE_DIR}/include)
 # target_link_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${<SomeLib>_BINARY_DIR}/lib)
 # target_link_libraries(${MAIN_EXECUTABLE_NAME} <SomeLib>)
-
+target_link_libraries(${MAIN_EXECUTABLE_NAME}
+        PRIVATE nlohmann_json::nlohmann_json
+)
 ###############################################################################
 
 # copy binaries to "bin" folder; these are uploaded as artifacts on each release
@@ -94,6 +98,6 @@ if(APPLE)
     install(FILES launcher.command DESTINATION ${DESTINATION_DIR})
 endif()
 
-copy_files(FILES tastatura.txt COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
+copy_files(FILES tastatura.txt airports.json waypoints.json aircrafts.json TARGET_NAME ${MAIN_EXECUTABLE_NAME})
 # copy_files(FILES tastatura.txt config.json DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
 # copy_files(DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})

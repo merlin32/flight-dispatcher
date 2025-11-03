@@ -1,10 +1,11 @@
 #include "../header/Airport.h"
 
-Airport::Airport(const Waypoint& coordinates_, const unsigned short int& elevation_, std::string airportName_, std::string iataCode_,
-            std::vector<Runway> airportRunways_, const Weather& airportWeather_):
-                    coordinates{coordinates_}, elevation{elevation_},
+Airport::Airport(std::string icaoCode_, const unsigned short int& elevation_, std::string airportName_, std::string iataCode_,
+                 std::vector<Runway> airportRunways_, const Weather& airportWeather_):
+                    icaoCode{std::move(icaoCode_)}, elevation{elevation_},
                     airportName{std::move(airportName_)},
-                    iataCode{std::move(iataCode_)}, airportRunways{std::move(airportRunways_)},
+                    iataCode{std::move(iataCode_)},
+                    airportRunways{std::move(airportRunways_)},
                     airportWeather{airportWeather_}{}
 Airport::Airport(const Airport& other) = default;
 Airport::~Airport() = default;
@@ -13,7 +14,7 @@ std::ostream& operator<<(std::ostream& os, const Airport& ap)
     os << ap.airportName << " information\n";
     os << "===========================================\n";
     os << "IATA: " << ap.iataCode << "\n";
-    os << ap.coordinates;
+    os << "ICAO: " << ap.icaoCode << "\n";
     os << "Elevation: " << ap.elevation << "ft\n";
     for (const auto& rw : ap.airportRunways)
         std::cout << rw;

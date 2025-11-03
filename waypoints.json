@@ -1,0 +1,34 @@
+[
+  {
+      "waypointCode": "LROP",
+      "longitude": 26.1022,
+      "latitude": 44.5722,
+      "maxAltitude": 45000,
+      "minAltitude": 2314,
+      "weatherAffected": false
+  },
+  {
+    "waypointCode": "BUKEL",
+    "longitude": 25.7257,
+    "latitude": 45.0778,
+    "maxAltitude": 45000,
+    "minAltitude": 5000,
+    "weatherAffected": false
+  },
+  {
+    "waypointCode": "MOBRA",
+    "longitude": 24.8194,
+    "latitude": 45.8644,
+    "maxAltitude": 45000,
+    "minAltitude": 5000,
+    "weatherAffected": false
+  },
+  {
+    "waypointCode": "LRCL",
+    "longitude": 23.6862,
+    "latitude": 46.7852,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false
+  }
+]

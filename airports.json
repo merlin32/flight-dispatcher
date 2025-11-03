@@ -1,0 +1,102 @@
+[
+  {
+      "icaoCode": "LROP",
+      "elevation": 314,
+      "airportName": "Aeroportul International Henri Coanda",
+      "iataCode": "OTP",
+      "airportRunways": [
+        {
+          "runwayID": "RW08L",
+          "runwayLength": 3499.10,
+          "runwayWidth": 45.11,
+          "runwayCondition": 0,
+          "runwayInUse": true
+        },
+        {
+          "runwayID": "RW08R",
+          "runwayLength": 3500.93,
+          "runwayWidth": 45.11,
+          "runwayCondition": 0,
+          "runwayInUse": true
+        },
+        {
+          "runwayID": "RW26L",
+          "runwayLength": 3499.10,
+          "runwayWidth": 45.11,
+          "runwayCondition": 0,
+          "runwayInUse": false
+        },
+        {
+          "runwayID": "RW26R",
+          "runwayLength": 3500.93,
+          "runwayWidth": 45.11,
+          "runwayCondition": 0,
+          "runwayInUse": false
+        }
+      ],
+      "airportWeather": [
+        {
+          "weatherReportStart": "3.11.2025 9:06",
+          "weatherReportEnd": "4.11.2025 00:00",
+          "weatherMetar": [
+            {
+              "airportIcao": "LROP",
+              "dateAndTime": "031800Z",
+              "windInfo": "28004KT",
+              "visibility": "CAVOK",
+              "specialConditions": " ",
+              "cloudsInfo": " ",
+              "temperature": 13,
+              "dewpoint": 9,
+              "qnh": 1017,
+              "additionalChanges": "NOSIG="
+            }
+          ]
+        }
+      ]
+
+  },
+  {
+    "icaoCode": "LRCL",
+    "elevation": 1039,
+    "airportName": "Aeroportul International Avram Iancu",
+    "iataCode": "CLJ",
+    "airportRunways": [
+      {
+        "runwayID": "RW07",
+        "runwayLength": 2040.02,
+        "runwayWidth": 45.11,
+        "runwayCondition": 0,
+        "runwayInUse": true
+      },
+      {
+        "runwayID": "RW25",
+        "runwayLength": 2040.02,
+        "runwayWidth": 45.11,
+        "runwayCondition": 0,
+        "runwayInUse": false
+      }
+    ],
+    "airportWeather": [
+      {
+        "weatherReportStart": "3.11.2025 9:06",
+        "weatherReportEnd": "4.11.2025 00:00",
+        "weatherMetar": [
+          {
+            "airportIcao": "LRCL",
+            "dateAndTime": "031800Z",
+            "windInfo": "28004KT",
+            "visibility": "CAVOK",
+            "specialConditions": " ",
+            "cloudsInfo": " ",
+            "temperature": 13,
+            "dewpoint": 9,
+            "qnh": 1017,
+            "additionalChanges": "NOSIG="
+          }
+        ]
+      }
+    ]
+
+  }
+]

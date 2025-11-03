@@ -2,18 +2,16 @@
 #define AIRCRAFT_H
 
 #include <string>
-#include "FuelManagement.h"
-#include "PerformanceCalculation.h"
+#include <nlohmann/json.hpp>
 
 class Aircraft
 {
+    std::string type;
     double range;
     double cruisingSpeed, wingSpan, maxTakeoffWeight;
     double maxPayload, emptyWeight, fuelCapacity;
     double fuelBurnClimb, fuelBurnCruise, fuelBurnDescent;
     int maxCruisingAltitude;
-    FuelManagement fuelPlanning;
-    PerformanceCalculation perfCalc;
     double fuelBurnIdle, fuelBurnLowAltitude;
     double maxFreight;
     int maxPassengerCount;
@@ -22,28 +20,27 @@ class Aircraft
     double climbSpeed;
     int minimumFlightDuration;
 public:
-    explicit Aircraft(double range_,
-            double cruisingSpeed_,
-            double wingSpan_,
-            double maxTakeoffWeight_,
-            double maxPayload_,
-            double emptyWeight_,
-            double fuelCapacity_,
-            double fuelBurnClimb_,
-            double fuelBurnCruise_,
-            double fuelBurnDescent_,
-            int maxCruisingAltitude_,
-            const FuelManagement& fuelPlanning_,
-            const PerformanceCalculation& perfCalc_,
-            double fuelBurnIdle_,
-            double fuelBurnLowAltitude_,
-            double maxFreight_,
-            int maxPassengerCount_,
-            double takeoffReferenceDist_,
-            int climbRate_,
-            int descentRate_,
-            double climbSpeed_,
-            int minimumFlightDuration_);
+    explicit Aircraft(std::string type_,
+             const double& range_,
+             const double& cruisingSpeed_,
+             const double& wingSpan_,
+             const double& maxTakeoffWeight_,
+             const double& maxPayload_,
+             const double& emptyWeight_,
+             const double& fuelCapacity_,
+             const double& fuelBurnClimb_,
+             const double& fuelBurnCruise_,
+             const double& fuelBurnDescent_,
+             const int& maxCruisingAltitude_,
+             const double& fuelBurnIdle_,
+             const double& fuelBurnLowAltitude_,
+             const double& maxFreight_,
+             const int& maxPassengerCount_,
+             const double& takeoffReferenceDist_,
+             const int& climbRate_,
+             const int& descentRate_,
+             const double& climbSpeed_,
+             const int& minimumFlightDuration_);
     Aircraft(const Aircraft& other);
     ~Aircraft();
     [[nodiscard]] int getMaxCruisingAltitude() const;
@@ -52,7 +49,6 @@ public:
     [[nodiscard]] double getCruisingSpeed() const;
     [[nodiscard]] double getClimbSpeed() const;
     [[nodiscard]] int getMinimumFlightDuration() const;
-    [[nodiscard]] PerformanceCalculation getPerfCalc() const;
     [[nodiscard]] double getRange() const;
     friend std::ostream& operator<<(std::ostream& os, const Aircraft& ac);
 

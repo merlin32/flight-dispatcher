@@ -13,7 +13,7 @@ private:
     double runwayLength;
     double runwayWidth;
     RwCond runwayCondition;
-    bool runwayInUse = false;
+    bool runwayInUse;
 public:
     explicit Runway(std::string runwayID_, const double& runwayLength_, const double& runwayWidth_, RwCond runwayCondition_, const bool& runwayInUse_);
     Runway(const Runway& other);

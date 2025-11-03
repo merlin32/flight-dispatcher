@@ -183,6 +183,6 @@ Comanda este aceeași ca la pasul 1 sau 2. Nu merge combinat cu Valgrind.
 ./install_dir/bin/oop
 ```
 
-## Resurse
+## External Libraries
 
-- adăugați trimiteri **detaliate** către resursele externe care v-au ajutat sau pe care le-ați folosit
+- [nlohmann/json](https://github.com/nlohmann/json): used for parsing and managing static JSON data.

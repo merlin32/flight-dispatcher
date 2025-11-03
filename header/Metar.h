@@ -8,7 +8,7 @@ class Metar
 {
 private:
     std::string airportIcao;
-    unsigned int dateAndTime;
+    std::string dateAndTime;
     std::string windInfo;
     std::string visibility;
     std::string specialConditions;
@@ -19,7 +19,7 @@ private:
     std::string additionalChanges;
 public:
     explicit Metar(std::string airportIcao_,
-              unsigned int dateAndTime_,
+              std::string dateAndTime_,
               std::string windInfo_,
               std::string visibility_,
               std::string specialConditions_,
@@ -29,8 +29,6 @@ public:
               unsigned short int qnh_,
               std::string additionalChanges_);
     Metar(const Metar& other);
-    Metar(Metar&& other) noexcept;
-    Metar& operator=(Metar&& other) noexcept;
     ~Metar();
     [[nodiscard]] unsigned short int getTemperature() const;
     [[nodiscard]] unsigned short int getQnh() const;

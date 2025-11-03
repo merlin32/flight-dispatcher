@@ -1,28 +1,28 @@
 #include "../header/Aircraft.h"
 
-Aircraft::Aircraft(double range_,
-             double cruisingSpeed_,
-             double wingSpan_,
-             double maxTakeoffWeight_,
-             double maxPayload_,
-             double emptyWeight_,
-             double fuelCapacity_,
-             double fuelBurnClimb_,
-             double fuelBurnCruise_,
-             double fuelBurnDescent_,
-             int maxCruisingAltitude_,
-             const FuelManagement& fuelPlanning_,
-             const PerformanceCalculation& perfCalc_,
-             double fuelBurnIdle_,
-             double fuelBurnLowAltitude_,
-             double maxFreight_,
-             int maxPassengerCount_,
-             double takeoffReferenceDist_,
-             int climbRate_,
-             int descentRate_,
-             double climbSpeed_,
-             int minimumFlightDuration_)
-        : range{range_},
+Aircraft::Aircraft(std::string type_,
+             const double& range_,
+             const double& cruisingSpeed_,
+             const double& wingSpan_,
+             const double& maxTakeoffWeight_,
+             const double& maxPayload_,
+             const double& emptyWeight_,
+             const double& fuelCapacity_,
+             const double& fuelBurnClimb_,
+             const double& fuelBurnCruise_,
+             const double& fuelBurnDescent_,
+             const int& maxCruisingAltitude_,
+             const double& fuelBurnIdle_,
+             const double& fuelBurnLowAltitude_,
+             const double& maxFreight_,
+             const int& maxPassengerCount_,
+             const double& takeoffReferenceDist_,
+             const int& climbRate_,
+             const int& descentRate_,
+             const double& climbSpeed_,
+             const int& minimumFlightDuration_)
+        : type{std::move(type_)},
+          range{range_},
           cruisingSpeed{cruisingSpeed_},
           wingSpan{wingSpan_},
           maxTakeoffWeight{maxTakeoffWeight_},
@@ -33,8 +33,6 @@ Aircraft::Aircraft(double range_,
           fuelBurnCruise{fuelBurnCruise_},
           fuelBurnDescent{fuelBurnDescent_},
           maxCruisingAltitude{maxCruisingAltitude_},
-          fuelPlanning{fuelPlanning_},
-          perfCalc{perfCalc_},
           fuelBurnIdle{fuelBurnIdle_},
           fuelBurnLowAltitude{fuelBurnLowAltitude_},
           maxFreight{maxFreight_},
@@ -67,8 +65,6 @@ std::ostream& operator<<(std::ostream& os, const Aircraft& ac)
     os << "Descent Rate: " << ac.descentRate << '\n';
     os << "Climb Speed: " << ac.climbSpeed << '\n';
     os << "Minimum Flight Duration: " << ac.minimumFlightDuration << '\n';
-    os << ac.fuelPlanning;
-    os << ac.perfCalc;
 
     return os;
 }
@@ -78,7 +74,7 @@ int Aircraft::getDescentRate() const {return this->descentRate;}
 double Aircraft::getCruisingSpeed() const{return this->cruisingSpeed;}
 double Aircraft::getClimbSpeed() const{return this->climbSpeed;}
 int Aircraft::getMinimumFlightDuration() const{return this->minimumFlightDuration;}
-PerformanceCalculation Aircraft::getPerfCalc() const{return this->perfCalc;}
 double Aircraft::getRange() const{return this->range;}
+
 
 

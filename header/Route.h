@@ -6,6 +6,8 @@
 #include "Airport.h"
 #include "Waypoint.h"
 #include "Aircraft.h"
+#include "FuelManagement.h"
+#include "PerformanceCalculation.h"
 
 class Route
 {
@@ -24,10 +26,13 @@ private:
     //TOD = top of descent
     double TOC = 0, TOD = 0;
     Aircraft plane;
+    FuelManagement fuelPlanning;
+    PerformanceCalculation perfCalc;
 public:
     explicit Route(const int& cruisingAltitude_, const std::string& flightNumber_, const std::string& callsign_,
                     const Airport& departure_, const Airport& arrival_, const std::string& departureRunway_, const std::string& arrivalRunway_,
-                    const std::vector<Waypoint>& waypoints_, const Aircraft& plane_);
+                    const std::vector<Waypoint>& waypoints_, const Aircraft& plane_, const FuelManagement& fuelPlanning_,
+                    const PerformanceCalculation& perfCalc_);
     Route(const Route& other);
     Route(Route&& other) noexcept;
     ~Route();

@@ -20,7 +20,6 @@ Metar::Metar(std::string airportIcao_,
             dewpoint{dewpoint_},
             qnh{qnh_},
             additionalChanges{std::move(additionalChanges_)}{}
-Metar::Metar(const Metar& other) = default;
 Metar::~Metar() = default;
 unsigned short int Metar::getTemperature() const {return this->temperature;}
 unsigned short int Metar::getQnh() const {return this->qnh;}

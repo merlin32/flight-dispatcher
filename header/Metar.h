@@ -28,7 +28,6 @@ public:
               unsigned short int dewpoint_,
               unsigned short int qnh_,
               std::string additionalChanges_);
-    Metar(const Metar& other);
     ~Metar();
     [[nodiscard]] unsigned short int getTemperature() const;
     [[nodiscard]] unsigned short int getQnh() const;

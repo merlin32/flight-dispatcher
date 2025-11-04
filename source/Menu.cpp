@@ -226,7 +226,7 @@ void Menu::flpCreation()
             if (currentWaypoint == i.getWaypointCode())
             {
                 found = true;
-                Waypoint& previous = routeWaypoints.back();
+                const Waypoint& previous = routeWaypoints.back();
                 Waypoint current = i;
                 current.setDistanceToPrevious(previous);
                 routeWaypoints.push_back(current);

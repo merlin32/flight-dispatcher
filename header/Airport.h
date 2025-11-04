@@ -18,8 +18,6 @@ public:
     Airport();
     explicit Airport(std::string icaoCode_, const unsigned short int& elevation_, std::string airportName_, std::string iataCode_,
                      std::vector<Runway> airportRunways_, const Weather& airportWeather_);
-    Airport(const Airport& other);
-    Airport& operator=(const Airport& other);
     ~Airport();
     friend std::ostream& operator<<(std::ostream& os, const Airport& ap);
     [[nodiscard]] Runway getRunway(const unsigned int& index) const;

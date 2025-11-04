@@ -65,36 +65,6 @@ Aircraft::Aircraft(std::string type_,
           descentRate{descentRate_},
           climbSpeed{climbSpeed_},
           minimumFlightDuration(minimumFlightDuration_){}
-Aircraft::Aircraft(const Aircraft& other) = default;
-//warning: implicitly-declared 'constexpr Aircraft& Aircraft::operator=(const Aircraft&)' is deprecated [-Wdeprecated-copy]
-Aircraft& Aircraft::operator=(const Aircraft& other)
-{
-    if (this != &other)
-    {
-        type = other.type;
-        range = other.range;
-        cruisingSpeed = other.cruisingSpeed;
-        wingSpan = other.wingSpan;
-        maxTakeoffWeight = other.maxTakeoffWeight;
-        maxPayload = other.maxPayload;
-        emptyWeight = other.emptyWeight;
-        fuelCapacity = other.fuelCapacity;
-        fuelBurnClimb = other.fuelBurnClimb;
-        fuelBurnCruise = other.fuelBurnCruise;
-        fuelBurnDescent = other.fuelBurnDescent;
-        maxCruisingAltitude = other.maxCruisingAltitude;
-        fuelBurnIdle = other.fuelBurnIdle;
-        fuelBurnLowAltitude = other.fuelBurnLowAltitude;
-        maxFreight = other.maxFreight;
-        maxPassengerCount = other.maxPassengerCount;
-        takeoffReferenceDist = other.takeoffReferenceDist;
-        climbRate = other.climbRate;
-        descentRate = other.descentRate;
-        climbSpeed = other.climbSpeed;
-        minimumFlightDuration = other.minimumFlightDuration;
-    }
-    return *this;
-}
 Aircraft::~Aircraft() = default;
 std::ostream& operator<<(std::ostream& os, const Aircraft& ac)
 {

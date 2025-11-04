@@ -11,20 +11,6 @@ Airport::Airport(std::string icaoCode_, const unsigned short int& elevation_, st
                     iataCode{std::move(iataCode_)},
                     airportRunways{std::move(airportRunways_)},
                     airportWeather{airportWeather_}{}
-Airport::Airport(const Airport& other) = default;
-Airport& Airport::operator=(const Airport& other)
-{
-    if (this != &other)
-    {
-        icaoCode = other.icaoCode;
-        elevation = other.elevation;
-        airportName = other.airportName;
-        iataCode = other.iataCode;
-        airportRunways = other.airportRunways;
-        airportWeather = other.airportWeather;
-    }
-    return *this;
-}
 Airport::~Airport() = default;
 std::ostream& operator<<(std::ostream& os, const Airport& ap)
 {

@@ -42,8 +42,6 @@ public:
              const int& descentRate_,
              const double& climbSpeed_,
              const int& minimumFlightDuration_);
-    Aircraft(const Aircraft& other);
-    Aircraft& operator=(const Aircraft& other);
     ~Aircraft();
     [[nodiscard]] int getMaxCruisingAltitude() const;
     [[nodiscard]] int getClimbRate() const;

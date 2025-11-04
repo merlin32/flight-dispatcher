@@ -13,9 +13,6 @@ public:
     Weather();
     explicit Weather(std::string weatherReportStart_, std::string weatherReportEnd_, const Metar& weatherMetar_);
     ~Weather();
-    Weather(const Weather& other);
-    Weather(Weather&& other) noexcept;
-    Weather& operator=(const Weather& other);
     friend std::ostream& operator<<(std::ostream& os, const Weather& wh);
     [[nodiscard]] Metar getMetar() const;
 };

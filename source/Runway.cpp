@@ -70,7 +70,6 @@ std::ostream& operator<<(std::ostream& os, const Runway& rw)
 }
 
 double Runway::getLength() const {return this->runwayLength;}
-double Runway::getWidth() const {return this->runwayWidth;}
 std::string Runway::getRunwayID() const{return this->runwayID;}
 int Runway::getRwDirection() const
 {

@@ -38,22 +38,6 @@ std::ostream& operator<<(std::ostream& os, const Airport& ap)
     std::cout << ap.airportWeather;
     return os;
 }
-
-double Airport::getLongestRunway() const{
-    double longestRw = 0;
-    unsigned int index = 0;
-    unsigned int rwPos = 0;
-    for (const auto& rw : airportRunways)
-    {
-        if (longestRw < rw.getLength())
-        {
-            longestRw = rw.getLength();
-            rwPos = index;
-        }
-        index++;
-    }
-    return rwPos;
-}
 Runway Airport::getRunway(const unsigned int& index) const{return this->airportRunways[index];}
 const Runway& Airport::getRunway(const std::string& runwayID) const
 {

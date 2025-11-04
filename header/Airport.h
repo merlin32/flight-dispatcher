@@ -22,7 +22,6 @@ public:
     Airport& operator=(const Airport& other);
     ~Airport();
     friend std::ostream& operator<<(std::ostream& os, const Airport& ap);
-    [[nodiscard]] double getLongestRunway() const;
     [[nodiscard]] Runway getRunway(const unsigned int& index) const;
     [[nodiscard]] const Runway& getRunway(const std::string& runwayID) const;
     [[nodiscard]] unsigned short int getElevation() const;

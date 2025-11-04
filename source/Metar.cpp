@@ -41,8 +41,6 @@ unsigned short int Metar::getWindSpeed() const
     unsigned short int speed = std::stoi(windSpeed);
     return speed;
 }
-std::string Metar::getSpecialConditions() const {return this->windInfo;}
-std::string Metar::getAirportIcao() const {return this->airportIcao;}
 std::ostream& operator<<(std::ostream& os, const Metar& mt)
 {
     os << "METAR ";

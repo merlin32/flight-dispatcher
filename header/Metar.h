@@ -34,8 +34,6 @@ public:
     [[nodiscard]] unsigned short int getQnh() const;
     [[nodiscard]] unsigned short int getWindDirection() const;
     [[nodiscard]] unsigned short int getWindSpeed() const;
-    [[nodiscard]] std::string getSpecialConditions() const;
-    [[nodiscard]] std::string getAirportIcao() const;
     friend std::ostream&  operator<<(std::ostream& os, const Metar& mt);
 };
 #endif //METAR_H

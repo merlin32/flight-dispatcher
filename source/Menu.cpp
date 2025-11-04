@@ -242,7 +242,7 @@ void Menu::flpCreation()
     for (const auto& i : waypointsList)
         if (arrivalIcao == i.getWaypointCode())
         {
-            Waypoint& previous = routeWaypoints.back();
+            Waypoint previous = routeWaypoints.back();
             Waypoint current = i;
             current.setDistanceToPrevious(previous);
             routeWaypoints.push_back(current);
@@ -270,7 +270,7 @@ void Menu::flpCreation()
     //cruising altitude selection
     std::cout << "Cruise altitude: ";
     std::string cruiseAlt;
-    int cruiseAltInput;
+    int cruiseAltInput = 0;
     std::cin >> cruiseAlt;
     if (cruiseAlt != "auto")
         cruiseAltInput = std::stoi(cruiseAlt);
@@ -283,7 +283,7 @@ void Menu::flpCreation()
     double ctgPctInput;
     std::cin >> fieldEntry;
     if (fieldEntry != "auto")
-        ctgPctInput = std::stoi(fieldEntry);
+        ctgPctInput = std::stod(fieldEntry);
     else
         ctgPctInput = 0;
     std::cout << "Reserve Time: ";
@@ -297,14 +297,14 @@ void Menu::flpCreation()
     double txFuelInput;
     std::cin >> fieldEntry;
     if (fieldEntry != "auto")
-        txFuelInput = std::stoi(fieldEntry);
+        txFuelInput = std::stod(fieldEntry);
     else
         txFuelInput = 0;
     std::cout << "Block Fuel: ";
     double blkFuelInput;
     std::cin >> fieldEntry;
     if (fieldEntry != "auto")
-        blkFuelInput = std::stoi(fieldEntry);
+        blkFuelInput = std::stod(fieldEntry);
     else
         blkFuelInput = 0;
     FuelManagement fuelPlanning{ctgPctInput, rsvTimeInput, txFuelInput, blkFuelInput};

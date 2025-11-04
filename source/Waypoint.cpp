@@ -10,7 +10,7 @@ Waypoint::~Waypoint() = default;
 void Waypoint::setDistanceToPrevious(const Waypoint& other)
 {
     //the haversine formula can be found here: https://www.movable-type.co.uk/scripts/latlong.html
-    double EarthRadiusKm = 6371.0;
+    double EarthRadiusNM = 3437.7;
     double pi = 3.14159265358979323846;
     double lat1 = this->latitude * pi / 180.0;
     double lon1 = this->longitude * pi / 180.0;
@@ -24,11 +24,12 @@ void Waypoint::setDistanceToPrevious(const Waypoint& other)
                std::cos(lat1) * std::cos(lat2) *
                std::sin(dLon / 2) * std::sin(dLon / 2);
     double c = 2 * std::atan2(std::sqrt(a), std::sqrt(1 - a));
-    double distance = EarthRadiusKm * c;
+    double distance = EarthRadiusNM * c;
     this->distanceToPrevious = distance;
 }
 double Waypoint::getDistanceToPrevious() const{return this->distanceToPrevious;}
 int Waypoint::getMinAltitude() const{return this->minAltitude;}
+std::string Waypoint::getWaypointCode() const{return this->waypointCode;}
 std::ostream& operator<<(std::ostream& os, const Waypoint& wp)
 {
     os << "Waypoint code: " << wp.waypointCode << '\n';

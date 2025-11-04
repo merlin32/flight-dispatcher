@@ -20,6 +20,7 @@ class Aircraft
     double climbSpeed;
     int minimumFlightDuration;
 public:
+    Aircraft();
     explicit Aircraft(std::string type_,
              const double& range_,
              const double& cruisingSpeed_,
@@ -42,6 +43,7 @@ public:
              const double& climbSpeed_,
              const int& minimumFlightDuration_);
     Aircraft(const Aircraft& other);
+    Aircraft& operator=(const Aircraft& other);
     ~Aircraft();
     [[nodiscard]] int getMaxCruisingAltitude() const;
     [[nodiscard]] int getClimbRate() const;
@@ -50,6 +52,7 @@ public:
     [[nodiscard]] double getClimbSpeed() const;
     [[nodiscard]] int getMinimumFlightDuration() const;
     [[nodiscard]] double getRange() const;
+    [[nodiscard]] std::string getType() const;
     friend std::ostream& operator<<(std::ostream& os, const Aircraft& ac);
 
 };

@@ -3,9 +3,7 @@
 
 #include <nlohmann/json.hpp>
 #include <fstream>
-#include "Aircraft.h"
-#include "Airport.h"
-#include "Waypoint.h"
+#include "Route.h"
 
 class Menu
 {
@@ -18,7 +16,8 @@ private:
     void populateAirports(std::ifstream airportsJson);
     void populateWaypoints(std::ifstream waypointsJson);
 public:
-    void menuStart();
+    void initLocalData();
+    void flpCreation();
 };
 
 #endif //MENU_H

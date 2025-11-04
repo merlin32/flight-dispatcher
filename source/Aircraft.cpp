@@ -1,5 +1,28 @@
 #include "../header/Aircraft.h"
 
+Aircraft::Aircraft()
+{
+    this->range = 0;
+    this->cruisingSpeed = 0;
+    this->wingSpan = 0;
+    this->maxTakeoffWeight = 0;
+    this->maxPayload = 0;
+    this->emptyWeight = 0;
+    this->fuelCapacity = 0;
+    this->fuelBurnClimb = 0;
+    this->fuelBurnCruise = 0;
+    this->fuelBurnDescent = 0;
+    this->maxCruisingAltitude = 0;
+    this->fuelBurnIdle = 0;
+    this->fuelBurnLowAltitude = 0;
+    this->maxFreight = 0;
+    this->maxPassengerCount = 0;
+    this->takeoffReferenceDist = 0;
+    this->climbRate = 0;
+    this->descentRate = 0;
+    this->climbSpeed = 0;
+    this->minimumFlightDuration = 0;
+}
 Aircraft::Aircraft(std::string type_,
              const double& range_,
              const double& cruisingSpeed_,
@@ -43,9 +66,39 @@ Aircraft::Aircraft(std::string type_,
           climbSpeed{climbSpeed_},
           minimumFlightDuration(minimumFlightDuration_){}
 Aircraft::Aircraft(const Aircraft& other) = default;
+//warning: implicitly-declared 'constexpr Aircraft& Aircraft::operator=(const Aircraft&)' is deprecated [-Wdeprecated-copy]
+Aircraft& Aircraft::operator=(const Aircraft& other)
+{
+    if (this != &other)
+    {
+        type = other.type;
+        range = other.range;
+        cruisingSpeed = other.cruisingSpeed;
+        wingSpan = other.wingSpan;
+        maxTakeoffWeight = other.maxTakeoffWeight;
+        maxPayload = other.maxPayload;
+        emptyWeight = other.emptyWeight;
+        fuelCapacity = other.fuelCapacity;
+        fuelBurnClimb = other.fuelBurnClimb;
+        fuelBurnCruise = other.fuelBurnCruise;
+        fuelBurnDescent = other.fuelBurnDescent;
+        maxCruisingAltitude = other.maxCruisingAltitude;
+        fuelBurnIdle = other.fuelBurnIdle;
+        fuelBurnLowAltitude = other.fuelBurnLowAltitude;
+        maxFreight = other.maxFreight;
+        maxPassengerCount = other.maxPassengerCount;
+        takeoffReferenceDist = other.takeoffReferenceDist;
+        climbRate = other.climbRate;
+        descentRate = other.descentRate;
+        climbSpeed = other.climbSpeed;
+        minimumFlightDuration = other.minimumFlightDuration;
+    }
+    return *this;
+}
 Aircraft::~Aircraft() = default;
 std::ostream& operator<<(std::ostream& os, const Aircraft& ac)
 {
+    os << "Type: " << ac.type << '\n';
     os << "Range: " << ac.range << '\n';
     os << "Cruising Speed: " << ac.cruisingSpeed << '\n';
     os << "Wing Span: " << ac.wingSpan << '\n';
@@ -75,6 +128,7 @@ double Aircraft::getCruisingSpeed() const{return this->cruisingSpeed;}
 double Aircraft::getClimbSpeed() const{return this->climbSpeed;}
 int Aircraft::getMinimumFlightDuration() const{return this->minimumFlightDuration;}
 double Aircraft::getRange() const{return this->range;}
+std::string Aircraft::getType() const{return this->type;}
 
 
 

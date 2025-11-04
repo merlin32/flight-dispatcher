@@ -87,6 +87,8 @@ int Runway::getRwCondition() const
         default: return -1;
     }
 }
+bool Runway::getRwStatus() const {return this->runwayInUse;}
+
 
 
 

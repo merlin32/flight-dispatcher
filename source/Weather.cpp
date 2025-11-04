@@ -1,5 +1,6 @@
 #include "../header/Weather.h"
 
+Weather::Weather(){}
 Weather::Weather(std::string weatherReportStart_, std::string weatherReportEnd_, const Metar& weatherMetar_):
                 weatherReportStart{std::move(weatherReportStart_)},
                 weatherReportEnd{std::move(weatherReportEnd_)},

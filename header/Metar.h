@@ -18,6 +18,7 @@ private:
     unsigned short int qnh;
     std::string additionalChanges;
 public:
+    Metar();
     explicit Metar(std::string airportIcao_,
               std::string dateAndTime_,
               std::string windInfo_,

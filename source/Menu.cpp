@@ -1,5 +1,8 @@
 #include "../header/Menu.h"
 
+#include "../header/FuelManagement.h"
+#include "../header/PerformanceCalculation.h"
+
 void Menu::populateAircrafts(std::ifstream aircraftsJson)
 {
     nlohmann::json data = nlohmann::json::parse(aircraftsJson);
@@ -95,7 +98,7 @@ void Menu::populateWaypoints(std::ifstream waypointsJson)
     }
     //waypointsJson.close();
 }
-void Menu::menuStart()
+void Menu::initLocalData()
 {
     std::ifstream aircraftsJson;
     std::ifstream airportsJson;
@@ -121,10 +124,224 @@ void Menu::menuStart()
     populateAircrafts(std::move(aircraftsJson));
     populateAirports(std::move(airportsJson));
     populateWaypoints(std::move(waypointsJson));
-    for (const auto& i:aircraftsList)
-        std::cout << i;
-    for (const auto& i:airportsList)
-        std::cout << i;
-    for (const auto& i:waypointsList)
-        std::cout << i;
+}
+void Menu::flpCreation()
+{
+    //input file opening
+    std::ifstream userInput;
+    userInput.open("tastatura.txt");
+    if (!userInput.is_open())
+    {
+        std::cerr << "Error opening tastatura.txt";
+        return;
+    }
+    //flight plan creation
+    std::cout << "================================\n";
+    std::cout << "===== Flight plan creation =====\n";
+    std::cout << "================================\n";
+    std::cout << "Flight number: \n";
+    std::string fltNumber;
+    userInput >> fltNumber;
+    std::cout << "Callsign: \n";
+    std::string callSgn;
+    userInput >> callSgn;
+    //departure selection. if the ICAO code is not present in airportsList the program ends
+    std::cout << "Departure: \n";
+    std::string departIcao;
+    userInput >> departIcao;
+    Airport depart;
+    bool found = false;
+    for (const auto& i : airportsList)
+        if (departIcao == i.getIcao())
+        {
+            found = true;
+            depart = i;
+            break;
+        }
+    if (found == false)
+    {
+        std::cerr << "Icao code not found in database\n";
+        return;
+    }
+    //arrival selection. if the ICAO code is not present in airportsList the program ends
+    found = false;
+    Airport arrival;
+    std::cout << "Arrival: \n";
+    std::string arrivalIcao;
+    userInput >> arrivalIcao;
+    for (const auto& i : airportsList)
+        if (arrivalIcao == i.getIcao())
+        {
+            found = true;
+            arrival = i;
+            break;
+        }
+    if (found == false)
+    {
+        std::cerr << "Icao code not found in database\n";
+        return;
+    }
+    //departing runway: it must exist and it must be in use
+    found = false;
+    std::cout << "Departing runway: \n";
+    std::string departRw;
+    userInput >> departRw;
+    for (const auto& i : depart.getAirportRunways())
+    {
+        if (departRw == i.getRunwayID() && i.getRwStatus())
+            found = true;
+    }
+    if (found == false)
+    {
+        std::cerr << "Invalid runway selection\n";
+        return;
+    }
+    //arrival runway: it must exist and it must be in use
+    found = false;
+    std::cout << "Arrival runway: \n";
+    std::string arrivalRw;
+    userInput >> arrivalRw;
+    for (const auto& i : arrival.getAirportRunways())
+    {
+        if (arrivalRw == i.getRunwayID() && i.getRwStatus())
+            found = true;
+    }
+    if (found == false)
+    {
+        std::cerr << "Invalid runway selection\n";
+        return;
+    }
+    //waypoints selection
+    //first, the departure airport is inserted into routeWaypoints, than the user enters the desired waypoints
+    //to mark the end, the user must type "end"
+    //the arrival airport waypoint is then inserted into the routeWaypoints
+    //the program also checks whether the selected waypoint exists or not
+    //for each waypoint we calculate its distance to the previous waypoint
+    std::cout << "Enter waypoints: \n";
+    std::vector<Waypoint> routeWaypoints;
+    std::string currentWaypoint;
+    userInput >> currentWaypoint;
+    for (const auto& i : waypointsList)
+        if (departIcao == i.getWaypointCode())
+        {
+            routeWaypoints.push_back(i);
+            break;
+        }
+    while (currentWaypoint != "end")
+    {
+        found = false;
+        for (const auto& i : waypointsList)
+            if (currentWaypoint == i.getWaypointCode())
+            {
+                found = true;
+                Waypoint& previous = routeWaypoints.back();
+                Waypoint current = i;
+                current.setDistanceToPrevious(previous);
+                routeWaypoints.push_back(current);
+                break;
+            }
+        if (found == false)
+        {
+            std::cerr << "Invalid waypoint selected!\n";
+            return;
+        }
+        userInput >> currentWaypoint;
+    }
+    for (const auto& i : waypointsList)
+        if (arrivalIcao == i.getWaypointCode())
+        {
+            Waypoint& previous = routeWaypoints.back();
+            Waypoint current = i;
+            current.setDistanceToPrevious(previous);
+            routeWaypoints.push_back(current);
+            break;
+        }
+    //aircraft selection
+    found = false;
+    std::cout << "Aircraft type: \n";
+    std::string acType;
+    userInput.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(userInput, acType);
+    Aircraft ac;
+    for (const auto& i : aircraftsList)
+        if (acType == i.getType())
+        {
+            found = true;
+            ac = i;
+            break;
+        }
+    if (found == false)
+    {
+        std::cerr << "Invalid aircraft type!\n";
+        return;
+    }
+    //cruising altitude selection
+    std::cout << "Cruise altitude: \n";
+    std::string cruiseAlt;
+    int cruiseAltInput;
+    userInput >> cruiseAlt;
+    if (cruiseAlt != "auto")
+        cruiseAltInput = std::stoi(cruiseAlt);
+    //PerformanceCalculation input data
+    std::cout << "==================\n";
+    std::cout << "== Fuel entries ==\n";
+    std::cout << "==================\n";
+    std::cout << "Contingency: \n";
+    std::string ctgPct;
+    double ctgPctInput;
+    userInput >> ctgPct;
+    if (ctgPct != "auto")
+        ctgPctInput = std::stoi(ctgPct);
+    else
+        ctgPctInput = 0;
+    std::cout << "Reserve Time: \n";
+    std::string rsvTime;
+    int rsvTimeInput;
+    userInput >> rsvTime;
+    if (rsvTime != "auto")
+        rsvTimeInput = std::stoi(rsvTime);
+    else
+        rsvTimeInput = 0;
+    std::cout << "Taxi Fuel: \n";
+    std::string txFuel;
+    double txFuelInput;
+    userInput >> txFuel;
+    if (txFuel != "auto")
+        txFuelInput = std::stoi(txFuel);
+    else
+        txFuelInput = 0;
+    std::cout << "Block Fuel: \n";
+    std::string blkFuel;
+    double blkFuelInput;
+    userInput >> blkFuel;
+    if (blkFuel != "auto")
+        blkFuelInput = std::stoi(blkFuel);
+    else
+        blkFuelInput = 0;
+    FuelManagement fuelPlanning{ctgPctInput, rsvTimeInput, txFuelInput, blkFuelInput};
+    //PerformanceCalculation input data
+    std::cout << "=======================\n";
+    std::cout << "=== Payload entries ===\n";
+    std::cout << "=======================\n";
+    std::cout << "Freight: \n";
+    double freightInput;
+    userInput >> freightInput;
+    std::cout << "Passengers: \n";
+    int passengersInput;
+    userInput >> passengersInput;
+    std::cout << "\n=======================\n\n";
+    PerformanceCalculation perfCalc{freightInput, passengersInput};
+    Route rt1{cruiseAltInput, fltNumber, callSgn, depart, arrival,
+        departRw, arrivalRw,
+             routeWaypoints, ac, fuelPlanning, perfCalc};
+    rt1.setRouteDistance();
+    rt1.setCruiseAltitude();
+    rt1.setClimbDuration();
+    rt1.setDescentDuration();
+    rt1.setTOC();
+    rt1.setTOD();
+    rt1.setCruiseDuration();
+    rt1.setAirTime();
+    rt1.setBlockTime();
+    std::cout << rt1;
 }

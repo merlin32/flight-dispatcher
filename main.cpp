@@ -6,6 +6,7 @@ int main() {
     waypoints.open("waypoints.json");
     nlohmann::json data = nlohmann::json::parse(waypoints);
     Menu mainMenu;
-    mainMenu.menuStart();
+    mainMenu.initLocalData();
+    mainMenu.flpCreation();
     return 0;
 }

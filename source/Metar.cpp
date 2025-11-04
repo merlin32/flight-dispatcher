@@ -1,5 +1,11 @@
 #include "../header/Metar.h"
 
+Metar::Metar()
+{
+    this->temperature = 0;
+    this->dewpoint = 0;
+    this->qnh = 0;
+}
 Metar::Metar(std::string airportIcao_,
               std::string dateAndTime_,
               std::string windInfo_,

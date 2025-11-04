@@ -22,6 +22,7 @@ public:
     void setDistanceToPrevious(const Waypoint& other);
     [[nodiscard]] double getDistanceToPrevious() const;
     [[nodiscard]] int getMinAltitude() const;
+    [[nodiscard]] std::string getWaypointCode() const;
     friend std::ostream& operator<<(std::ostream& os, const Waypoint& wp);
 };
 #endif //WAYPOINT_H

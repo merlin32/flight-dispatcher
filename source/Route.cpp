@@ -30,11 +30,11 @@ void Route::setDescentDuration()
 }
 void Route::setTOD()
 {
-    this->TOD = (climbDuration * plane.getClimbSpeed()) / 60;
+    this->TOD = (descentDuration * plane.getCruisingSpeed()) / 60;
 }
 void Route::setTOC()
 {
-    this->TOC = (descentDuration * plane.getCruisingSpeed()) / 60;
+    this->TOC = (climbDuration * plane.getClimbSpeed()) / 60;
 }
 void Route::setCruiseAltitude()
 {
@@ -74,4 +74,29 @@ bool Route::rwTooShortArrival() const
 bool Route::aircraftRangeExceeded() const
 {
     return this->routeDistance > this->plane.getRange();
+}
+std::ostream& operator<<(std::ostream& os, const Route& rt)
+{
+    os << "Flight plan details\n\n";
+    os << "Flight number: " << rt.flightNumber << "\n";
+    os << "Callsign: " << rt.callsign << "\n";
+    os << "Departure: " << rt.departure << " (Runway: " << rt.departureRunway << ")\n";
+    os << "Arrival: " << rt.arrival << " (Runway: " << rt.arrivalRunway << ")\n";
+    os << "Cruising altitude: " << rt.cruisingAltitude << "\n";
+    os << "Route distance: " << rt.routeDistance << " NM\n";
+    os << "Block time: " << rt.blockTime << ", Air time: " << rt.airTime << "\n";
+    os << "Climb duration: " << rt.climbDuration
+       << ", Cruise duration: " << rt.cruiseDuration
+       << ", Descent duration: " << rt.descentDuration << "\n";
+    os << "TOC: " << rt.TOC << ", TOD: " << rt.TOD << "\n";
+    os << "Plane:\n" << rt.plane << "\n";
+    os << "Fuel planning:\n" << rt.fuelPlanning << "\n";
+    os << "Performance calculation:\n" << rt.perfCalc << "\n";
+
+    os << "Waypoints:\n";
+    for (const auto& wp : rt.waypoints) {
+        os << wp << "\n";
+    }
+
+    return os;
 }

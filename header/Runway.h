@@ -27,5 +27,6 @@ public:
     [[nodiscard]] std::string getRunwayID() const;
     [[nodiscard]] int getRwDirection() const;
     [[nodiscard]] int getRwCondition() const;
+    [[nodiscard]] bool getRwStatus() const;
 };
 #endif //RUNWAY_H

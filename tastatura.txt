@@ -1,2 +1,17 @@
-5
-11 22 33 44 55
+WZZ3403
+WZZ3403
+LROP
+LRCL
+RW08L
+RW07
+BUKEL
+MOBRA
+end
+Airbus A320Neo
+auto
+auto
+auto
+auto
+auto
+3400
+120

@@ -10,6 +10,7 @@ private:
     std::string weatherReportEnd;
     Metar weatherMetar;
 public:
+    Weather();
     explicit Weather(std::string weatherReportStart_, std::string weatherReportEnd_, const Metar& weatherMetar_);
     ~Weather();
     Weather(const Weather& other);

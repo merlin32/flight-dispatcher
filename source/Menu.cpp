@@ -127,28 +127,20 @@ void Menu::initLocalData()
 }
 void Menu::flpCreation()
 {
-    //input file opening
-    std::ifstream userInput;
-    userInput.open("tastatura.txt");
-    if (!userInput.is_open())
-    {
-        std::cerr << "Error opening tastatura.txt";
-        return;
-    }
     //flight plan creation
     std::cout << "================================\n";
     std::cout << "===== Flight plan creation =====\n";
     std::cout << "================================\n";
-    std::cout << "Flight number: \n";
+    std::cout << "Flight number: ";
     std::string fltNumber;
-    userInput >> fltNumber;
-    std::cout << "Callsign: \n";
+    std::cin >> fltNumber;
+    std::cout << "Callsign: ";
     std::string callSgn;
-    userInput >> callSgn;
+    std::cin >> callSgn;
     //departure selection. if the ICAO code is not present in airportsList the program ends
-    std::cout << "Departure: \n";
+    std::cout << "Departure: ";
     std::string departIcao;
-    userInput >> departIcao;
+    std::cin >> departIcao;
     Airport depart;
     bool found = false;
     for (const auto& i : airportsList)
@@ -166,9 +158,9 @@ void Menu::flpCreation()
     //arrival selection. if the ICAO code is not present in airportsList the program ends
     found = false;
     Airport arrival;
-    std::cout << "Arrival: \n";
+    std::cout << "Arrival: ";
     std::string arrivalIcao;
-    userInput >> arrivalIcao;
+    std::cin >> arrivalIcao;
     for (const auto& i : airportsList)
         if (arrivalIcao == i.getIcao())
         {
@@ -183,9 +175,9 @@ void Menu::flpCreation()
     }
     //departing runway: it must exist and it must be in use
     found = false;
-    std::cout << "Departing runway: \n";
+    std::cout << "Departing runway: ";
     std::string departRw;
-    userInput >> departRw;
+    std::cin >> departRw;
     for (const auto& i : depart.getAirportRunways())
     {
         if (departRw == i.getRunwayID() && i.getRwStatus())
@@ -198,9 +190,9 @@ void Menu::flpCreation()
     }
     //arrival runway: it must exist and it must be in use
     found = false;
-    std::cout << "Arrival runway: \n";
+    std::cout << "Arrival runway: ";
     std::string arrivalRw;
-    userInput >> arrivalRw;
+    std::cin >> arrivalRw;
     for (const auto& i : arrival.getAirportRunways())
     {
         if (arrivalRw == i.getRunwayID() && i.getRwStatus())
@@ -217,10 +209,10 @@ void Menu::flpCreation()
     //the arrival airport waypoint is then inserted into the routeWaypoints
     //the program also checks whether the selected waypoint exists or not
     //for each waypoint we calculate its distance to the previous waypoint
-    std::cout << "Enter waypoints: \n";
+    std::cout << "Enter waypoints: ";
     std::vector<Waypoint> routeWaypoints;
     std::string currentWaypoint;
-    userInput >> currentWaypoint;
+    std::cin >> currentWaypoint;
     for (const auto& i : waypointsList)
         if (departIcao == i.getWaypointCode())
         {
@@ -245,7 +237,7 @@ void Menu::flpCreation()
             std::cerr << "Invalid waypoint selected!\n";
             return;
         }
-        userInput >> currentWaypoint;
+        std::cin >> currentWaypoint;
     }
     for (const auto& i : waypointsList)
         if (arrivalIcao == i.getWaypointCode())
@@ -258,10 +250,10 @@ void Menu::flpCreation()
         }
     //aircraft selection
     found = false;
-    std::cout << "Aircraft type: \n";
+    std::cout << "Aircraft type: ";
     std::string acType;
-    userInput.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::getline(userInput, acType);
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(std::cin, acType);
     Aircraft ac;
     for (const auto& i : aircraftsList)
         if (acType == i.getType())
@@ -276,46 +268,43 @@ void Menu::flpCreation()
         return;
     }
     //cruising altitude selection
-    std::cout << "Cruise altitude: \n";
+    std::cout << "Cruise altitude: ";
     std::string cruiseAlt;
     int cruiseAltInput;
-    userInput >> cruiseAlt;
+    std::cin >> cruiseAlt;
     if (cruiseAlt != "auto")
         cruiseAltInput = std::stoi(cruiseAlt);
     //PerformanceCalculation input data
     std::cout << "==================\n";
     std::cout << "== Fuel entries ==\n";
     std::cout << "==================\n";
-    std::cout << "Contingency: \n";
-    std::string ctgPct;
+    std::cout << "Contingency: ";
+    std::string fieldEntry;
     double ctgPctInput;
-    userInput >> ctgPct;
-    if (ctgPct != "auto")
-        ctgPctInput = std::stoi(ctgPct);
+    std::cin >> fieldEntry;
+    if (fieldEntry != "auto")
+        ctgPctInput = std::stoi(fieldEntry);
     else
         ctgPctInput = 0;
-    std::cout << "Reserve Time: \n";
-    std::string rsvTime;
+    std::cout << "Reserve Time: ";
     int rsvTimeInput;
-    userInput >> rsvTime;
-    if (rsvTime != "auto")
-        rsvTimeInput = std::stoi(rsvTime);
+    std::cin >> fieldEntry;
+    if (fieldEntry != "auto")
+        rsvTimeInput = std::stoi(fieldEntry);
     else
         rsvTimeInput = 0;
-    std::cout << "Taxi Fuel: \n";
-    std::string txFuel;
+    std::cout << "Taxi Fuel: ";
     double txFuelInput;
-    userInput >> txFuel;
-    if (txFuel != "auto")
-        txFuelInput = std::stoi(txFuel);
+    std::cin >> fieldEntry;
+    if (fieldEntry != "auto")
+        txFuelInput = std::stoi(fieldEntry);
     else
         txFuelInput = 0;
-    std::cout << "Block Fuel: \n";
-    std::string blkFuel;
+    std::cout << "Block Fuel: ";
     double blkFuelInput;
-    userInput >> blkFuel;
-    if (blkFuel != "auto")
-        blkFuelInput = std::stoi(blkFuel);
+    std::cin >> fieldEntry;
+    if (fieldEntry != "auto")
+        blkFuelInput = std::stoi(fieldEntry);
     else
         blkFuelInput = 0;
     FuelManagement fuelPlanning{ctgPctInput, rsvTimeInput, txFuelInput, blkFuelInput};
@@ -323,25 +312,31 @@ void Menu::flpCreation()
     std::cout << "=======================\n";
     std::cout << "=== Payload entries ===\n";
     std::cout << "=======================\n";
-    std::cout << "Freight: \n";
+    std::cout << "Freight: ";
     double freightInput;
-    userInput >> freightInput;
-    std::cout << "Passengers: \n";
+    std::cin >> freightInput;
+    std::cout << "Passengers: ";
     int passengersInput;
-    userInput >> passengersInput;
+    std::cin >> passengersInput;
     std::cout << "\n=======================\n\n";
     PerformanceCalculation perfCalc{freightInput, passengersInput};
     Route rt1{cruiseAltInput, fltNumber, callSgn, depart, arrival,
         departRw, arrivalRw,
              routeWaypoints, ac, fuelPlanning, perfCalc};
-    rt1.setRouteDistance();
-    rt1.setCruiseAltitude();
-    rt1.setClimbDuration();
-    rt1.setDescentDuration();
-    rt1.setTOC();
-    rt1.setTOD();
-    rt1.setCruiseDuration();
-    rt1.setAirTime();
-    rt1.setBlockTime();
+    if (rt1.routeInit() == false)
+    {
+        std::cerr << "Invalid flight plan data!\n";
+        return;
+    }
+    if (rt1.fuelManagementInit() == false)
+    {
+        std::cerr << "Invalid fuel data!\n";
+        return;
+    }
+    if (rt1.performanceCalculationInit() == false)
+    {
+        std::cerr << "Invalid payload data!\n";
+        return;
+    }
     std::cout << rt1;
 }

@@ -5,7 +5,6 @@ Waypoint::Waypoint(std::string waypointCode_, const double& longitude_, const do
                    const int& maxAltitude_, const int& minAltitude_, const bool& weatherAffected_):
                         waypointCode{std::move(waypointCode_)}, longitude{longitude_}, latitude{latitude_},
                         maxAltitude{maxAltitude_}, minAltitude{minAltitude_}, weatherAffected{weatherAffected_}{}
-Waypoint::Waypoint(const Waypoint& other) = default;
 Waypoint::~Waypoint() = default;
 void Waypoint::setDistanceToPrevious(const Waypoint& other)
 {

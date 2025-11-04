@@ -17,7 +17,6 @@ private:
 public:
     explicit Waypoint(std::string waypointCode_, const double& longitude_, const double& latitude_,
                         const int& maxAltitude_, const int& minAltitude_, const bool& weatherAffected_);
-    Waypoint(const Waypoint& other);
     ~Waypoint();
     void setDistanceToPrevious(const Waypoint& other);
     [[nodiscard]] double getDistanceToPrevious() const;

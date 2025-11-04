@@ -7,7 +7,7 @@
 class PerformanceCalculation
 {
 private:
-    double payload = 0, freight;
+    double payload = 0, freight = 0;
     int passengerNumber;
     double totalWeight = 0;
     double ZFW = 0, TOW = 0;
@@ -15,8 +15,6 @@ private:
     double takeoffDistance = 0, landingDistance = 0;
 public:
     explicit PerformanceCalculation(const double& freight_, const int& passengerNumber_);
-    PerformanceCalculation(const PerformanceCalculation& other);
-    PerformanceCalculation(PerformanceCalculation&& other) noexcept;
     ~PerformanceCalculation();
     void setPayload();
     void setFreight();
@@ -33,9 +31,9 @@ public:
     [[nodiscard]] bool maxPassengersExceeded(const int& maxPassengerNumber) const;
     [[nodiscard]] bool maxFreightExceeded(const double& maxFreight) const;
     [[nodiscard]] bool maxTakeoffWeightExceeded(const double& maxTakeoffWeight) const;
-    [[nodiscard]] bool maxWeightExceeded(const double& maxWeight) const;
     [[nodiscard]] double getTakeoffDistance() const;
     [[nodiscard]] double getLandingDistance() const;
+    [[nodiscard]] double getFreight() const;
     friend std::ostream& operator<<(std::ostream& os, const PerformanceCalculation& pfc);
 };
 

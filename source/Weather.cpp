@@ -27,3 +27,4 @@ std::ostream& operator<<(std::ostream& os, const Weather& wh)
     os << "METAR: " << wh.weatherMetar << "\n\n";
     return os;
 }
+Metar Weather::getMetar() const{return this->weatherMetar;}

@@ -20,10 +20,7 @@ private:
     double minimumTakeoffFuel = 0;
     double takeoffFuel = 0;
 public:
-
     explicit FuelManagement(const double& contingencyPct_, const int& reserveTime_, const double& taxiFuel_, const double& blockFuel_);
-    FuelManagement(const FuelManagement& other);
-    FuelManagement(FuelManagement&& other) noexcept;
     ~FuelManagement();
     void setTripFuel(const double& climbDuration, const double& cruiseDuration, const double& descentDuration,
                  const double& fuelBurnClimb, const double& fuelBurnCruise, const double& fuelBurnDescent);
@@ -37,6 +34,9 @@ public:
     void setTakeoffFuel();
     [[nodiscard]] bool isFuelSufficient() const;
     [[nodiscard]] bool fuelCapacityExceeded(const double& fuelCapacity) const;
+    [[nodiscard]] double getTaxiFuel() const;
+    [[nodiscard]] double getBlockFuel() const;
+    [[nodiscard]] double getTripFuel() const;
     friend std::ostream& operator<<(std::ostream& os, const FuelManagement& flm);
 };
 

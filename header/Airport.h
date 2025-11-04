@@ -28,7 +28,7 @@ public:
     [[nodiscard]] unsigned short int getElevation() const;
     [[nodiscard]] std::string getIcao() const;
     [[nodiscard]] std::vector<Runway> getAirportRunways() const;
-
+    [[nodiscard]] Weather getWeather() const;
 };
 
 #endif  //AIRPORT_H

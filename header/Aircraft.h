@@ -53,6 +53,18 @@ public:
     [[nodiscard]] int getMinimumFlightDuration() const;
     [[nodiscard]] double getRange() const;
     [[nodiscard]] std::string getType() const;
+    [[nodiscard]] double getFuelBurnClimb() const;
+    [[nodiscard]] double getFuelBurnCruise() const;
+    [[nodiscard]] double getFuelBurnDescent() const;
+    [[nodiscard]] double getFuelBurnIdle() const;
+    [[nodiscard]] double getFuelBurnLowAltitude() const;
+    [[nodiscard]] double getFuelCapacity() const;
+    [[nodiscard]] double getEmptyWeight() const;
+    [[nodiscard]] double getTakeoffReferenceDist() const;
+    [[nodiscard]] double getMaxTakeoffWeight() const;
+    [[nodiscard]] int getMaxPassengerCount() const;
+    [[nodiscard]] double getMaxFreight() const;
+    [[nodiscard]] double getMaxPayload() const;
     friend std::ostream& operator<<(std::ostream& os, const Aircraft& ac);
 
 };

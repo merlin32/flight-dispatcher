@@ -41,14 +41,14 @@
           "weatherMetar": [
             {
               "airportIcao": "LROP",
-              "dateAndTime": "031800Z",
-              "windInfo": "28004KT",
-              "visibility": "CAVOK",
-              "specialConditions": " ",
-              "cloudsInfo": " ",
-              "temperature": 13,
-              "dewpoint": 9,
-              "qnh": 1017,
+              "dateAndTime": "041630Z",
+              "windInfo": "10004KT",
+              "visibility": "9999",
+              "specialConditions": "-DZ",
+              "cloudsInfo": "FEW007 OVC038",
+              "temperature": 11,
+              "dewpoint": 11,
+              "qnh": 1025,
               "additionalChanges": "NOSIG="
             }
           ]
@@ -84,14 +84,14 @@
         "weatherMetar": [
           {
             "airportIcao": "LRCL",
-            "dateAndTime": "031800Z",
-            "windInfo": "28004KT",
+            "dateAndTime": "041630Z",
+            "windInfo": "00001KT",
             "visibility": "CAVOK",
             "specialConditions": " ",
             "cloudsInfo": " ",
-            "temperature": 13,
-            "dewpoint": 9,
-            "qnh": 1017,
+            "temperature": 7,
+            "dewpoint": 5,
+            "qnh": 1026,
             "additionalChanges": "NOSIG="
           }
         ]

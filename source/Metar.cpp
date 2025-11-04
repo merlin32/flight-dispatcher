@@ -50,11 +50,14 @@ std::ostream& operator<<(std::ostream& os, const Metar& mt)
     os << mt.dateAndTime << "Z ";
     os << mt.windInfo << " ";
     os << mt.visibility << " ";
-    os << mt.specialConditions << " ";
-    os << mt.cloudsInfo << " ";
+    if (mt.specialConditions != " ")
+        os << mt.specialConditions << " ";
+    if (mt.cloudsInfo != " ")
+        os << mt.cloudsInfo << " ";
     os << mt.temperature << "/";
     os << mt.dewpoint << " ";
     os << "Q" << mt.qnh << " ";
-    os << mt.additionalChanges << "\n";
+    if (mt.additionalChanges != " ")
+        os << mt.additionalChanges << "\n";
     return os;
 }

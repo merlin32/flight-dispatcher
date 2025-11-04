@@ -33,9 +33,12 @@ public:
                     const Airport& departure_, const Airport& arrival_, const std::string& departureRunway_, const std::string& arrivalRunway_,
                     const std::vector<Waypoint>& waypoints_, const Aircraft& plane_, const FuelManagement& fuelPlanning_,
                     const PerformanceCalculation& perfCalc_);
-    Route(const Route& other);
-    Route(Route&& other) noexcept;
     ~Route();
+    friend std::ostream& operator<<(std::ostream& os, const Route& rt);
+    [[nodiscard]] bool routeInit();
+    [[nodiscard]] bool fuelManagementInit();
+    [[nodiscard]] bool performanceCalculationInit();
+private:
     void setRouteDistance();
     void setClimbDuration();
     void setCruiseDuration();
@@ -54,7 +57,7 @@ public:
     [[nodiscard]] bool rwTooShortDepar() const;
     [[nodiscard]] bool rwTooShortArrival() const;
     [[nodiscard]] bool aircraftRangeExceeded() const;
-    friend std::ostream& operator<<(std::ostream& os, const Route& rt);
+    [[nodiscard]] bool getCruisingAltitude() const;
 };
 
 #endif //ROUTE_H

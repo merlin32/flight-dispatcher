@@ -66,6 +66,8 @@ const Runway& Airport::getRunway(const std::string& runwayID) const
 unsigned short int Airport::getElevation() const{return this->elevation;}
 std::string Airport::getIcao() const{return this->icaoCode;}
 std::vector<Runway> Airport::getAirportRunways() const{return this->airportRunways;}
+Weather Airport::getWeather() const{return this->airportWeather;}
+
 
 
 

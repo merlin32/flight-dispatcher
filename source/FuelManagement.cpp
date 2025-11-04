@@ -15,8 +15,6 @@ FuelManagement::FuelManagement(const double& contingencyPct_, const int& reserve
     if (blockFuel_ != 0) this->blockFuel = blockFuel_;
     else this->blockFuel = 0;
 }
-FuelManagement::FuelManagement(const FuelManagement& other) = default;
-FuelManagement::FuelManagement(FuelManagement&& other) noexcept = default;
 FuelManagement::~FuelManagement() = default;
 void FuelManagement::setTripFuel(const double& climbDuration, const double& cruiseDuration, const double& descentDuration,
                  const double& fuelBurnClimb, const double& fuelBurnCruise, const double& fuelBurnDescent)
@@ -40,25 +38,28 @@ void FuelManagement::setExtraFuel(){this->extraFuel = this->blockFuel - this->ca
 void FuelManagement::setMinTakeoffFuel(){this->minimumTakeoffFuel = this->tripFuel + this->contingencyFuel + this->reserveFuel;}
 void FuelManagement::setTakeoffFuel(){this->takeoffFuel = this->blockFuel - this->taxiFuel;}
 //making sure that we have enough fuel to complete the trip
-bool FuelManagement::isFuelSufficient() const{return this->calculatedBlockFuel > this->blockFuel;}
+bool FuelManagement::isFuelSufficient() const{return this->calculatedBlockFuel <= this->blockFuel;}
 bool FuelManagement::fuelCapacityExceeded(const double& fuelCapacity) const {return this->blockFuel > fuelCapacity;}
+double FuelManagement::getTaxiFuel() const{return this->taxiFuel;}
+double FuelManagement::getBlockFuel() const{return this->blockFuel;}
+double FuelManagement::getTripFuel() const{return this->tripFuel;}
 std::ostream& operator<<(std::ostream& os, const FuelManagement& flm)
 {
     os << "============================\n";
     os << "===     PLANNED FUEL     ===\n";
     os << "============================\n";
-    os << "TRIP: " << flm.tripFuel << '\n';
-    os << "CONT " <<  flm.contingencyPct << " PCT: " << flm.contingencyFuel << '\n';
-    os << "FINRES: " << flm.reserveFuel << '\n';
+    os << "TRIP: " << flm.tripFuel << " KG\n";
+    os << "CONT " <<  flm.contingencyPct << " PCT: " << flm.contingencyFuel << " KG\n";
+    os << "FINRES: " << flm.reserveFuel << " KG\n";
     os << "============================\n";
-    os << "MINIMUM T/OFF FUEL: " << flm.minimumTakeoffFuel << '\n';
+    os << "MINIMUM T/OFF FUEL: " << flm.minimumTakeoffFuel << " KG\n";
     os << "============================\n";
-    os << "FOB ADD: " << flm.extraFuel << '\n';
+    os << "FOB ADD: " << flm.extraFuel << " KG\n";
     os << "============================\n";
-    os << "T/OFF FUEL: " << flm.takeoffFuel << '\n';
-    os << "TAXI: " << flm.taxiFuel << '\n';
+    os << "T/OFF FUEL: " << flm.takeoffFuel << " KG\n";
+    os << "TAXI: " << flm.taxiFuel << " KG\n";
     os << "============================\n";
-    os << "BLOCK FUEL: " << flm.blockFuel << "\n\n";
+    os << "BLOCK FUEL: " << flm.blockFuel << " KG\n\n";
     return os;
 }
 

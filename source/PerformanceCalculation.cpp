@@ -7,8 +7,6 @@ PerformanceCalculation::PerformanceCalculation(const double& freight_, const int
     if (freight_ != 0) this->freight = freight_;
     else this->freight = 0;
 }
-PerformanceCalculation::PerformanceCalculation(const PerformanceCalculation& other) = default;
-PerformanceCalculation::PerformanceCalculation(PerformanceCalculation&& other) noexcept = default;
 PerformanceCalculation::~PerformanceCalculation() = default;
 //on average, a passenger is estimated to weight around 75 kg
 void PerformanceCalculation::setPayload(){this->payload = 75 * passengerNumber + this->freight;}
@@ -57,23 +55,23 @@ bool PerformanceCalculation::maxPayloadExceeded(const double& maxPayload) const 
 bool PerformanceCalculation::maxPassengersExceeded(const int& maxPassengerNumber) const {return this->passengerNumber > maxPassengerNumber;}
 bool PerformanceCalculation::maxFreightExceeded(const double& maxFreight) const {return this->freight > maxFreight;}
 bool PerformanceCalculation::maxTakeoffWeightExceeded(const double& maxTakeoffWeight) const{return this->TOW > maxTakeoffWeight;}
-bool PerformanceCalculation::maxWeightExceeded(const double& maxWeight) const{return this->totalWeight > maxWeight;}
 double PerformanceCalculation::getTakeoffDistance() const{return this->takeoffDistance;}
 double PerformanceCalculation::getLandingDistance() const{return this->landingDistance;}
+double PerformanceCalculation::getFreight() const{return this->freight;}
 std::ostream& operator<<(std::ostream& os, const PerformanceCalculation& pfc)
 {
     os << "=======================================\n";
     os << "===     PERFORMANCE CALCULATION     ===\n";
     os << "=======================================\n";
-    os << "PAYLOAD: " << pfc.payload << '\n';
-    os << "FREIGHT: " << pfc.freight << '\n';
+    os << "PAYLOAD: " << pfc.payload << " KG\n";
+    os << "FREIGHT: " << pfc.freight << " KG\n";
     os << "PASSENGER NUMBER: " << pfc.passengerNumber << '\n';
-    os << "TOTAL WEIGHT: " << pfc.totalWeight << '\n';
-    os << "ZFW: " << pfc.ZFW << '\n';
-    os << "TOW: " << pfc.TOW << '\n';
-    os << "LDW: " << pfc.LDW << '\n';
-    os << "TAKEOFF DISTANCE: " << pfc.takeoffDistance << '\n';
-    os << "LANDING DISTANCE: " << pfc.landingDistance << "\n\n";
+    os << "TOTAL WEIGHT: " << pfc.totalWeight << " KG\n";
+    os << "ZFW: " << pfc.ZFW << " KG\n";
+    os << "TOW: " << pfc.TOW << " KG\n";
+    os << "LDW: " << pfc.LDW << " KG\n";
+    os << "TAKEOFF DISTANCE: " << pfc.takeoffDistance << " M\n";
+    os << "LANDING DISTANCE: " << pfc.landingDistance << " M\n\n";
     return os;
 }
 

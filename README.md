@@ -52,7 +52,7 @@ O cerință nu se consideră îndeplinită dacă este realizată doar prin cod g
   - vor fi adăugate în fișierul `tastatura.txt` DOAR exemple de date de intrare de la tastatură (dacă există); dacă aveți nevoie de date din fișiere, creați alte fișiere separat
 - [x] minim 50-55% din codul propriu să fie C++, `.gitattributes` configurat corect
 - [x] tag de `git`: de exemplu `v0.1`
-- [ ] serviciu de integrare continuă (CI) cu **toate bifele**; exemplu: GitHub Actions
+- [x] serviciu de integrare continuă (CI) cu **toate bifele**; exemplu: GitHub Actions
 - [ ] code review #1 2 proiecte
 
 ## Tema 2

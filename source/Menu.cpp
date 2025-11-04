@@ -242,7 +242,7 @@ void Menu::flpCreation()
     for (const auto& i : waypointsList)
         if (arrivalIcao == i.getWaypointCode())
         {
-            Waypoint previous = routeWaypoints.back();
+            const Waypoint& previous = routeWaypoints.back();
             Waypoint current = i;
             current.setDistanceToPrevious(previous);
             routeWaypoints.push_back(current);

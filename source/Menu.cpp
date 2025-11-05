@@ -273,7 +273,7 @@ void Menu::flpCreation()
     std::cin >> cruiseAlt;
     if (cruiseAlt != "auto")
         cruiseAltInput = std::stoi(cruiseAlt);
-    //PerformanceCalculation input data
+    //FuelManagement input data
     std::cout << "==================\n";
     std::cout << "== Fuel entries ==\n";
     std::cout << "==================\n";

@@ -2,9 +2,9 @@
 #ifndef PERFORMANCECALCULATION_H
 #define PERFORMANCECALCULATION_H
 
-#include "../header/Aircraft.h"
-#include "../header/FuelManagement.h"
-#include "../header/Airport.h"
+#include "Aircraft.h"
+#include "FuelManagement.h"
+#include "Airport.h"
 
 class PerformanceCalculation
 {

@@ -1,5 +1,4 @@
 #include "../header/Menu.h"
-
 #include "../header/FuelManagement.h"
 #include "../header/PerformanceCalculation.h"
 
@@ -326,16 +325,6 @@ void Menu::flpCreation()
     if (rt1.routeInit() == false)
     {
         std::cerr << "Invalid flight plan data!\n";
-        return;
-    }
-    if (rt1.fuelManagementInit() == false)
-    {
-        std::cerr << "Invalid fuel data!\n";
-        return;
-    }
-    if (rt1.performanceCalculationInit() == false)
-    {
-        std::cerr << "Invalid payload data!\n";
         return;
     }
     std::cout << rt1;

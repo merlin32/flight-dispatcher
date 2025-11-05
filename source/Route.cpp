@@ -1,12 +1,12 @@
 #include "../header/Route.h"
 
-Route::Route(const int& cruisingAltitude_, const std::string& flightNumber_, const std::string& callsign_,
-                    const Airport& departure_, const Airport& arrival_, const std::string& departureRunway_, const std::string& arrivalRunway_,
+Route::Route(const int& cruisingAltitude_, std::string flightNumber_, std::string callsign_,
+                    const Airport& departure_, const Airport& arrival_, std::string departureRunway_, std::string arrivalRunway_,
                     const std::vector<Waypoint>& waypoints_, const Aircraft& plane_,
                     const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_):
-                    cruisingAltitude{cruisingAltitude_}, flightNumber{flightNumber_}, callsign{callsign_},
-                    departure{departure_}, arrival{arrival_}, departureRunway{departureRunway_},
-                    arrivalRunway{arrivalRunway_}, waypoints{waypoints_}, plane{plane_},
+                    cruisingAltitude{cruisingAltitude_}, flightNumber{std::move(flightNumber_)}, callsign{std::move(callsign_)},
+                    departure{departure_}, arrival{arrival_}, departureRunway{std::move(departureRunway_)},
+                    arrivalRunway{std::move(arrivalRunway_)}, waypoints{std::move(waypoints_)}, plane{plane_},
                     fuelPlanning{fuelPlanning_}, perfCalc{perfCalc_}{}
 Route::~Route() = default;
 void Route::setRouteDistance()
@@ -120,85 +120,18 @@ bool Route::routeInit()
         std::cerr << "Flight exceeds the range of the selected aircraft!\n";
         return false;
     }
-    return true;
-}
-bool Route::fuelManagementInit()
-{
-    this->fuelPlanning.setTripFuel(this->climbDuration, this->cruiseDuration, this->descentDuration,
-                                   this->plane.getFuelBurnClimb(), this->plane.getFuelBurnCruise(),
-                                   this->plane.getFuelBurnDescent());
-    this->fuelPlanning.setContingencyFuel();
-    this->fuelPlanning.setReserveFuel(this->plane.getFuelBurnLowAltitude());
-    if (this->fuelPlanning.getTaxiFuel() == 0)
-        this->fuelPlanning.setTaxiFuel(this->plane.getFuelBurnIdle());
-    if (this->fuelPlanning.getBlockFuel() == 0)
+    if (this->fuelPlanning.init(this->climbDuration, this->cruiseDuration, this->descentDuration, this->plane) == false)
     {
-        this->fuelPlanning.setBlockFuel();
-        this->fuelPlanning.setCalculatedBlockFuel();
-        this->fuelPlanning.setExtraFuel();
+        std::cerr << "Invalid fuel data!\n";
+        return false;
     }
-    else
+    if (this->perfCalc.init(plane, fuelPlanning, departure, arrival, arrivalRunway) == false)
     {
-        this->fuelPlanning.setCalculatedBlockFuel();
-        if (this->fuelPlanning.isFuelSufficient() == false)
-        {
-            std::cerr << "Inserted block fuel is invalid: not enough fuel to complete the trip!\n";
-            return false;
-        }
-    }
-    this->fuelPlanning.setExtraFuel();
-    this->fuelPlanning.setMinTakeoffFuel();
-    this->fuelPlanning.setTakeoffFuel();
-    if (this->fuelPlanning.fuelCapacityExceeded(this->plane.getFuelCapacity()) == true)
-    {
-        std::cerr << "Block fuel exceeds aircraft's maximum fuel capacity!\n";
+        std::cerr << "Invalid payload data!\n";
         return false;
     }
     return true;
 }
-bool Route::performanceCalculationInit()
-{
-    if (this->perfCalc.maxPassengersExceeded(this->plane.getMaxPassengerCount()))
-    {
-        std::cerr << "Passengers number has been exceeded!\n";
-        return false;
-    }
-    if (this->perfCalc.maxFreightExceeded(this->plane.getMaxFreight()) == true)
-    {
-        std::cerr << "Maximum freight value has been exceeded!\n";
-        return false;
-    }
-    this->perfCalc.setPayload();
-    if (this->perfCalc.getFreight() == 0)
-        this->perfCalc.setFreight();
-    this->perfCalc.setZFW(this->plane.getEmptyWeight());
-    this->perfCalc.setTOW(this->fuelPlanning.getBlockFuel(), this->fuelPlanning.getTaxiFuel());
-    this->perfCalc.setLDW(this->fuelPlanning.getTripFuel());
-    this->perfCalc.setTotalWeight(this->fuelPlanning.getBlockFuel());
-    this->perfCalc.setTakeoffDistance(this->plane.getTakeoffReferenceDist(),
-                                      this->plane.getMaxTakeoffWeight(),
-                                      this->departure.getWeather().getMetar().getQnh(),
-                                      this->departure.getWeather().getMetar().getTemperature());
-    this->perfCalc.setLandingDistance(this->plane.getTakeoffReferenceDist(), this->plane.getMaxTakeoffWeight(),
-                                      this->arrival.getWeather().getMetar().getQnh(),
-                                      this->arrival.getWeather().getMetar().getTemperature(),
-                                      this->arrival.getWeather().getMetar().getWindSpeed(),
-                                      this->arrival.getWeather().getMetar().getWindDirection(),
-                                      this->arrival.getRunway(arrivalRunway).getRwDirection(),
-                                      this->arrival.getRunway(arrivalRunway).getRwCondition());
-    if (this->perfCalc.maxPayloadExceeded(this->plane.getMaxPayload()) == true)
-    {
-        std::cerr << "Maximum payload value has been exceeded!\n";
-        return false;
-    }
-    if (this->perfCalc.maxTakeoffWeightExceeded(this->plane.getMaxTakeoffWeight()) == true)
-    {
-        std::cerr << "Maximum takeoff weight value has been exceeded!\n";
-        return false;
-    }
-    return true;
-}
-
 std::ostream& operator<<(std::ostream& os, const Route& rt)
 {
     os << "=========================\n";

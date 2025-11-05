@@ -1,4 +1,5 @@
 #include "../header/FuelManagement.h"
+#include <iostream>
 
 FuelManagement::FuelManagement(const double& contingencyPct_, const int& reserveTime_, const double& taxiFuel_, const double& blockFuel_)
 {
@@ -43,6 +44,41 @@ bool FuelManagement::fuelCapacityExceeded(const double& fuelCapacity) const {ret
 double FuelManagement::getTaxiFuel() const{return this->taxiFuel;}
 double FuelManagement::getBlockFuel() const{return this->blockFuel;}
 double FuelManagement::getTripFuel() const{return this->tripFuel;}
+bool FuelManagement::init(const double& climbDuration, const double& cruiseDuration, const double& descentDuration,
+                          const Aircraft& plane)
+{
+    this->setTripFuel(climbDuration, cruiseDuration, descentDuration,
+                      plane.getFuelBurnClimb(), plane.getFuelBurnCruise(),
+                      plane.getFuelBurnDescent());
+    this->setContingencyFuel();
+    this->setReserveFuel(plane.getFuelBurnLowAltitude());
+    if (this->taxiFuel== 0)
+        this->setTaxiFuel(plane.getFuelBurnIdle());
+    if (this->blockFuel == 0)
+    {
+        this->setBlockFuel();
+        this->setCalculatedBlockFuel();
+        this->setExtraFuel();
+    }
+    else
+    {
+        this->setCalculatedBlockFuel();
+        if (this->isFuelSufficient() == false)
+        {
+            std::cerr << "Inserted block fuel is invalid: not enough fuel to complete the trip!\n";
+            return false;
+        }
+    }
+    this->setExtraFuel();
+    this->setMinTakeoffFuel();
+    this->setTakeoffFuel();
+    if (this->fuelCapacityExceeded(plane.getFuelCapacity()) == true)
+    {
+        std::cerr << "Block fuel exceeds aircraft's maximum fuel capacity!\n";
+        return false;
+    }
+    return true;
+}
 std::ostream& operator<<(std::ostream& os, const FuelManagement& flm)
 {
     os << "============================\n";

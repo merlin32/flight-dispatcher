@@ -2,10 +2,8 @@
 #ifndef ROUTE_H
 #define ROUTE_H
 
-#include <string>
 #include "Airport.h"
 #include "Waypoint.h"
-#include "Aircraft.h"
 #include "FuelManagement.h"
 #include "PerformanceCalculation.h"
 
@@ -29,15 +27,13 @@ private:
     FuelManagement fuelPlanning;
     PerformanceCalculation perfCalc;
 public:
-    explicit Route(const int& cruisingAltitude_, const std::string& flightNumber_, const std::string& callsign_,
-                    const Airport& departure_, const Airport& arrival_, const std::string& departureRunway_, const std::string& arrivalRunway_,
-                    const std::vector<Waypoint>& waypoints_, const Aircraft& plane_, const FuelManagement& fuelPlanning_,
-                    const PerformanceCalculation& perfCalc_);
+    explicit Route(const int& cruisingAltitude_, std::string flightNumber_, std::string callsign_,
+                    const Airport& departure_, const Airport& arrival_, std::string departureRunway_, std::string arrivalRunway_,
+                    const std::vector<Waypoint>& waypoints_, const Aircraft& plane_,
+                    const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_);
     ~Route();
     friend std::ostream& operator<<(std::ostream& os, const Route& rt);
     [[nodiscard]] bool routeInit();
-    [[nodiscard]] bool fuelManagementInit();
-    [[nodiscard]] bool performanceCalculationInit();
 private:
     void setRouteDistance();
     void setClimbDuration();

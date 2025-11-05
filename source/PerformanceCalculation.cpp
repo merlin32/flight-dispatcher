@@ -1,5 +1,6 @@
 #include "../header/PerformanceCalculation.h"
 #include <cmath>
+#include <iostream>
 
 PerformanceCalculation::PerformanceCalculation(const double& freight_, const int& passengerNumber_): passengerNumber{passengerNumber_}
 {
@@ -58,6 +59,49 @@ bool PerformanceCalculation::maxTakeoffWeightExceeded(const double& maxTakeoffWe
 double PerformanceCalculation::getTakeoffDistance() const{return this->takeoffDistance;}
 double PerformanceCalculation::getLandingDistance() const{return this->landingDistance;}
 double PerformanceCalculation::getFreight() const{return this->freight;}
+bool PerformanceCalculation::init(const Aircraft& plane, const FuelManagement& fuelPlanning, const Airport& departure,
+                                  const Airport& arrival, const std::string& arrivalRunway)
+{
+    if (this->maxPassengersExceeded(plane.getMaxPassengerCount()))
+    {
+        std::cerr << "Passengers number has been exceeded!\n";
+        return false;
+    }
+    if (this->maxFreightExceeded(plane.getMaxFreight()) == true)
+    {
+        std::cerr << "Maximum freight value has been exceeded!\n";
+        return false;
+    }
+    this->setPayload();
+    if (this->getFreight() == 0)
+        this->setFreight();
+    this->setZFW(plane.getEmptyWeight());
+    this->setTOW(fuelPlanning.getBlockFuel(), fuelPlanning.getTaxiFuel());
+    this->setLDW(fuelPlanning.getTripFuel());
+    this->setTotalWeight(fuelPlanning.getBlockFuel());
+    this->setTakeoffDistance(plane.getTakeoffReferenceDist(),
+                                      plane.getMaxTakeoffWeight(),
+                                      departure.getWeather().getMetar().getQnh(),
+                                      departure.getWeather().getMetar().getTemperature());
+    this->setLandingDistance(plane.getTakeoffReferenceDist(), plane.getMaxTakeoffWeight(),
+                                      arrival.getWeather().getMetar().getQnh(),
+                                      arrival.getWeather().getMetar().getTemperature(),
+                                      arrival.getWeather().getMetar().getWindSpeed(),
+                                      arrival.getWeather().getMetar().getWindDirection(),
+                                      arrival.getRunway(arrivalRunway).getRwDirection(),
+                                      arrival.getRunway(arrivalRunway).getRwCondition());
+    if (this->maxPayloadExceeded(plane.getMaxPayload()) == true)
+    {
+        std::cerr << "Maximum payload value has been exceeded!\n";
+        return false;
+    }
+    if (this->maxTakeoffWeightExceeded(plane.getMaxTakeoffWeight()) == true)
+    {
+        std::cerr << "Maximum takeoff weight value has been exceeded!\n";
+        return false;
+    }
+    return true;
+}
 std::ostream& operator<<(std::ostream& os, const PerformanceCalculation& pfc)
 {
     os << "=======================================\n";

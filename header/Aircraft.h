@@ -3,6 +3,7 @@
 
 #include <string>
 #include <nlohmann/json.hpp>
+#include "PerformanceCalculation.h"
 
 class Aircraft
 {

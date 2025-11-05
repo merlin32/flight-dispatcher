@@ -2,7 +2,9 @@
 #ifndef PERFORMANCECALCULATION_H
 #define PERFORMANCECALCULATION_H
 
-#include <iostream>
+#include "../header/Aircraft.h"
+#include "../header/FuelManagement.h"
+#include "../header/Airport.h"
 
 class PerformanceCalculation
 {
@@ -16,6 +18,7 @@ private:
 public:
     explicit PerformanceCalculation(const double& freight_, const int& passengerNumber_);
     ~PerformanceCalculation();
+private:
     void setPayload();
     void setFreight();
     void setZFW(const double& emptyWeight);
@@ -31,9 +34,12 @@ public:
     [[nodiscard]] bool maxPassengersExceeded(const int& maxPassengerNumber) const;
     [[nodiscard]] bool maxFreightExceeded(const double& maxFreight) const;
     [[nodiscard]] bool maxTakeoffWeightExceeded(const double& maxTakeoffWeight) const;
+public:
     [[nodiscard]] double getTakeoffDistance() const;
     [[nodiscard]] double getLandingDistance() const;
     [[nodiscard]] double getFreight() const;
+    [[nodiscard]] bool init(const Aircraft& plane, const FuelManagement& fuelPlanning, const Airport& departure,
+                                  const Airport& arrival, const std::string& arrivalRunway);
     friend std::ostream& operator<<(std::ostream& os, const PerformanceCalculation& pfc);
 };
 

@@ -36,8 +36,6 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(json)
-#
-# FetchContent_MakeAvailable(SomeLib)
 
 ###############################################################################
 

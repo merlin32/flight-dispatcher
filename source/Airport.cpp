@@ -5,7 +5,7 @@ Airport::Airport()
     this->elevation = 0;
 }
 Airport::Airport(std::string icaoCode_, const unsigned short int& elevation_, std::string airportName_, std::string iataCode_,
-                 std::vector<Runway> airportRunways_, const Weather& airportWeather_):
+                 std::vector<Runway> airportRunways_, const Metar& airportWeather_):
                     icaoCode{std::move(icaoCode_)}, elevation{elevation_},
                     airportName{std::move(airportName_)},
                     iataCode{std::move(iataCode_)},
@@ -36,7 +36,7 @@ const Runway& Airport::getRunway(const std::string& runwayID) const
 unsigned short int Airport::getElevation() const{return this->elevation;}
 std::string Airport::getIcao() const{return this->icaoCode;}
 std::vector<Runway> Airport::getAirportRunways() const{return this->airportRunways;}
-Weather Airport::getWeather() const{return this->airportWeather;}
+Metar Airport::getMetar() const{return this->airportWeather;}
 
 
 

@@ -30,10 +30,9 @@ public:
               unsigned short int qnh_,
               std::string additionalChanges_);
     ~Metar();
-    [[nodiscard]] unsigned short int getTemperature() const;
-    [[nodiscard]] unsigned short int getQnh() const;
-    [[nodiscard]] unsigned short int getWindDirection() const;
-    [[nodiscard]] unsigned short int getWindSpeed() const;
+    [[nodiscard]] double calculateQhnsRatio() const;
+    [[nodiscard]] double calculateTemperaturesRatio() const;
+    [[nodiscard]] double calculateWindSpeed(const int& runwayDirection) const;
     friend std::ostream&  operator<<(std::ostream& os, const Metar& mt);
 };
 #endif //METAR_H

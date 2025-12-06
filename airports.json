@@ -34,11 +34,7 @@
           "runwayInUse": false
         }
       ],
-      "airportWeather": [
-        {
-          "weatherReportStart": "3.11.2025 9:06",
-          "weatherReportEnd": "4.11.2025 00:00",
-          "weatherMetar": [
+    "metar": [
             {
               "airportIcao": "LROP",
               "dateAndTime": "041630Z",
@@ -52,9 +48,6 @@
               "additionalChanges": "NOSIG="
             }
           ]
-        }
-      ]
-
   },
   {
     "icaoCode": "LRCL",
@@ -77,11 +70,7 @@
         "runwayInUse": false
       }
     ],
-    "airportWeather": [
-      {
-        "weatherReportStart": "3.11.2025 9:06",
-        "weatherReportEnd": "4.11.2025 00:00",
-        "weatherMetar": [
+    "metar": [
           {
             "airportIcao": "LRCL",
             "dateAndTime": "041630Z",
@@ -95,8 +84,5 @@
             "additionalChanges": "NOSIG="
           }
         ]
-      }
-    ]
-
   }
 ]

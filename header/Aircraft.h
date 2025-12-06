@@ -51,19 +51,20 @@ public:
     [[nodiscard]] int getMinimumFlightDuration() const;
     [[nodiscard]] double getRange() const;
     [[nodiscard]] std::string getType() const;
-    [[nodiscard]] double getFuelBurnClimb() const;
-    [[nodiscard]] double getFuelBurnCruise() const;
-    [[nodiscard]] double getFuelBurnDescent() const;
-    [[nodiscard]] double getFuelBurnIdle() const;
-    [[nodiscard]] double getFuelBurnLowAltitude() const;
-    [[nodiscard]] double getFuelCapacity() const;
     [[nodiscard]] double getEmptyWeight() const;
     [[nodiscard]] double getTakeoffReferenceDist() const;
     [[nodiscard]] double getMaxTakeoffWeight() const;
-    [[nodiscard]] int getMaxPassengerCount() const;
-    [[nodiscard]] double getMaxFreight() const;
-    [[nodiscard]] double getMaxPayload() const;
     friend std::ostream& operator<<(std::ostream& os, const Aircraft& ac);
+    //moved these calculations from FuelManagement to eliminate some getters
+    [[nodiscard]] double calculateTripFuel(const double& climbDuration, const double& cruiseDuration, const double& descentDuration) const;
+    [[nodiscard]] double calculateReserveFuel(const int& reserveTime) const;
+    [[nodiscard]] double calculateTaxiFuel() const;
+    //check functions have been moved from FuelManagement and PerformanceCalculation to get rid of some getters
+    [[nodiscard]] bool fuelCapacityExceeded(const double& blockFuel) const;
+    [[nodiscard]] bool maxPayloadExceeded(const double& payload) const;
+    [[nodiscard]] bool maxPassengersExceeded(const int& passengerNumber) const;
+    [[nodiscard]] bool maxFreightExceeded(const double& freight) const;
+    [[nodiscard]] bool maxTakeoffWeightExceeded(const double& TOW) const;
 
 };
 

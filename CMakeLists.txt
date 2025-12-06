@@ -52,8 +52,6 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         header/Airport.h
         header/Runway.h
         source/Runway.cpp
-        header/Weather.h
-        source/Weather.cpp
         header/Aircraft.h
         source/Aircraft.cpp
         header/Waypoint.h

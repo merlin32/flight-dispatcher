@@ -1,4 +1,5 @@
 #include "../header/Metar.h"
+#include <cmath>
 
 Metar::Metar()
 {
@@ -27,20 +28,17 @@ Metar::Metar(std::string airportIcao_,
             qnh{qnh_},
             additionalChanges{std::move(additionalChanges_)}{}
 Metar::~Metar() = default;
-unsigned short int Metar::getTemperature() const {return this->temperature;}
-unsigned short int Metar::getQnh() const {return this->qnh;}
-unsigned short int Metar::getWindDirection() const
+double Metar::calculateQhnsRatio() const{return 1013.0 / qnh;} //1013 represents the standard air pressure}
+double Metar::calculateTemperaturesRatio() const{return (temperature + 273.15) / 288.15;} //288.15 represents the standard air temperature in Kelvins
+double Metar::calculateWindSpeed(const int& runwayDirection) const
 {
-    std::string windDirection = this->windInfo.substr(0, 3);
-    unsigned short int degrees = std::stoi(windDirection);
-    return degrees;
+    unsigned int windDirection = std::stoi(windInfo.substr(0, 3));
+    unsigned int windSpeed     = std::stoi(windInfo.substr(3, 2));
+    double pi = 3.14159265358979323846;
+    double angleRad = (windDirection - runwayDirection) * pi / 180.0;
+    return windSpeed * cos(angleRad);
 }
-unsigned short int Metar::getWindSpeed() const
-{
-    std::string windSpeed = this->windInfo.substr(3, 2);
-    unsigned short int speed = std::stoi(windSpeed);
-    return speed;
-}
+
 std::ostream& operator<<(std::ostream& os, const Metar& mt)
 {
     os << "METAR ";

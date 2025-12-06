@@ -90,6 +90,21 @@ std::ostream& operator<<(std::ostream& os, const Aircraft& ac)
     os << "Minimum Flight Duration: " << ac.minimumFlightDuration << " MIN\n";
     return os;
 }
+double Aircraft::calculateTripFuel(const double& climbDuration, const double& cruiseDuration, const double& descentDuration) const
+{
+        return climbDuration * fuelBurnClimb +
+                cruiseDuration * fuelBurnCruise +
+                descentDuration * fuelBurnDescent;
+}
+//reserveFuel = the extra fuel the aircraft must have for this flight
+double Aircraft::calculateReserveFuel (const int& reserveTime)const{return reserveTime * fuelBurnLowAltitude;}
+//when taxiFuel is not inserted, we approximate that the taxi time takes around 20 minutes
+double Aircraft::calculateTaxiFuel() const{return 20 * fuelBurnIdle;}
+bool Aircraft::fuelCapacityExceeded(const double& blockFuel) const {return blockFuel > fuelCapacity;}
+bool Aircraft::maxPayloadExceeded(const double& payload) const {return payload > maxPayload;}
+bool Aircraft::maxPassengersExceeded(const int& passengerNumber) const {return passengerNumber > maxPassengerCount;}
+bool Aircraft::maxFreightExceeded(const double& freight) const {return freight > maxFreight;}
+bool Aircraft::maxTakeoffWeightExceeded(const double& TOW) const{return TOW > maxTakeoffWeight;}
 int Aircraft::getMaxCruisingAltitude() const {return this->maxCruisingAltitude;}
 int Aircraft::getClimbRate() const {return this->climbRate;}
 int Aircraft::getDescentRate() const {return this->descentRate;}
@@ -98,18 +113,9 @@ double Aircraft::getClimbSpeed() const{return this->climbSpeed;}
 int Aircraft::getMinimumFlightDuration() const{return this->minimumFlightDuration;}
 double Aircraft::getRange() const{return this->range;}
 std::string Aircraft::getType() const{return this->type;}
-double Aircraft::getFuelBurnClimb() const{return this->fuelBurnClimb;}
-double Aircraft::getFuelBurnCruise() const{return this->fuelBurnCruise;}
-double Aircraft::getFuelBurnDescent() const{return this->fuelBurnDescent;}
-double Aircraft::getFuelBurnIdle() const{return this->fuelBurnIdle;}
-double Aircraft::getFuelBurnLowAltitude() const{return this->fuelBurnLowAltitude;}
-double Aircraft::getFuelCapacity() const {return this->fuelCapacity;}
 double Aircraft::getEmptyWeight() const{return this->emptyWeight;}
 double Aircraft::getTakeoffReferenceDist() const{return this->takeoffReferenceDist;}
 double Aircraft::getMaxTakeoffWeight() const{return this->maxTakeoffWeight;}
-int Aircraft::getMaxPassengerCount() const{return this->maxPassengerCount;}
-double Aircraft::getMaxFreight() const{return this->maxFreight;}
-double Aircraft::getMaxPayload() const{return this->maxPayload;}
 
 
 

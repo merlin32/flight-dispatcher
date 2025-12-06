@@ -52,21 +52,16 @@ void Menu::populateAirports(std::ifstream airportsJson)
             runwaysList.push_back(rw);
         }
         Metar mt{
-            i["airportWeather"][0]["weatherMetar"][0]["airportIcao"],
-            i["airportWeather"][0]["weatherMetar"][0]["dateAndTime"],
-            i["airportWeather"][0]["weatherMetar"][0]["windInfo"],
-            i["airportWeather"][0]["weatherMetar"][0]["visibility"],
-            i["airportWeather"][0]["weatherMetar"][0]["specialConditions"],
-            i["airportWeather"][0]["weatherMetar"][0]["cloudsInfo"],
-            i["airportWeather"][0]["weatherMetar"][0]["temperature"],
-            i["airportWeather"][0]["weatherMetar"][0]["dewpoint"],
-            i["airportWeather"][0]["weatherMetar"][0]["qnh"],
-            i["airportWeather"][0]["weatherMetar"][0]["additionalChanges"]
-        };
-        Weather wh{
-            i["airportWeather"][0]["weatherReportStart"],
-            i["airportWeather"][0]["weatherReportEnd"],
-            mt
+            i["metar"][0]["airportIcao"],
+            i["metar"][0]["dateAndTime"],
+            i["metar"][0]["windInfo"],
+            i["metar"][0]["visibility"],
+            i["metar"][0]["specialConditions"],
+            i["metar"][0]["cloudsInfo"],
+            i["metar"][0]["temperature"],
+            i["metar"][0]["dewpoint"],
+            i["metar"][0]["qnh"],
+            i["metar"][0]["additionalChanges"]
         };
         Airport ap{
             i["icaoCode"],
@@ -74,7 +69,7 @@ void Menu::populateAirports(std::ifstream airportsJson)
             i["airportName"],
             i["iataCode"],
             runwaysList,
-            wh
+            mt
         };
         airportsList.push_back(ap);
     }

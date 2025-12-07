@@ -21,13 +21,13 @@ private:
     //TOC = top of climb
     //TOD = top of descent
     double TOC = 0, TOD = 0;
-    Aircraft plane;
+    std::shared_ptr<Aircraft> plane;
     FuelManagement fuelPlanning;
     PerformanceCalculation perfCalc;
 public:
     explicit Route(const int& cruisingAltitude_, std::string flightNumber_, std::string callsign_,
                     const Airport& departure_, const Airport& arrival_, std::string departureRunway_, std::string arrivalRunway_,
-                    const std::vector<Waypoint>& waypoints_, const Aircraft& plane_,
+                    const std::vector<Waypoint>& waypoints_, std::shared_ptr<Aircraft> plane_,
                     const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_);
     ~Route();
     friend std::ostream& operator<<(std::ostream& os, const Route& rt);

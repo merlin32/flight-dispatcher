@@ -2,11 +2,11 @@
 
 Route::Route(const int& cruisingAltitude_, std::string flightNumber_, std::string callsign_,
                     const Airport& departure_, const Airport& arrival_, std::string departureRunway_, std::string arrivalRunway_,
-                    const std::vector<Waypoint>& waypoints_, const Aircraft& plane_,
+                    const std::vector<Waypoint>& waypoints_, std::shared_ptr<Aircraft> plane_,
                     const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_):
                     cruisingAltitude{cruisingAltitude_}, flightNumber{std::move(flightNumber_)}, callsign{std::move(callsign_)},
                     departure{departure_}, arrival{arrival_}, departureRunway{std::move(departureRunway_)},
-                    arrivalRunway{std::move(arrivalRunway_)}, waypoints{std::move(waypoints_)}, plane{plane_},
+                    arrivalRunway{std::move(arrivalRunway_)}, waypoints{std::move(waypoints_)}, plane{std::move(plane_)},
                     fuelPlanning{fuelPlanning_}, perfCalc{perfCalc_}{}
 Route::~Route() = default;
 void Route::setRouteDistance()
@@ -16,28 +16,28 @@ void Route::setRouteDistance()
 }
 void Route::setClimbDuration()
 {
-    this->climbDuration = (double)(this->cruisingAltitude - this->departure.getElevation()) / plane.getClimbRate();
+    this->climbDuration = (double)(this->cruisingAltitude - this->departure.getElevation()) / plane->getClimbRate();
 }
 void Route::setCruiseDuration()
 {
-    this->cruiseDuration = (this->TOD - this->TOC) / plane.getCruisingSpeed();
+    this->cruiseDuration = (this->TOD - this->TOC) / plane->getCruisingSpeed();
 }
 void Route::setDescentDuration()
 {
-    this->descentDuration = (double)(this->cruisingAltitude - arrival.getElevation()) / plane.getDescentRate();
+    this->descentDuration = (double)(this->cruisingAltitude - arrival.getElevation()) / plane->getDescentRate();
 }
 void Route::setTOD()
 {
-    this->TOD = (descentDuration * plane.getCruisingSpeed()) / 60;
+    this->TOD = (descentDuration * plane->getCruisingSpeed()) / 60;
 }
 void Route::setTOC()
 {
-    this->TOC = (climbDuration * plane.getClimbSpeed()) / 60;
+    this->TOC = (climbDuration * plane->getClimbSpeed()) / 60;
 }
 void Route::setCruiseAltitude()
 {
-    double ratio1 = plane.getClimbSpeed() / plane.getClimbRate();
-    double ratio2 = plane.getCruisingSpeed() / plane.getDescentRate();
+    double ratio1 = plane->getClimbSpeed() / plane->getClimbRate();
+    double ratio2 = plane->getCruisingSpeed() / plane->getDescentRate();
     double numerator = this->routeDistance * 60 + ratio1 * departure.getElevation() + ratio2 * arrival.getElevation();
     double denominator = ratio1 + ratio2;
     this->cruisingAltitude = (int) (numerator / denominator);
@@ -50,7 +50,7 @@ void Route::setBlockTime()
 {
     this->blockTime = this->airTime + 40; //40 minutes for taxi combined (departure + arrival)
 }
-bool Route::maxCruiseAltitudeExceeded() const {return this->cruisingAltitude > plane.getMaxCruisingAltitude();}
+bool Route::maxCruiseAltitudeExceeded() const {return this->cruisingAltitude > plane->getMaxCruisingAltitude();}
 bool Route::terrainDanger() const
 {
     for (const auto& waypct: waypoints)
@@ -58,7 +58,7 @@ bool Route::terrainDanger() const
             return true;
     return false;
 }
-bool Route::flightTooShort() const{return this->airTime < plane.getMinimumFlightDuration();}
+bool Route::flightTooShort() const{return this->airTime < plane->getMinimumFlightDuration();}
 //bool Route::rwTooNarrowDepart() const {} those methods will be implemented soon
 //bool Route::rwTooNarrowArrival() const{}
 bool Route::rwTooShortDepar() const
@@ -71,7 +71,7 @@ bool Route::rwTooShortArrival() const
 }
 bool Route::aircraftRangeExceeded() const
 {
-    return this->routeDistance > this->plane.getRange();
+    return this->routeDistance > this->plane->getRange();
 }
 bool Route::getCruisingAltitude() const
 {
@@ -120,12 +120,12 @@ bool Route::routeInit()
         std::cerr << "Flight exceeds the range of the selected aircraft!\n";
         return false;
     }
-    if (this->fuelPlanning.init(this->climbDuration, this->cruiseDuration, this->descentDuration, this->plane) == false)
+    if (this->fuelPlanning.init(this->climbDuration, this->cruiseDuration, this->descentDuration, *this->plane) == false)
     {
         std::cerr << "Invalid fuel data!\n";
         return false;
     }
-    if (this->perfCalc.init(plane, fuelPlanning, departure, arrival, arrivalRunway) == false)
+    if (this->perfCalc.init(*plane, fuelPlanning, departure, arrival, arrivalRunway) == false)
     {
         std::cerr << "Invalid payload data!\n";
         return false;

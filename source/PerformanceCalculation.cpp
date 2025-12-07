@@ -7,11 +7,14 @@ PerformanceCalculation::PerformanceCalculation(const double& freight_, const int
     if (freight_ != 0) this->freight = freight_;
     else this->freight = 0;
 }
-PerformanceCalculation::~PerformanceCalculation() = default;
-//on average, a passenger is estimated to weight around 75 kg
-void PerformanceCalculation::setPayload(){this->payload = 75 * passengerNumber + this->freight;}
-//on average, a passenger is estimated to have 10kg of baggage
-void PerformanceCalculation::setFreight(){this->freight = 10 * passengerNumber;}
+void PerformanceCalculation::setPayload(const Aircraft& plane)
+{
+    this->payload = plane.calculatePayload();
+}
+void PerformanceCalculation::setFreight(const Aircraft& plane)
+{
+    this->freight = plane.calculateFreight();
+}
 //ZFW = zero fuel weight
 void PerformanceCalculation::setZFW(const double& emptyWeight){this->ZFW = emptyWeight + this->payload;}
 //TOW = Takeoff weight

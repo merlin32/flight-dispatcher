@@ -6,6 +6,7 @@
 
 class Aircraft
 {
+private:
     std::string type;
     double range;
     double cruisingSpeed, wingSpan, maxTakeoffWeight;
@@ -14,11 +15,13 @@ class Aircraft
     int maxCruisingAltitude;
     double fuelBurnIdle, fuelBurnLowAltitude;
     double maxFreight;
-    int maxPassengerCount;
     double takeoffReferenceDist;
     int climbRate, descentRate;
     double climbSpeed;
     int minimumFlightDuration;
+    virtual double calculatePayload_() const = 0;
+    virtual double calculateFreight_() const = 0;
+    virtual void display(std::ostream &) const {}
 public:
     Aircraft();
     explicit Aircraft(std::string type_,
@@ -36,13 +39,15 @@ public:
              const double& fuelBurnIdle_,
              const double& fuelBurnLowAltitude_,
              const double& maxFreight_,
-             const int& maxPassengerCount_,
              const double& takeoffReferenceDist_,
              const int& climbRate_,
              const int& descentRate_,
              const double& climbSpeed_,
              const int& minimumFlightDuration_);
-    ~Aircraft();
+    virtual ~Aircraft() = default;
+    virtual std::shared_ptr<Aircraft> clone() const = 0;
+    [[nodiscard]] double calculatePayload() const;
+    [[nodiscard]] double calculateFreight() const;
     [[nodiscard]] int getMaxCruisingAltitude() const;
     [[nodiscard]] int getClimbRate() const;
     [[nodiscard]] int getDescentRate() const;
@@ -62,9 +67,12 @@ public:
     //check functions have been moved from FuelManagement and PerformanceCalculation to get rid of some getters
     [[nodiscard]] bool fuelCapacityExceeded(const double& blockFuel) const;
     [[nodiscard]] bool maxPayloadExceeded(const double& payload) const;
-    [[nodiscard]] bool maxPassengersExceeded(const int& passengerNumber) const;
     [[nodiscard]] bool maxFreightExceeded(const double& freight) const;
     [[nodiscard]] bool maxTakeoffWeightExceeded(const double& TOW) const;
+protected:
+    Aircraft(const Aircraft& other) = default;
+    Aircraft &operator=(const Aircraft& other) = default;
+
 
 };
 

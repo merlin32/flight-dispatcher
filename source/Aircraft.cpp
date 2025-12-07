@@ -16,7 +16,6 @@ Aircraft::Aircraft()
     this->fuelBurnIdle = 0;
     this->fuelBurnLowAltitude = 0;
     this->maxFreight = 0;
-    this->maxPassengerCount = 0;
     this->takeoffReferenceDist = 0;
     this->climbRate = 0;
     this->descentRate = 0;
@@ -38,7 +37,6 @@ Aircraft::Aircraft(std::string type_,
              const double& fuelBurnIdle_,
              const double& fuelBurnLowAltitude_,
              const double& maxFreight_,
-             const int& maxPassengerCount_,
              const double& takeoffReferenceDist_,
              const int& climbRate_,
              const int& descentRate_,
@@ -59,13 +57,11 @@ Aircraft::Aircraft(std::string type_,
           fuelBurnIdle{fuelBurnIdle_},
           fuelBurnLowAltitude{fuelBurnLowAltitude_},
           maxFreight{maxFreight_},
-          maxPassengerCount{maxPassengerCount_},
           takeoffReferenceDist{takeoffReferenceDist_},
           climbRate{climbRate_},
           descentRate{descentRate_},
           climbSpeed{climbSpeed_},
           minimumFlightDuration(minimumFlightDuration_){}
-Aircraft::~Aircraft() = default;
 std::ostream& operator<<(std::ostream& os, const Aircraft& ac)
 {
     os << "Type: " << ac.type << '\n';
@@ -82,12 +78,13 @@ std::ostream& operator<<(std::ostream& os, const Aircraft& ac)
     os << "Fuel Burn Idle: " << ac.fuelBurnIdle << " KG/MIN\n";
     os << "Fuel Burn Low Altitude: " << ac.fuelBurnLowAltitude << " KG/MIN\n";
     os << "Max Freight: " << ac.maxFreight << " KG\n";
-    os << "Max Passenger Count: " << ac.maxPassengerCount << '\n';
     os << "Takeoff Reference Distance: " << ac.takeoffReferenceDist << " M\n";
     os << "Climb Rate: " << ac.climbRate << " FT/MIN\n";
     os << "Descent Rate: " << ac.descentRate << " FT/MIN\n";
     os << "Climb Speed: " << ac.climbSpeed << " KTS\n";
     os << "Minimum Flight Duration: " << ac.minimumFlightDuration << " MIN\n";
+    ac.display(os);
+    os << '\n';
     return os;
 }
 double Aircraft::calculateTripFuel(const double& climbDuration, const double& cruiseDuration, const double& descentDuration) const
@@ -102,7 +99,6 @@ double Aircraft::calculateReserveFuel (const int& reserveTime)const{return reser
 double Aircraft::calculateTaxiFuel() const{return 20 * fuelBurnIdle;}
 bool Aircraft::fuelCapacityExceeded(const double& blockFuel) const {return blockFuel > fuelCapacity;}
 bool Aircraft::maxPayloadExceeded(const double& payload) const {return payload > maxPayload;}
-bool Aircraft::maxPassengersExceeded(const int& passengerNumber) const {return passengerNumber > maxPassengerCount;}
 bool Aircraft::maxFreightExceeded(const double& freight) const {return freight > maxFreight;}
 bool Aircraft::maxTakeoffWeightExceeded(const double& TOW) const{return TOW > maxTakeoffWeight;}
 int Aircraft::getMaxCruisingAltitude() const {return this->maxCruisingAltitude;}
@@ -116,6 +112,10 @@ std::string Aircraft::getType() const{return this->type;}
 double Aircraft::getEmptyWeight() const{return this->emptyWeight;}
 double Aircraft::getTakeoffReferenceDist() const{return this->takeoffReferenceDist;}
 double Aircraft::getMaxTakeoffWeight() const{return this->maxTakeoffWeight;}
+double Aircraft::calculateFreight() const{return calculateFreight_();}
+double Aircraft::calculatePayload() const{return calculatePayload_();}
+
+
 
 
 

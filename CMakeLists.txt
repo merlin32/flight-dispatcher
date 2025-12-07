@@ -66,6 +66,12 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         source/Route.cpp
         source/Menu.cpp
         header/Menu.h
+        header/PassengerAircraft.h
+        source/PassengerAircraft.cpp
+        header/CargoAircraft.h
+        source/CargoAircraft.cpp
+        header/GeneralAviationAircraft.h
+        source/GeneralAviationAircraft.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

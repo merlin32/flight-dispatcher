@@ -17,10 +17,9 @@ private:
     double takeoffDistance = 0, landingDistance = 0;
 public:
     explicit PerformanceCalculation(const double& freight_, const int& passengerNumber_);
-    ~PerformanceCalculation();
 private:
-    void setPayload();
-    void setFreight();
+    void setPayload(const Aircraft& plane);
+    void setFreight(const Aircraft& plane);
     void setZFW(const double& emptyWeight);
     void setTOW(const double& blockFuel, const double& taxiFuel);
     void setLDW(const double& tripFuel);

@@ -3,6 +3,7 @@
 #define CARGOAIRCRAFT_H
 
 #include "Aircraft.h"
+#include <vector>
 
 class CargoAircraft : public Aircraft
 {

@@ -2,7 +2,7 @@
 #include <nlohmann/json.hpp>
 
 int main() {
-    Menu mainMenu;
+    //Menu mainMenu;
     //mainMenu.initLocalData();
     //mainMenu.flpCreation();
     return 0;

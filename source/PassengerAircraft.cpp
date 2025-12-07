@@ -46,7 +46,8 @@ bool PassengerAircraft::isDataValid_() const
     {
         std::cerr << "Passengers number has been exceeded!\n";
         return false;
-    };
+    }
+    return true;
 }
 
 

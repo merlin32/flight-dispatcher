@@ -15,6 +15,9 @@ private:
     double calculatePayload_() const override;
     double calculateFreight_() const override;
     void display(std::ostream &os) const override;
+    bool isDataValid_() const override;
+    [[nodiscard]] bool maxPilotCountExceeded() const;
+    [[nodiscard]] bool maxPassengersNumberExceeded() const;
 public:
     explicit GeneralAviationAircraft(const std::string& type_,
              const double& range_,
@@ -39,8 +42,6 @@ public:
              const int& maxPilotCount_,
              const int& maxPassengersNumber_);
     [[nodiscard]] std::shared_ptr<Aircraft> clone() const override;
-    [[nodiscard]] bool maxPilotCountExceeded() const;
-    [[nodiscard]] bool maxPassengersNumberExceeded() const;
     void setPilotsCount(const int& inputValue);
     void setPassengersNumber(const int& inputValue);
     void setBaggageWeight(const double& inputValue);

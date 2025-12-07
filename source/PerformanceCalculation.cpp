@@ -58,19 +58,16 @@ double PerformanceCalculation::getFreight() const{return this->freight;}
 bool PerformanceCalculation::init(const Aircraft& plane, const FuelManagement& fuelPlanning, const Airport& departure,
                                   const Airport& arrival, const std::string& arrivalRunway)
 {
-    if (plane.maxPassengersExceeded(passengerNumber) == true)
-    {
-        std::cerr << "Passengers number has been exceeded!\n";
+    if (plane.isDataValid() == false)
         return false;
-    }
     if (plane.maxFreightExceeded(freight) == true)
     {
         std::cerr << "Maximum freight value has been exceeded!\n";
         return false;
     }
-    this->setPayload();
+    this->setPayload(plane);
     if (this->getFreight() == 0)
-        this->setFreight();
+        this->setFreight(plane);
     this->setZFW(plane.getEmptyWeight());
     this->setTOW(fuelPlanning.getBlockFuel(), fuelPlanning.getTaxiFuel());
     this->setLDW(fuelPlanning.getTripFuel());

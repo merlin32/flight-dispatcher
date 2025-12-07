@@ -29,7 +29,9 @@ public:
                     const Airport& departure_, const Airport& arrival_, std::string departureRunway_, std::string arrivalRunway_,
                     const std::vector<Waypoint>& waypoints_, std::shared_ptr<Aircraft> plane_,
                     const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_);
-    ~Route();
+    Route(const Route& other);
+    Route &operator=(Route other);
+    friend void swap(Route &rt1, Route &rt2) noexcept;
     friend std::ostream& operator<<(std::ostream& os, const Route& rt);
     [[nodiscard]] bool routeInit();
 private:

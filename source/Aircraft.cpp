@@ -114,6 +114,8 @@ double Aircraft::getTakeoffReferenceDist() const{return this->takeoffReferenceDi
 double Aircraft::getMaxTakeoffWeight() const{return this->maxTakeoffWeight;}
 double Aircraft::calculateFreight() const{return calculateFreight_();}
 double Aircraft::calculatePayload() const{return calculatePayload_();}
+bool Aircraft::isDataValid() const {return isDataValid_();}
+
 
 
 

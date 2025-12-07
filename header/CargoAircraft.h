@@ -15,6 +15,9 @@ private:
     double calculatePayload_() const override;
     double calculateFreight_() const override;
     void display(std::ostream &os) const override;
+    [[nodiscard]] bool maxContainersNumExceeded() const;
+    [[nodiscard]] bool maxContainerWeightExceeded() const;
+    bool isDataValid_() const override;
 public:
     explicit CargoAircraft(const std::string& type_,
              const double& range_,
@@ -40,8 +43,6 @@ public:
              const int& crewCount_,
              const double& maxContainerWeight_);
     [[nodiscard]] std::shared_ptr<Aircraft> clone() const override;
-    [[nodiscard]] bool maxContainersNumExceeded() const;
-    [[nodiscard]] bool maxContainerWeightExceeded() const;
     void setContainersNum(const int& inputContainersNum);
     void setContainersWeights(const std::vector<double>& inputValues);
 

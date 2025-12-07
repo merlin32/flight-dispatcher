@@ -2,6 +2,7 @@
 #define AIRCRAFT_H
 
 #include <string>
+#include <iostream>
 #include <nlohmann/json.hpp>
 
 class Aircraft
@@ -22,6 +23,7 @@ private:
     virtual double calculatePayload_() const = 0;
     virtual double calculateFreight_() const = 0;
     virtual void display(std::ostream &) const {}
+    virtual bool isDataValid_() const = 0;
 public:
     Aircraft();
     explicit Aircraft(std::string type_,
@@ -48,6 +50,7 @@ public:
     virtual std::shared_ptr<Aircraft> clone() const = 0;
     [[nodiscard]] double calculatePayload() const;
     [[nodiscard]] double calculateFreight() const;
+    [[nodiscard]] bool isDataValid() const;
     [[nodiscard]] int getMaxCruisingAltitude() const;
     [[nodiscard]] int getClimbRate() const;
     [[nodiscard]] int getDescentRate() const;

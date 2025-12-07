@@ -13,6 +13,7 @@ private:
     double calculatePayload_() const override;
     double calculateFreight_() const override;
     void display(std::ostream &os) const override;
+    bool isDataValid_() const override;
 public:
     explicit PassengerAircraft(const std::string& type_,
              const double& range_,
@@ -37,9 +38,7 @@ public:
              const int& maxPassengerCount_,
              const int& crewCount_);
     [[nodiscard]] std::shared_ptr<Aircraft> clone() const override;
-    [[nodiscard]] bool maxPassengersExceeded() const;
     void setFreight(const int& inputFreight);
     void setPassengerNumber(const int& inputPassengerNumber);
-
 };
 #endif //PASSENGERAIRCRAFT_H

@@ -28,19 +28,19 @@ CargoAircraft::CargoAircraft(const std::string& type_,
              fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,
              climbRate_, descentRate_, climbSpeed_, minimumFlightDuration_}, maxContainersNum{maxContainersNum_},
              crewCount{crewCount_}, maxContainerWeight{maxContainerWeight_} {}
-std::shared_ptr<Aircraft> CargoAircraft::clone() const override {return std::make_shared<CargoAircraft>(*this);}
-double CargoAircraft::calculatePayload_() const override
+std::shared_ptr<Aircraft> CargoAircraft::clone() const{return std::make_shared<CargoAircraft>(*this);}
+double CargoAircraft::calculatePayload_() const
 {
     return 80 * crewCount + calculateFreight();
 }
-double CargoAircraft::calculateFreight_() const override
+double CargoAircraft::calculateFreight_() const
 {
     double totalContainersWeight = 0;
     for (int i = 0; i < containersNum; i++)
         totalContainersWeight += containersWeights[i];
     return totalContainersWeight;
 }
-void CargoAircraft::display(std::ostream &os) const override
+void CargoAircraft::display(std::ostream &os) const
 {
     os << "Maximum containers available to load: " << maxContainersNum << '\n';
     os << "Crew count: " << crewCount << '\n';
@@ -60,6 +60,21 @@ bool CargoAircraft::maxContainerWeightExceeded() const
 }
 void CargoAircraft::setContainersNum(const int& inputContainersNum){this->containersNum = inputContainersNum;}
 void CargoAircraft::setContainersWeights(const std::vector<double>& inputValues){this->containersWeights = inputValues;}
+bool CargoAircraft::isDataValid_() const
+{
+    if (maxContainersNumExceeded() == true)
+    {
+        std::cerr << "Number of maximum container slots excedeed!\n";
+        return false;
+    }
+    if (maxContainerWeightExceeded() == true)
+    {
+        std::cerr << "Container maximum weight has been exceeded!\n";
+        return false;
+    }
+    return true;
+}
+
 
 
 

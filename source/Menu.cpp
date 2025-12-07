@@ -5,6 +5,7 @@
 void Menu::populateAircrafts(std::ifstream aircraftsJson)
 {
     nlohmann::json data = nlohmann::json::parse(aircraftsJson);
+    /*
     for (const auto& i : data)
     {
         Aircraft ac{
@@ -31,7 +32,7 @@ void Menu::populateAircrafts(std::ifstream aircraftsJson)
             i["minimumFlightDuration"]
         };
         aircraftsList.push_back(ac);
-    }
+    }*/
     aircraftsJson.close();
 }
 void Menu::populateAirports(std::ifstream airportsJson)
@@ -121,6 +122,7 @@ void Menu::initLocalData()
 }
 void Menu::flpCreation()
 {
+    /*
     //flight plan creation
     std::cout << "================================\n";
     std::cout << "===== Flight plan creation =====\n";
@@ -323,4 +325,5 @@ void Menu::flpCreation()
         return;
     }
     std::cout << rt1;
+    */
 }

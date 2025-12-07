@@ -27,19 +27,28 @@ PassengerAircraft::PassengerAircraft(const std::string& type_,
              fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,
              climbRate_, descentRate_, climbSpeed_, minimumFlightDuration_}, maxPassengerCount{maxPassengerCount_},
              crewCount{crewCount_} {}
-std::shared_ptr<Aircraft> PassengerAircraft::clone() const override {return std::make_shared<PassengerAircraft>(*this);}
+std::shared_ptr<Aircraft> PassengerAircraft::clone() const{return std::make_shared<PassengerAircraft>(*this);}
 void PassengerAircraft::setFreight(const int& inputFreight){ this->freight = inputFreight;}
 void PassengerAircraft::setPassengerNumber(const int& inputPassengerNumber){this->passengerNumber = inputPassengerNumber;}
 //on average, a person is estimated to weight around 75 kg
-double PassengerAircraft::calculatePayload_() const override {return 75 * (passengerNumber + crewCount) + freight;}
+double PassengerAircraft::calculatePayload_() const{return 75 * (passengerNumber + crewCount) + freight;}
 //on average, a person is estimated to have 10kg of baggage
-double PassengerAircraft::calculateFreight_() const override {return 10 * (passengerNumber + crewCount);}
-bool PassengerAircraft::maxPassengersExceeded() const {return passengerNumber > maxPassengerCount;}
-void PassengerAircraft::display(std::ostream &os) const override
+double PassengerAircraft::calculateFreight_() const{return 10 * (passengerNumber + crewCount);}
+void PassengerAircraft::display(std::ostream &os) const
 {
     os << "Maximum passenger capacity: " << maxPassengerCount << '\n';
     os << "Crew count: " << crewCount << '\n';
 }
+bool PassengerAircraft::isDataValid_() const
+{
+    //replacement for maxPassengersExceeded() function
+    if (passengerNumber > maxPassengerCount)
+    {
+        std::cerr << "Passengers number has been exceeded!\n";
+        return false;
+    };
+}
+
 
 
 

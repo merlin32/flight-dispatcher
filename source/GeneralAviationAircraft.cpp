@@ -27,13 +27,13 @@ GeneralAviationAircraft::GeneralAviationAircraft(const std::string& type_,
              fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,
              climbRate_, descentRate_, climbSpeed_, minimumFlightDuration_},
              maxPilotCount{maxPilotCount_}, maxPassengersNumber{maxPassengersNumber_}{}
-std::shared_ptr<Aircraft> GeneralAviationAircraft::clone() const override{return std::make_shared<GeneralAviationAircraft>(*this);}
+std::shared_ptr<Aircraft> GeneralAviationAircraft::clone() const{return std::make_shared<GeneralAviationAircraft>(*this);}
 double GeneralAviationAircraft::calculatePayload_() const
 {
     return 80 * (pilotsCount + passengersNumber) + baggageWeight;
 }
 double GeneralAviationAircraft::calculateFreight_() const{return baggageWeight;}
-void GeneralAviationAircraft::display(std::ostream &os) const override
+void GeneralAviationAircraft::display(std::ostream &os) const
 {
     os << "Maximum number of pilots: " << maxPilotCount << '\n';
     os << "Maximum number of passengers: " << maxPassengersNumber << '\n';
@@ -45,6 +45,20 @@ bool GeneralAviationAircraft::maxPassengersNumberExceeded() const{return passeng
 void GeneralAviationAircraft::setPilotsCount(const int& inputValue) {this->pilotsCount = inputValue;}
 void GeneralAviationAircraft::setPassengersNumber(const int& inputValue){this->passengersNumber = inputValue;}
 void GeneralAviationAircraft::setBaggageWeight(const double& inputValue){this->baggageWeight = inputValue;}
+bool GeneralAviationAircraft::isDataValid_() const
+{
+    if (maxPilotCountExceeded() == true)
+    {
+        std::cerr << "Maximum number of pilots exceeded!\n";
+        return false;
+    }
+    if (maxPassengersNumberExceeded() == true)
+    {
+        std::cerr << "Passengers number has been exceeded!\n";
+        return false;
+    }
+    return true;
+}
 
 
 

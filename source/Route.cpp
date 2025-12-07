@@ -8,7 +8,46 @@ Route::Route(const int& cruisingAltitude_, std::string flightNumber_, std::strin
                     departure{departure_}, arrival{arrival_}, departureRunway{std::move(departureRunway_)},
                     arrivalRunway{std::move(arrivalRunway_)}, waypoints{std::move(waypoints_)}, plane{std::move(plane_)},
                     fuelPlanning{fuelPlanning_}, perfCalc{perfCalc_}{}
-Route::~Route() = default;
+Route::Route(const Route& other) : cruisingAltitude{other.cruisingAltitude},
+                    flightNumber{other.flightNumber},
+                    callsign{other.callsign},
+                    departure{other.departure},
+                    arrival{other.arrival},
+                    departureRunway{other.departureRunway},
+                    arrivalRunway{other.arrivalRunway},
+                    waypoints{other.waypoints},
+                    plane{other.plane},
+                    fuelPlanning{other.fuelPlanning},
+                    perfCalc{other.perfCalc}{}
+Route& Route::operator=(Route other)
+{
+    if (this != &other)
+        swap(*this, other);
+    return *this;
+}
+void swap(Route& rt1, Route& rt2) noexcept
+{
+    using std::swap;
+    swap(rt1.cruisingAltitude, rt2.cruisingAltitude);
+    swap(rt1.routeDistance, rt2.routeDistance);
+    swap(rt1.flightNumber, rt2.flightNumber);
+    swap(rt1.callsign, rt2.callsign);
+    swap(rt1.departureRunway, rt2.departureRunway);
+    swap(rt1.arrivalRunway, rt2.arrivalRunway);
+    swap(rt1.blockTime, rt2.blockTime);
+    swap(rt1.airTime, rt2.airTime);
+    swap(rt1.climbDuration, rt2.climbDuration);
+    swap(rt1.cruiseDuration, rt2.cruiseDuration);
+    swap(rt1.descentDuration, rt2.descentDuration);
+    swap(rt1.TOC, rt2.TOC);
+    swap(rt1.TOD, rt2.TOD);
+    swap(rt1.departure, rt2.departure);
+    swap(rt1.arrival, rt2.arrival);
+    swap(rt1.waypoints, rt2.waypoints);
+    swap(rt1.plane, rt2.plane);
+    swap(rt1.fuelPlanning, rt2.fuelPlanning);
+    swap(rt1.perfCalc, rt2.perfCalc);
+}
 void Route::setRouteDistance()
 {
     for (const auto& waypct : waypoints)

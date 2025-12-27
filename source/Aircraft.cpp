@@ -1,6 +1,7 @@
 #include "../header/Aircraft.h"
 #include <iostream>
 #include <algorithm>
+#include <nlohmann/json.hpp>
 
 Aircraft::Aircraft()
 {

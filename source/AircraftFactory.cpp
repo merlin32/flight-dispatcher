@@ -2,6 +2,8 @@
 #include "../header/PassengerAircraft.h"
 #include "../header/CargoAircraft.h"
 #include "../header/GeneralAviationAircraft.h"
+#include "../header/Aircraft.h"
+#include <nlohmann/json.hpp>
 
 std::shared_ptr<Aircraft> AircraftFactory::createAircraft(const nlohmann::json& obj)
 {

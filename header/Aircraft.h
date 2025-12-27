@@ -3,8 +3,8 @@
 
 #include <string>
 #include <memory>
-#include <nlohmann/json.hpp>
 #include <vector>
+#include <nlohmann/json_fwd.hpp>
 
 class Aircraft
 {

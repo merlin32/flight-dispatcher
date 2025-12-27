@@ -1,5 +1,6 @@
 #include "../header/CargoAircraft.h"
 #include <iostream>
+#include <nlohmann/json.hpp>
 
 CargoAircraft::CargoAircraft(const std::string& category_,
              const std::string& type_,

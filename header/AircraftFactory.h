@@ -3,7 +3,6 @@
 #define AIRCRAFTFACTORY_H
 
 #include "Aircraft.h"
-#include <memory>
 
 class AircraftFactory
 {

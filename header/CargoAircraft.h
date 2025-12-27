@@ -8,18 +8,18 @@
 class CargoAircraft : public Aircraft
 {
 private:
-    int maxContainersNum;
-    int crewCount;
+    int maxContainersNum = 0;
+    int crewCount = 0;
     int containersNum = 0;
-    double maxContainerWeight;
+    double maxContainerWeight = 0;
     std::vector<double> containersWeights{};
-    double calculatePayload_() const override;
-    double calculateFreight_() const override;
+    [[nodiscard]] double calculatePayload_() const override;
+    [[nodiscard]] double calculateFreight_() const override;
     void readFromJson_(const nlohmann::json& obj) override;
     void display(std::ostream &os) const override;
     [[nodiscard]] bool maxContainersNumExceeded() const;
     [[nodiscard]] bool maxContainerWeightExceeded() const;
-    bool isDataValid_() const override;
+    [[nodiscard]] bool isDataValid_() const override;
 public:
     CargoAircraft() = default;
     explicit CargoAircraft(const std::string& type_,

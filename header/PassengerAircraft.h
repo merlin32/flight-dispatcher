@@ -6,15 +6,15 @@
 class PassengerAircraft : public Aircraft
 {
 private:
-    int maxPassengerCount;
-    int crewCount;
+    int maxPassengerCount = 0;
+    int crewCount = 0;
     int freight = 0;
     int passengerNumber = 0;
-    double calculatePayload_() const override;
-    double calculateFreight_() const override;
+    [[nodiscard]] double calculatePayload_() const override;
+    [[nodiscard]] double calculateFreight_() const override;
     void readFromJson_(const nlohmann::json& obj) override;
     void display(std::ostream &os) const override;
-    bool isDataValid_() const override;
+    [[nodiscard]] bool isDataValid_() const override;
 public:
     PassengerAircraft() = default;
     explicit PassengerAircraft(const std::string& type_,

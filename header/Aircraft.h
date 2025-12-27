@@ -21,11 +21,11 @@ private:
     int climbRate, descentRate;
     double climbSpeed;
     int minimumFlightDuration;
-    virtual double calculatePayload_() const = 0;
-    virtual double calculateFreight_() const = 0;
+    [[nodiscard]] virtual double calculatePayload_() const = 0;
+    [[nodiscard]] virtual double calculateFreight_() const = 0;
     virtual void readFromJson_(const nlohmann::json& obj) = 0;
     virtual void display(std::ostream &) const {}
-    virtual bool isDataValid_() const = 0;
+    [[nodiscard]] virtual bool isDataValid_() const = 0;
 public:
     Aircraft();
     explicit Aircraft(std::string type_,
@@ -49,7 +49,7 @@ public:
              const double& climbSpeed_,
              const int& minimumFlightDuration_);
     virtual ~Aircraft() = default;
-    virtual std::shared_ptr<Aircraft> clone() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<Aircraft> clone() const = 0;
     [[nodiscard]] double calculatePayload() const;
     [[nodiscard]] double calculateFreight() const;
     [[nodiscard]] bool isDataValid() const;

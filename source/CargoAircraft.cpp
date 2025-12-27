@@ -71,7 +71,7 @@ bool CargoAircraft::isDataValid_() const
 {
     if (maxContainersNumExceeded() == true)
     {
-        std::cerr << "Number of maximum container slots excedeed!\n";
+        std::cerr << "Number of maximum container slots exceeded!\n";
         return false;
     }
     if (maxContainerWeightExceeded() == true)

@@ -7,16 +7,16 @@
 class GeneralAviationAircraft : public Aircraft
 {
 private:
-    int maxPilotCount;
-    int maxPassengersNumber;
+    int maxPilotCount = 0;
+    int maxPassengersNumber = 0;
     int pilotsCount = 0;
     int passengersNumber = 0;
     double baggageWeight = 0;
-    double calculatePayload_() const override;
-    double calculateFreight_() const override;
+    [[nodiscard]] double calculatePayload_() const override;
+    [[nodiscard]] double calculateFreight_() const override;
     void readFromJson_(const nlohmann::json& obj) override;
     void display(std::ostream &os) const override;
-    bool isDataValid_() const override;
+    [[nodiscard]] bool isDataValid_() const override;
     [[nodiscard]] bool maxPilotCountExceeded() const;
     [[nodiscard]] bool maxPassengersNumberExceeded() const;
 public:

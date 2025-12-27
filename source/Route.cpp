@@ -1,15 +1,14 @@
 #include "../header/Route.h"
 
-Route::Route(const int& cruisingAltitude_, std::string flightNumber_, std::string callsign_,
+Route::Route(const int& cruisingAltitude_, std::string callsign_,
                     const Airport& departure_, const Airport& arrival_, std::string departureRunway_, std::string arrivalRunway_,
                     const std::vector<Waypoint>& waypoints_, std::shared_ptr<Aircraft> plane_,
                     const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_):
-                    cruisingAltitude{cruisingAltitude_}, flightNumber{std::move(flightNumber_)}, callsign{std::move(callsign_)},
+                    cruisingAltitude{cruisingAltitude_}, callsign{std::move(callsign_)},
                     departure{departure_}, arrival{arrival_}, departureRunway{std::move(departureRunway_)},
                     arrivalRunway{std::move(arrivalRunway_)}, waypoints{std::move(waypoints_)}, plane{std::move(plane_)},
                     fuelPlanning{fuelPlanning_}, perfCalc{perfCalc_}{}
 Route::Route(const Route& other) : cruisingAltitude{other.cruisingAltitude},
-                    flightNumber{other.flightNumber},
                     callsign{other.callsign},
                     departure{other.departure},
                     arrival{other.arrival},
@@ -30,7 +29,6 @@ void swap(Route& rt1, Route& rt2) noexcept
     using std::swap;
     swap(rt1.cruisingAltitude, rt2.cruisingAltitude);
     swap(rt1.routeDistance, rt2.routeDistance);
-    swap(rt1.flightNumber, rt2.flightNumber);
     swap(rt1.callsign, rt2.callsign);
     swap(rt1.departureRunway, rt2.departureRunway);
     swap(rt1.arrivalRunway, rt2.arrivalRunway);
@@ -178,7 +176,6 @@ std::ostream& operator<<(std::ostream& os, const Route& rt)
     os << "=========================\n";
     os << "== Flight plan details ==\n";
     os << "=========================\n";
-    os << "Flight number: " << rt.flightNumber << "\n";
     os << "Callsign: " << rt.callsign << "\n";
     os << "Departure: " << rt.departure.getIcao() << " (Runway: " << rt.departureRunway << ")\n";
     os << "Arrival: " << rt.arrival.getIcao() << " (Runway: " << rt.arrivalRunway << ")\n";

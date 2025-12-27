@@ -17,6 +17,7 @@ private:
 public:
     void initLocalData();
     void flpCreation();
+    void mainMenu();
 };
 
 #endif //MENU_H

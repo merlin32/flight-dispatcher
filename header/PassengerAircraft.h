@@ -17,7 +17,8 @@ private:
     [[nodiscard]] bool isDataValid_() const override;
 public:
     PassengerAircraft() = default;
-    explicit PassengerAircraft(const std::string& type_,
+    explicit PassengerAircraft(const std::string& category_,
+             const std::string& type_,
              const double& range_,
              const double& cruisingSpeed_,
              const double& wingSpan_,

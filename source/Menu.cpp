@@ -2,6 +2,8 @@
 #include "../header/FuelManagement.h"
 #include "../header/PerformanceCalculation.h"
 #include "../header/AircraftFactory.h"
+#include "../header/CargoAircraft.h"
+#include "../header/GeneralAviationAircraft.h"
 #include "../header/PassengerAircraft.h"
 
 void Menu::populateAircrafts(std::ifstream aircraftsJson)
@@ -14,6 +16,7 @@ void Menu::populateAircrafts(std::ifstream aircraftsJson)
             aircraftsList.push_back(temp);
     }
     aircraftsJson.close();
+    std::sort(aircraftsList.begin(),aircraftsList.end(), Aircraft::compareAircraftTypes);
 }
 void Menu::populateAirports(std::ifstream airportsJson)
 {
@@ -55,6 +58,7 @@ void Menu::populateAirports(std::ifstream airportsJson)
         airportsList.push_back(ap);
     }
     airportsJson.close();
+    std::sort(airportsList.begin(), airportsList.end(), Airport::compareAirportsIcao);
 }
 void Menu::populateWaypoints(std::ifstream waypointsJson)
 {
@@ -71,7 +75,8 @@ void Menu::populateWaypoints(std::ifstream waypointsJson)
             };
             waypointsList.push_back(wp);
     }
-    //waypointsJson.close();
+    waypointsJson.close();
+    std::sort(waypointsList.begin(), waypointsList.end(), Waypoint::compareWaypointCodes);
 }
 void Menu::initLocalData()
 {
@@ -106,148 +111,171 @@ void Menu::flpCreation()
     std::cout << "================================\n";
     std::cout << "===== Flight plan creation =====\n";
     std::cout << "================================\n";
-    std::cout << "Flight number: ";
-    std::string fltNumber;
-    std::cin >> fltNumber;
     std::cout << "Callsign: ";
     std::string callSgn;
     std::cin >> callSgn;
-    //departure selection. if the ICAO code is not present in airportsList the program ends
-    std::cout << "Departure: ";
-    std::string departIcao;
-    std::cin >> departIcao;
+    //departure selection. If the ICAO code is not present in airportsList, the user must enter again a valid code
     Airport depart;
-    bool found = false;
-    for (const auto& i : airportsList)
-        if (departIcao == i.getIcao())
-        {
-            found = true;
-            depart = i;
-            break;
-        }
-    if (found == false)
+    std::string departIcao;
+    while (true)
     {
-        std::cerr << "Icao code not found in database\n";
-        return;
+        std::cout << "Departure: ";
+        std::cin >> departIcao;
+        if (Airport::validAirport(airportsList, departIcao, depart) == true)
+            break;
     }
-    //arrival selection. if the ICAO code is not present in airportsList the program ends
-    found = false;
+    //arrival selection. If the ICAO code is not present in airportsList, the user must enter again a valid code
     Airport arrival;
-    std::cout << "Arrival: ";
     std::string arrivalIcao;
-    std::cin >> arrivalIcao;
-    for (const auto& i : airportsList)
-        if (arrivalIcao == i.getIcao())
-        {
-            found = true;
-            arrival = i;
+    while (true)
+    {
+        std::cout << "Arrival: ";
+        std::cin >> arrivalIcao;
+        if (Airport::validAirport(airportsList, arrivalIcao, arrival) == true)
             break;
-        }
-    if (found == false)
-    {
-        std::cerr << "Icao code not found in database\n";
-        return;
     }
-    //departing runway: it must exist and it must be in use
-    found = false;
-    std::cout << "Departing runway: ";
+    //departure runway selection.
+    //the runway is being checked and if it doesn't exist, the user must enter again a valid runway code
     std::string departRw;
-    std::cin >> departRw;
-    for (const auto& i : depart.getAirportRunways())
+    while (true)
     {
-        if (departRw == i.getRunwayID() && i.getRwStatus())
-            found = true;
+        std::cout << "Departing runway: ";
+        std::cin >> departRw;
+        if (Airport::validRunway(departRw, depart) == true)
+            break;
     }
-    if (found == false)
-    {
-        std::cerr << "Invalid runway selection\n";
-        return;
-    }
-    //arrival runway: it must exist and it must be in use
-    found = false;
-    std::cout << "Arrival runway: ";
+
+    //arrival runway selection.
+    //the runway is being checked and if it doesn't exist, the user must enter again a valid runway code
     std::string arrivalRw;
-    std::cin >> arrivalRw;
-    for (const auto& i : arrival.getAirportRunways())
+    while (true)
     {
-        if (arrivalRw == i.getRunwayID() && i.getRwStatus())
-            found = true;
-    }
-    if (found == false)
-    {
-        std::cerr << "Invalid runway selection\n";
-        return;
+        std::cout << "Arrival runway: ";
+        std::cin >> arrivalRw;
+        if (Airport::validRunway(arrivalRw, arrival) == true)
+            break;
     }
     //waypoints selection
     //first, the departure airport is inserted into routeWaypoints, than the user enters the desired waypoints
     //to mark the end, the user must type "end"
     //the arrival airport waypoint is then inserted into the routeWaypoints
     //the program also checks whether the selected waypoint exists or not
-    //for each waypoint we calculate its distance to the previous waypoint
-    std::cout << "Enter waypoints: ";
+    //for each waypoint, except the first one, we calculate its distance to the previous one
+    std::cout << "================================\n";
+    std::cout << "===== Waypoints selection ======\n";
+    std::cout << "================================\n";
+    std::cout << "Type (end) to stop selection!\n";
     std::vector<Waypoint> routeWaypoints;
     std::string currentWaypoint;
-    std::cin >> currentWaypoint;
-    for (const auto& i : waypointsList)
-        if (departIcao == i.getWaypointCode())
-        {
-            routeWaypoints.push_back(i);
-            break;
-        }
-    while (currentWaypoint != "end")
+    Waypoint departureWaypoint;
+    Waypoint arrivalWaypoint;
+    int counter = 1;
+    if (Waypoint::validWaypoint(waypointsList, departIcao, departureWaypoint) == true)
+        routeWaypoints.push_back(departureWaypoint);
+    while (true)
     {
-        found = false;
-        for (const auto& i : waypointsList)
-            if (currentWaypoint == i.getWaypointCode())
-            {
-                found = true;
-                const Waypoint& previous = routeWaypoints.back();
-                Waypoint current = i;
-                current.setDistanceToPrevious(previous);
-                routeWaypoints.push_back(current);
-                break;
-            }
-        if (found == false)
-        {
-            std::cerr << "Invalid waypoint selected!\n";
-            return;
-        }
+        std::cout << "Waypoint " << counter << ": ";
         std::cin >> currentWaypoint;
-    }
-    for (const auto& i : waypointsList)
-        if (arrivalIcao == i.getWaypointCode())
-        {
-            const Waypoint& previous = routeWaypoints.back();
-            Waypoint current = i;
-            current.setDistanceToPrevious(previous);
-            routeWaypoints.push_back(current);
+        if (currentWaypoint == "end")
             break;
+        Waypoint temp;
+        if (Waypoint::validWaypoint(waypointsList, currentWaypoint, temp))
+        {
+            routeWaypoints.push_back(temp);
+            counter++;
         }
+    }
+    if (Waypoint::validWaypoint(waypointsList, arrivalIcao, arrivalWaypoint) == true)
+        routeWaypoints.push_back(arrivalWaypoint);
+    for (size_t i = 1; i < routeWaypoints.size(); i++)
+    {
+        Waypoint previous = routeWaypoints[i-1];
+        routeWaypoints[i].setDistanceToPrevious(previous);
+    }
+
     //aircraft selection
-    found = false;
-    std::cout << "Aircraft type: ";
-    std::string acType;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::getline(std::cin, acType);
     std::shared_ptr<Aircraft> ac;
-    for (const auto& i : aircraftsList)
-        if (acType == i->getType())
-        {
-            found = true;
-            ac = i;
+    while (true)
+    {
+        std::cout << "Aircraft type: ";
+        std::string acType;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  //buffer clear
+        std::getline(std::cin, acType);
+        if (Aircraft::validAircraft(aircraftsList, acType, ac) == true)
             break;
+    }
+
+    if (ac->getCategory() == "passenger")
+    {
+        auto passengerAc = std::dynamic_pointer_cast<PassengerAircraft>(ac);
+        if (passengerAc)
+        {
+            double freight;
+            int passengers;
+            while (true)
+            {
+                std::cout << "Freight: ";
+                std::cin >> freight;
+                std::cout << "Passengers: ";
+                std::cin >> passengers;
+                if (passengerAc->isDataValid() == true)
+                    break;
+            }
+            passengerAc->setFreight(freight);
+            passengerAc->setPassengerNumber(passengers);
         }
-    if (found == false)
-    {
-        std::cerr << "Invalid aircraft type!\n";
-        return;
     }
-    auto passengerAc = std::dynamic_pointer_cast<PassengerAircraft>(ac);
-    if (passengerAc)
+    if (ac->getCategory() == "cargo")
     {
-        passengerAc->setFreight(4000);
-        passengerAc->setPassengerNumber(180);
+        auto cargoAc = std::dynamic_pointer_cast<CargoAircraft>(ac);
+        if (cargoAc)
+        {
+            int containersNum;
+            std::vector<double> containersWeights{};
+            while (true)
+            {
+                std::cout << "Number of containers: ";
+                std::cin >> containersNum;
+                std::cout << "Enter each container's weight: \n";
+                for (int i = 0; i < containersNum; i++)
+                {
+                    double temp;
+                    std::cout << "Container " << i + 1 << ": ";
+                    std::cin >> temp;
+                    containersWeights.push_back(temp);
+                }
+                if (cargoAc->isDataValid() == true)
+                    break;
+            }
+            cargoAc->setContainersNum(containersNum);
+            cargoAc->setContainersWeights(containersWeights);
+        }
     }
+    if (ac->getCategory() == "general aviation")
+    {
+        auto generalAvAc = std::dynamic_pointer_cast<GeneralAviationAircraft>(ac);
+        if (generalAvAc)
+        {
+            int pilotsCount;
+            int passengersNumber;
+            double baggageWeight;
+            while (true)
+            {
+                std::cout << "Number of pilots: ";
+                std::cin >> pilotsCount;
+                std::cout << "Passengers: ";
+                std::cin >> passengersNumber;
+                std::cout << "Baggage quantity: ";
+                std::cin >> baggageWeight;
+                if (generalAvAc->isDataValid() == true)
+                    break;
+            }
+            generalAvAc->setPilotsCount(pilotsCount);
+            generalAvAc->setPassengersNumber(passengersNumber);
+            generalAvAc->setBaggageWeight(baggageWeight);
+        }
+    }
+
     //cruising altitude selection
     std::cout << "Cruise altitude: ";
     std::string cruiseAlt;
@@ -289,20 +317,11 @@ void Menu::flpCreation()
     else
         blkFuelInput = 0;
     FuelManagement fuelPlanning{ctgPctInput, rsvTimeInput, txFuelInput, blkFuelInput};
-    //PerformanceCalculation input data
-    std::cout << "=======================\n";
-    std::cout << "=== Payload entries ===\n";
-    std::cout << "=======================\n";
-    std::cout << "Freight: ";
-    double freightInput;
-    std::cin >> freightInput;
-    std::cout << "Passengers: ";
-    int passengersInput;
-    std::cin >> passengersInput;
-    std::cout << "\n=======================\n\n";
+    //performance calculation data init
     PerformanceCalculation perfCalc;
-    perfCalc.setPayload(passengerAc);
-    Route rt1{cruiseAltInput, fltNumber, callSgn, depart, arrival,
+    perfCalc.setPayload(ac);
+    //flight plan creation
+    Route rt1{cruiseAltInput, callSgn, depart, arrival,
         departRw, arrivalRw,
              routeWaypoints, ac, fuelPlanning, perfCalc};
     if (rt1.routeInit() == false)
@@ -311,4 +330,24 @@ void Menu::flpCreation()
         return;
     }
     std::cout << rt1;
+}
+
+void Menu::mainMenu()
+{
+    std::cout << "=======================================\n";
+    std::cout << "==== Flight Dispatcher - Main Menu ====\n";
+    std::cout << "=======================================\n\n";
+    std::cout << "\t1) Create new flight plan\n";
+    std::cout << "\t2) Open existing flight plan\n";
+    std::cout << "\t3) Exit\n";
+    short unsigned int option;
+    std::cin >> option;
+    switch (option)
+    {
+        case 1: flpCreation(); break;
+        //case 2: accessFlp(); break;
+        case 3: exit(0);
+        default: std::cerr << "Unknown option! Please enter a valid option!\n"; break;
+    }
+    std::cout << "\n\n\n";
 }

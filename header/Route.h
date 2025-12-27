@@ -11,7 +11,7 @@ private:
     //not implemented yet: alternate selection
     int cruisingAltitude;
     double routeDistance = 0;
-    std::string flightNumber, callsign;
+    std::string callsign;
     Airport departure, arrival;
     std::string departureRunway;
     std::string arrivalRunway;
@@ -25,7 +25,7 @@ private:
     FuelManagement fuelPlanning;
     PerformanceCalculation perfCalc;
 public:
-    explicit Route(const int& cruisingAltitude_, std::string flightNumber_, std::string callsign_,
+    explicit Route(const int& cruisingAltitude_, std::string callsign_,
                     const Airport& departure_, const Airport& arrival_, std::string departureRunway_, std::string arrivalRunway_,
                     const std::vector<Waypoint>& waypoints_, std::shared_ptr<Aircraft> plane_,
                     const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_);

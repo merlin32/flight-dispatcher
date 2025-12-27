@@ -35,7 +35,7 @@ double Metar::calculateWindSpeed(const int& runwayDirection) const
     unsigned int windDirection = std::stoi(windInfo.substr(0, 3));
     unsigned int windSpeed     = std::stoi(windInfo.substr(3, 2));
     double pi = 3.14159265358979323846;
-    double angleRad = (windDirection - runwayDirection) * pi / 180.0;
+    double angleRad = (windDirection - (runwayDirection * 10)) * pi / 180.0;
     return windSpeed * cos(angleRad);
 }
 

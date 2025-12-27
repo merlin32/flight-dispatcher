@@ -5,10 +5,12 @@
 #include <iostream>
 #include <memory>
 #include <nlohmann/json.hpp>
+#include <algorithm>
 
 class Aircraft
 {
 private:
+    std::string category;
     std::string type;
     double range;
     double cruisingSpeed, wingSpan, maxTakeoffWeight;
@@ -28,7 +30,8 @@ private:
     [[nodiscard]] virtual bool isDataValid_() const = 0;
 public:
     Aircraft();
-    explicit Aircraft(std::string type_,
+    explicit Aircraft(std::string category_,
+             std::string type_,
              const double& range_,
              const double& cruisingSpeed_,
              const double& wingSpan_,
@@ -64,6 +67,7 @@ public:
     [[nodiscard]] double getEmptyWeight() const;
     [[nodiscard]] double getTakeoffReferenceDist() const;
     [[nodiscard]] double getMaxTakeoffWeight() const;
+    [[nodiscard]] std::string getCategory() const;
     friend std::ostream& operator<<(std::ostream& os, const Aircraft& ac);
     //moved these calculations from FuelManagement to eliminate some getters
     [[nodiscard]] double calculateTripFuel(const double& climbDuration, const double& cruiseDuration,
@@ -76,6 +80,9 @@ public:
     [[nodiscard]] bool maxPayloadExceeded(const double& payload) const;
     [[nodiscard]] bool maxFreightExceeded(const double& freight) const;
     [[nodiscard]] bool maxTakeoffWeightExceeded(const double& TOW) const;
+    [[nodiscard]] static bool compareAircraftTypes(const std::shared_ptr<Aircraft>& plane1, const std::shared_ptr<Aircraft>& plane2);
+    [[nodiscard]] static bool validAircraft(const std::vector<std::shared_ptr<Aircraft>>& aircraftsList, const std::string& inputType,
+                                            std::shared_ptr<Aircraft>& plane);
 protected:
     Aircraft(const Aircraft& other) = default;
     Aircraft &operator=(const Aircraft& other) = default;

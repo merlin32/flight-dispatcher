@@ -39,4 +39,27 @@ std::ostream& operator<<(std::ostream& os, const Waypoint& wp)
     os << "Weather Affected: " << wp.weatherAffected << '\n';
     return os;
 }
+bool Waypoint::validWaypoint(const std::vector<Waypoint>& waypointsList, const std::string& waypointName,
+                            Waypoint& selectedWaypoint)
+{
+    auto position = std::lower_bound(waypointsList.begin(), waypointsList.end(),
+                                    waypointName, [](const Waypoint& w, const std::string& name)
+                                    {
+                                        return w.getWaypointCode() < name;
+                                    });
+    if (position != waypointsList.end() && position->getWaypointCode() == waypointName)
+    {
+        selectedWaypoint = *position;
+        return true;
+    }
+    std::cerr << waypointName << " is not valid! Select another waypoint!\n";
+    return false;
+}
+bool Waypoint::compareWaypointCodes(const Waypoint& wp1, const Waypoint& wp2)
+{
+    return wp1.getWaypointCode() < wp2.getWaypointCode();
+}
+
+
+
 

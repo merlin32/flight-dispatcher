@@ -1,6 +1,7 @@
 #include "../header/PassengerAircraft.h"
 
-PassengerAircraft::PassengerAircraft(const std::string& type_,
+PassengerAircraft::PassengerAircraft(const std::string& category_,
+             const std::string& type_,
              const double& range_,
              const double& cruisingSpeed_,
              const double& wingSpan_,
@@ -21,7 +22,7 @@ PassengerAircraft::PassengerAircraft(const std::string& type_,
              const double& climbSpeed_,
              const int& minimumFlightDuration_,
              const int& maxPassengerCount_,
-             const int& crewCount_) : Aircraft{type_, range_, cruisingSpeed_,
+             const int& crewCount_) : Aircraft{category_, type_, range_, cruisingSpeed_,
              wingSpan_, maxTakeoffWeight_, maxPayload_, emptyWeight_, fuelCapacity_,
              fuelBurnClimb_, fuelBurnCruise_, fuelBurnDescent_, maxCruisingAltitude_,
              fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,

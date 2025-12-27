@@ -1,5 +1,6 @@
 #include "../header/PerformanceCalculation.h"
 #include <iostream>
+#include <cmath>
 
 void PerformanceCalculation::setPayload(const std::shared_ptr<Aircraft>& plane)
 {
@@ -18,7 +19,7 @@ void PerformanceCalculation::setLDW(const double& tripFuel){this->LDW = this->TO
 void PerformanceCalculation::setTotalWeight(const double& blockFuel){this->totalWeight = this->ZFW + blockFuel;}
 void PerformanceCalculation::setTakeoffDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight, const Metar& metar)
 {
-    double massesRatio = (this->TOW / maxTakeoffWeight) * (this->TOW / maxTakeoffWeight);
+    double massesRatio = this->TOW / maxTakeoffWeight;
     double qnhsRatio = metar.calculateQhnsRatio();
     double temperaturesRatio = metar.calculateTemperaturesRatio();
     double distance = takeoffReferenceDist * massesRatio * qnhsRatio * temperaturesRatio;
@@ -27,7 +28,7 @@ void PerformanceCalculation::setTakeoffDistance(const double& takeoffReferenceDi
 void PerformanceCalculation::setLandingDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight,
                                                 const Metar& metar, const int& runwayDirection, const int& runwayConditon)
 {
-    double massesRatio = (this->LDW / maxTakeoffWeight) * (this->LDW / maxTakeoffWeight);
+    double massesRatio = this->LDW / maxTakeoffWeight;
     double qnhsRatio = metar.calculateQhnsRatio();
     double temperaturesRatio = metar.calculateTemperaturesRatio();
     //wind factor calculation
@@ -43,7 +44,7 @@ void PerformanceCalculation::setLandingDistance(const double& takeoffReferenceDi
         case 1: runwayFactor = 1.20; break;
         default: runwayFactor = 1; break;
     }
-    double distance = takeoffReferenceDist * massesRatio * qnhsRatio * temperaturesRatio * windFactor * runwayFactor;
+    double distance = (0.7 * takeoffReferenceDist) * massesRatio * qnhsRatio * temperaturesRatio * windFactor * runwayFactor;
     this->landingDistance = distance;
 }
 double PerformanceCalculation::getTakeoffDistance() const{return this->takeoffDistance;}

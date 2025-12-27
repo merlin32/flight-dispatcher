@@ -22,7 +22,8 @@ Aircraft::Aircraft()
     this->climbSpeed = 0;
     this->minimumFlightDuration = 0;
 }
-Aircraft::Aircraft(std::string type_,
+Aircraft::Aircraft(std::string category_,
+             std::string type_,
              const double& range_,
              const double& cruisingSpeed_,
              const double& wingSpan_,
@@ -42,7 +43,8 @@ Aircraft::Aircraft(std::string type_,
              const int& descentRate_,
              const double& climbSpeed_,
              const int& minimumFlightDuration_)
-        : type{std::move(type_)},
+        : category{std::move(category_)},
+          type{std::move(type_)},
           range{range_},
           cruisingSpeed{cruisingSpeed_},
           wingSpan{wingSpan_},
@@ -64,6 +66,7 @@ Aircraft::Aircraft(std::string type_,
           minimumFlightDuration(minimumFlightDuration_){}
 std::ostream& operator<<(std::ostream& os, const Aircraft& ac)
 {
+    os << "Category: " << ac.category << '\n';
     os << "Type: " << ac.type << '\n';
     os << "Range: " << ac.range << " NM\n";
     os << "Cruising Speed: " << ac.cruisingSpeed << " KTS\n";
@@ -115,12 +118,14 @@ std::string Aircraft::getType() const{return this->type;}
 double Aircraft::getEmptyWeight() const{return this->emptyWeight;}
 double Aircraft::getTakeoffReferenceDist() const{return this->takeoffReferenceDist;}
 double Aircraft::getMaxTakeoffWeight() const{return this->maxTakeoffWeight;}
+std::string Aircraft::getCategory() const {return this->category;}
 //virtual functions calls
 double Aircraft::calculateFreight() const{return calculateFreight_();}
 double Aircraft::calculatePayload() const{return calculatePayload_();}
 bool Aircraft::isDataValid() const {return isDataValid_();}
 void Aircraft::readFromJson(const nlohmann::json& obj)
 {
+    category = obj["category"];
     type = obj["type"];
     range = obj["range"];
     cruisingSpeed = obj["cruisingSpeed"];
@@ -143,6 +148,30 @@ void Aircraft::readFromJson(const nlohmann::json& obj)
     minimumFlightDuration = obj["minimumFlightDuration"];
     readFromJson_(obj);
 }
+bool Aircraft::compareAircraftTypes(const std::shared_ptr<Aircraft>& plane1, const std::shared_ptr<Aircraft>& plane2)
+{
+    return plane1->getType() < plane2->getType();
+}
+bool Aircraft::validAircraft(const std::vector<std::shared_ptr<Aircraft>>& aircraftsList, const std::string& inputType,
+                                std::shared_ptr<Aircraft>& plane)
+{
+    auto position = std::lower_bound(aircraftsList.begin(), aircraftsList.end(), inputType,
+                                    [](const std::shared_ptr<Aircraft>& a, const std::string& tp)
+                                    {
+                                        return a->getType() < tp;
+                                    });
+    if (position != aircraftsList.end() && (*position)->getType() == inputType)
+    {
+        plane = *position;
+        return true;
+    }
+    std::cerr << "Invalid aircraft type! Enter a valid aircraft type!\n";
+    return false;
+}
+
+
+
+
 
 
 

@@ -11,7 +11,7 @@ private:
     int maxPassengersNumber = 0;
     int pilotsCount = 0;
     int passengersNumber = 0;
-    double baggageWeight = 0;
+    double baggageWeight = 0.0;
     [[nodiscard]] double calculatePayload_() const override;
     [[nodiscard]] double calculateFreight_() const override;
     void readFromJson_(const nlohmann::json& obj) override;
@@ -21,7 +21,8 @@ private:
     [[nodiscard]] bool maxPassengersNumberExceeded() const;
 public:
     GeneralAviationAircraft() = default;
-    explicit GeneralAviationAircraft(const std::string& type_,
+    explicit GeneralAviationAircraft(const std::string& category_,
+             const std::string& type_,
              const double& range_,
              const double& cruisingSpeed_,
              const double& wingSpan_,

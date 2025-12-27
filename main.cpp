@@ -1,9 +1,9 @@
 #include "header/Menu.h"
 
 int main() {
-    Menu mainMenu;
-    mainMenu.initLocalData();
-    mainMenu.flpCreation();
+    Menu flightDispatcher;
+    flightDispatcher.initLocalData();
+    flightDispatcher.mainMenu();
     return 0;
 }
 

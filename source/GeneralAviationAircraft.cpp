@@ -1,6 +1,7 @@
 #include "../header/GeneralAviationAircraft.h"
 
-GeneralAviationAircraft::GeneralAviationAircraft(const std::string& type_,
+GeneralAviationAircraft::GeneralAviationAircraft(const std::string& category_,
+             const std::string& type_,
              const double& range_,
              const double& cruisingSpeed_,
              const double& wingSpan_,
@@ -21,7 +22,7 @@ GeneralAviationAircraft::GeneralAviationAircraft(const std::string& type_,
              const double& climbSpeed_,
              const int& minimumFlightDuration_,
              const int& maxPilotCount_,
-             const int& maxPassengersNumber_) : Aircraft{type_, range_, cruisingSpeed_,
+             const int& maxPassengersNumber_) : Aircraft{category_, type_, range_, cruisingSpeed_,
              wingSpan_, maxTakeoffWeight_, maxPayload_, emptyWeight_, fuelCapacity_,
              fuelBurnClimb_, fuelBurnCruise_, fuelBurnDescent_, maxCruisingAltitude_,
              fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,
@@ -36,7 +37,7 @@ double GeneralAviationAircraft::calculateFreight_() const{return baggageWeight;}
 void GeneralAviationAircraft::readFromJson_(const nlohmann::json& obj)
 {
     maxPilotCount = obj["maxPilotCount"];
-    maxPassengersNumber = obj["maxPassengerNumber"];
+    maxPassengersNumber = obj["maxPassengersNumber"];
 }
 
 void GeneralAviationAircraft::display(std::ostream &os) const

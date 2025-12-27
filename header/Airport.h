@@ -4,6 +4,7 @@
 #include "Runway.h"
 #include "Metar.h"
 #include <vector>
+#include <algorithm>
 
 class Airport
 {
@@ -24,8 +25,11 @@ public:
     [[nodiscard]] const Runway& getRunway(const std::string& runwayID) const;
     [[nodiscard]] unsigned short int getElevation() const;
     [[nodiscard]] std::string getIcao() const;
-    [[nodiscard]] std::vector<Runway> getAirportRunways() const;
     [[nodiscard]] Metar getMetar() const;
+    [[nodiscard]] std::vector<Runway> getAirportRunways() const;
+    [[nodiscard]] static bool validAirport (const std::vector<Airport>& airportsList, const std::string& candidate, Airport& ap);
+    [[nodiscard]] static bool validRunway(const std::string& runwayCode, const Airport& ap);
+    [[nodiscard]] static bool compareAirportsIcao(const Airport& ap1, const Airport& ap2);
 };
 
 #endif  //AIRPORT_H

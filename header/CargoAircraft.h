@@ -22,7 +22,8 @@ private:
     [[nodiscard]] bool isDataValid_() const override;
 public:
     CargoAircraft() = default;
-    explicit CargoAircraft(const std::string& type_,
+    explicit CargoAircraft(const std::string& category_,
+             const std::string& type_,
              const double& range_,
              const double& cruisingSpeed_,
              const double& wingSpan_,

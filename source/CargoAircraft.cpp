@@ -1,6 +1,7 @@
 #include "../header/CargoAircraft.h"
 
-CargoAircraft::CargoAircraft(const std::string& type_,
+CargoAircraft::CargoAircraft(const std::string& category_,
+             const std::string& type_,
              const double& range_,
              const double& cruisingSpeed_,
              const double& wingSpan_,
@@ -22,7 +23,7 @@ CargoAircraft::CargoAircraft(const std::string& type_,
              const int& minimumFlightDuration_,
              const int& maxContainersNum_,
              const int& crewCount_,
-             const double& maxContainerWeight_) : Aircraft{type_, range_, cruisingSpeed_,
+             const double& maxContainerWeight_) : Aircraft{category_, type_, range_, cruisingSpeed_,
              wingSpan_, maxTakeoffWeight_, maxPayload_, emptyWeight_, fuelCapacity_,
              fuelBurnClimb_, fuelBurnCruise_, fuelBurnDescent_, maxCruisingAltitude_,
              fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,

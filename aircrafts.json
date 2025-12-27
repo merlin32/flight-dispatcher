@@ -23,5 +23,31 @@
         "minimumFlightDuration": 20,
         "maxPassengerCount": 180,
         "crewCount": 6
-  }
+  },
+      {
+            "category": "cargo",
+            "type": "Boeing 747-8F",
+            "range": 4120,
+            "cruisingSpeed": 490,
+            "wingSpan": 68,
+            "maxTakeoffWeight": 447700,
+            "maxPayload": 134000,
+            "emptyWeight": 186000,
+            "fuelCapacity": 181500,
+            "fuelBurnClimb": 200,
+            "fuelBurnCruise": 140,
+            "fuelBurnDescent": 40,
+            "maxCruisingAltitude": 43100,
+            "fuelBurnIdle": 15,
+            "fuelBurnLowAltitude": 80,
+            "maxFreight": 134000,
+            "takeoffReferenceDist": 3000,
+            "climbRate": 1600,
+            "descentRate": 2000,
+            "climbSpeed": 250,
+            "minimumFlightDuration": 20,
+            "maxContainersNum": 34,
+            "crewCount": 4,
+            "maxContainerWeight": 6000
+      }
 ]

@@ -56,14 +56,10 @@ bool Airport::validAirport(const std::vector<Airport>& airportsList, const std::
 }
 bool Airport::validRunway(const std::string& runwayCode, const Airport& ap)
 {
-    bool found = false;
     for (const auto& i : ap.getAirportRunways())
     {
         if (runwayCode == i.getRunwayID() && i.getRwStatus())
-        {
-            found = true;
-            return found;
-        }
+            return true;
     }
     std::cerr << "Invalid runway selection! Choose another runway!\n";
     return false;

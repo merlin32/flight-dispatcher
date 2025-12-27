@@ -6,6 +6,7 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <algorithm>
+#include <vector>
 
 class Aircraft
 {

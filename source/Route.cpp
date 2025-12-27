@@ -112,11 +112,6 @@ bool Route::aircraftRangeExceeded() const
 {
     return this->routeDistance > this->plane->getRange();
 }
-bool Route::getCruisingAltitude() const
-{
-    return this->cruisingAltitude;
-}
-
 bool Route::routeInit()
 {
     this->setRouteDistance();

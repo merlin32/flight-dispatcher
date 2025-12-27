@@ -53,7 +53,6 @@ private:
     [[nodiscard]] bool rwTooShortDepar() const;
     [[nodiscard]] bool rwTooShortArrival() const;
     [[nodiscard]] bool aircraftRangeExceeded() const;
-    [[nodiscard]] bool getCruisingAltitude() const;
 };
 
 #endif //ROUTE_H

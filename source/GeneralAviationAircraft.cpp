@@ -1,4 +1,5 @@
 #include "../header/GeneralAviationAircraft.h"
+#include <iostream>
 
 GeneralAviationAircraft::GeneralAviationAircraft(const std::string& category_,
              const std::string& type_,

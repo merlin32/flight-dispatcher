@@ -2,10 +2,8 @@
 #define AIRCRAFT_H
 
 #include <string>
-#include <iostream>
 #include <memory>
 #include <nlohmann/json.hpp>
-#include <algorithm>
 #include <vector>
 
 class Aircraft

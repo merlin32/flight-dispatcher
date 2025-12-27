@@ -5,6 +5,7 @@
 #include "../header/CargoAircraft.h"
 #include "../header/GeneralAviationAircraft.h"
 #include "../header/PassengerAircraft.h"
+#include <fstream>
 
 void Menu::populateAircrafts(std::ifstream aircraftsJson)
 {

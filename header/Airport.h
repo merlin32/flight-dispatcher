@@ -4,7 +4,6 @@
 #include "Runway.h"
 #include "Metar.h"
 #include <vector>
-#include <algorithm>
 
 class Airport
 {

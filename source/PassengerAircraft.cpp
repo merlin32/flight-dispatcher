@@ -1,4 +1,5 @@
 #include "../header/PassengerAircraft.h"
+#include <iostream>
 
 PassengerAircraft::PassengerAircraft(const std::string& category_,
              const std::string& type_,

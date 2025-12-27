@@ -1,4 +1,5 @@
 #include "../header/CargoAircraft.h"
+#include <iostream>
 
 CargoAircraft::CargoAircraft(const std::string& category_,
              const std::string& type_,

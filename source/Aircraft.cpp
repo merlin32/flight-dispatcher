@@ -1,4 +1,6 @@
 #include "../header/Aircraft.h"
+#include <iostream>
+#include <algorithm>
 
 Aircraft::Aircraft()
 {

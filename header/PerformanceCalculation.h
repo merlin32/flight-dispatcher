@@ -4,7 +4,6 @@
 
 #include "FuelManagement.h"
 #include "Airport.h"
-#include "Aircraft.h"
 
 class PerformanceCalculation
 {

@@ -1,19 +1,13 @@
 #include "../header/PerformanceCalculation.h"
 #include <iostream>
 
-PerformanceCalculation::PerformanceCalculation(const double& freight_, const int& passengerNumber_): passengerNumber{passengerNumber_}
+void PerformanceCalculation::setPayload(const std::shared_ptr<Aircraft>& plane)
 {
-    //the user may want to insert only the passengerNumber value
-    if (freight_ != 0) this->freight = freight_;
-    else this->freight = 0;
+    this->payload = plane->calculatePayload();
 }
-void PerformanceCalculation::setPayload(const Aircraft& plane)
+void PerformanceCalculation::setFreight(const std::shared_ptr<Aircraft>& plane)
 {
-    this->payload = plane.calculatePayload();
-}
-void PerformanceCalculation::setFreight(const Aircraft& plane)
-{
-    this->freight = plane.calculateFreight();
+    this->freight = plane->calculateFreight();
 }
 //ZFW = zero fuel weight
 void PerformanceCalculation::setZFW(const double& emptyWeight){this->ZFW = emptyWeight + this->payload;}
@@ -55,12 +49,12 @@ void PerformanceCalculation::setLandingDistance(const double& takeoffReferenceDi
 double PerformanceCalculation::getTakeoffDistance() const{return this->takeoffDistance;}
 double PerformanceCalculation::getLandingDistance() const{return this->landingDistance;}
 double PerformanceCalculation::getFreight() const{return this->freight;}
-bool PerformanceCalculation::init(const Aircraft& plane, const FuelManagement& fuelPlanning, const Airport& departure,
+bool PerformanceCalculation::init(const std::shared_ptr<Aircraft>& plane, const FuelManagement& fuelPlanning, const Airport& departure,
                                   const Airport& arrival, const std::string& arrivalRunway)
 {
-    if (plane.isDataValid() == false)
+    if (plane->isDataValid() == false)
         return false;
-    if (plane.maxFreightExceeded(freight) == true)
+    if (plane->maxFreightExceeded(freight) == true)
     {
         std::cerr << "Maximum freight value has been exceeded!\n";
         return false;
@@ -68,23 +62,23 @@ bool PerformanceCalculation::init(const Aircraft& plane, const FuelManagement& f
     this->setPayload(plane);
     if (this->getFreight() == 0)
         this->setFreight(plane);
-    this->setZFW(plane.getEmptyWeight());
+    this->setZFW(plane->getEmptyWeight());
     this->setTOW(fuelPlanning.getBlockFuel(), fuelPlanning.getTaxiFuel());
     this->setLDW(fuelPlanning.getTripFuel());
     this->setTotalWeight(fuelPlanning.getBlockFuel());
-    double takeoffReferenceDistance = plane.getTakeoffReferenceDist();
-    double maxTakeoffWeight = plane.getMaxTakeoffWeight();
+    double takeoffReferenceDistance = plane->getTakeoffReferenceDist();
+    double maxTakeoffWeight = plane->getMaxTakeoffWeight();
     this->setTakeoffDistance(takeoffReferenceDistance, maxTakeoffWeight, departure.getMetar());
     this->setLandingDistance(takeoffReferenceDistance, maxTakeoffWeight,
                                       arrival.getMetar(),
                                       arrival.getRunway(arrivalRunway).getRwDirection(),
                                       arrival.getRunway(arrivalRunway).getRwCondition());
-    if (plane.maxPayloadExceeded(payload) == true)
+    if (plane->maxPayloadExceeded(payload) == true)
     {
         std::cerr << "Maximum payload value has been exceeded!\n";
         return false;
     }
-    if (plane.maxTakeoffWeightExceeded(TOW) == true)
+    if (plane->maxTakeoffWeightExceeded(TOW) == true)
     {
         std::cerr << "Maximum takeoff weight value has been exceeded!\n";
         return false;
@@ -98,7 +92,6 @@ std::ostream& operator<<(std::ostream& os, const PerformanceCalculation& pfc)
     os << "=======================================\n";
     os << "PAYLOAD: " << pfc.payload << " KG\n";
     os << "FREIGHT: " << pfc.freight << " KG\n";
-    os << "PASSENGER NUMBER: " << pfc.passengerNumber << '\n';
     os << "TOTAL WEIGHT: " << pfc.totalWeight << " KG\n";
     os << "ZFW: " << pfc.ZFW << " KG\n";
     os << "TOW: " << pfc.TOW << " KG\n";

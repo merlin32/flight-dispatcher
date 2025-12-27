@@ -87,11 +87,14 @@ std::ostream& operator<<(std::ostream& os, const Aircraft& ac)
     os << '\n';
     return os;
 }
-double Aircraft::calculateTripFuel(const double& climbDuration, const double& cruiseDuration, const double& descentDuration) const
+double Aircraft::calculateTripFuel(const double& climbDuration, const double& cruiseDuration,
+                                    const double& descentDuration, const double& TOW) const
 {
-        return climbDuration * fuelBurnClimb +
+    //introducing a weight factor to compute the fuel consumption taking into account the takeoff weight as well
+    double weightFactor = std::pow(TOW / maxTakeoffWeight, 0.75);
+        return (climbDuration * fuelBurnClimb +
                 cruiseDuration * fuelBurnCruise +
-                descentDuration * fuelBurnDescent;
+                descentDuration * fuelBurnDescent) * weightFactor;
 }
 //reserveFuel = the extra fuel the aircraft must have for this flight
 double Aircraft::calculateReserveFuel (const int& reserveTime)const{return reserveTime * fuelBurnLowAltitude;}
@@ -112,9 +115,34 @@ std::string Aircraft::getType() const{return this->type;}
 double Aircraft::getEmptyWeight() const{return this->emptyWeight;}
 double Aircraft::getTakeoffReferenceDist() const{return this->takeoffReferenceDist;}
 double Aircraft::getMaxTakeoffWeight() const{return this->maxTakeoffWeight;}
+//virtual functions calls
 double Aircraft::calculateFreight() const{return calculateFreight_();}
 double Aircraft::calculatePayload() const{return calculatePayload_();}
 bool Aircraft::isDataValid() const {return isDataValid_();}
+void Aircraft::readFromJson(const nlohmann::json& obj)
+{
+    type = obj["type"];
+    range = obj["range"];
+    cruisingSpeed = obj["cruisingSpeed"];
+    wingSpan = obj["wingSpan"];
+    maxTakeoffWeight = obj["maxTakeoffWeight"];
+    maxPayload = obj["maxPayload"];
+    emptyWeight = obj["emptyWeight"];
+    fuelCapacity = obj["fuelCapacity"];
+    fuelBurnClimb = obj["fuelBurnClimb"];
+    fuelBurnCruise = obj["fuelBurnCruise"];
+    fuelBurnDescent = obj["fuelBurnDescent"];
+    maxCruisingAltitude = obj["maxCruisingAltitude"];
+    fuelBurnIdle = obj["fuelBurnIdle"];
+    fuelBurnLowAltitude = obj["fuelBurnLowAltitude"];
+    maxFreight = obj["maxFreight"];
+    takeoffReferenceDist = obj["takeoffReferenceDist"];
+    climbRate = obj["climbRate"];
+    descentRate = obj["descentRate"];
+    climbSpeed = obj["climbSpeed"];
+    minimumFlightDuration = obj["minimumFlightDuration"];
+    readFromJson_(obj);
+}
 
 
 

@@ -1,38 +1,18 @@
 #include "../header/Menu.h"
 #include "../header/FuelManagement.h"
 #include "../header/PerformanceCalculation.h"
+#include "../header/AircraftFactory.h"
+#include "../header/PassengerAircraft.h"
 
 void Menu::populateAircrafts(std::ifstream aircraftsJson)
 {
     nlohmann::json data = nlohmann::json::parse(aircraftsJson);
-    /*
     for (const auto& i : data)
     {
-        Aircraft ac{
-            i["type"],
-            i["range"],
-            i["cruisingSpeed"],
-            i["wingSpan"],
-            i["maxTakeoffWeight"],
-            i["maxPayload"],
-            i["emptyWeight"],
-            i["fuelCapacity"],
-            i["fuelBurnClimb"],
-            i["fuelBurnCruise"],
-            i["fuelBurnDescent"],
-            i["maxCruisingAltitude"],
-            i["fuelBurnIdle"],
-            i["fuelBurnLowAltitude"],
-            i["maxFreight"],
-            i["maxPassengerCount"],
-            i["takeoffReferenceDist"],
-            i["climbRate"],
-            i["descentRate"],
-            i["climbSpeed"],
-            i["minimumFlightDuration"]
-        };
-        aircraftsList.push_back(ac);
-    }*/
+        std::shared_ptr<Aircraft> temp = AircraftFactory::createAircraft(i);
+        if (temp)
+            aircraftsList.push_back(temp);
+    }
     aircraftsJson.close();
 }
 void Menu::populateAirports(std::ifstream airportsJson)
@@ -122,7 +102,6 @@ void Menu::initLocalData()
 }
 void Menu::flpCreation()
 {
-    /*
     //flight plan creation
     std::cout << "================================\n";
     std::cout << "===== Flight plan creation =====\n";
@@ -250,9 +229,9 @@ void Menu::flpCreation()
     std::string acType;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::getline(std::cin, acType);
-    Aircraft ac;
+    std::shared_ptr<Aircraft> ac;
     for (const auto& i : aircraftsList)
-        if (acType == i.getType())
+        if (acType == i->getType())
         {
             found = true;
             ac = i;
@@ -262,6 +241,12 @@ void Menu::flpCreation()
     {
         std::cerr << "Invalid aircraft type!\n";
         return;
+    }
+    auto passengerAc = std::dynamic_pointer_cast<PassengerAircraft>(ac);
+    if (passengerAc)
+    {
+        passengerAc->setFreight(4000);
+        passengerAc->setPassengerNumber(180);
     }
     //cruising altitude selection
     std::cout << "Cruise altitude: ";
@@ -315,7 +300,8 @@ void Menu::flpCreation()
     int passengersInput;
     std::cin >> passengersInput;
     std::cout << "\n=======================\n\n";
-    PerformanceCalculation perfCalc{freightInput, passengersInput};
+    PerformanceCalculation perfCalc;
+    perfCalc.setPayload(passengerAc);
     Route rt1{cruiseAltInput, fltNumber, callSgn, depart, arrival,
         departRw, arrivalRw,
              routeWaypoints, ac, fuelPlanning, perfCalc};
@@ -325,5 +311,4 @@ void Menu::flpCreation()
         return;
     }
     std::cout << rt1;
-    */
 }

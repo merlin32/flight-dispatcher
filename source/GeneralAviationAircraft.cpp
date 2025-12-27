@@ -33,6 +33,12 @@ double GeneralAviationAircraft::calculatePayload_() const
     return 80 * (pilotsCount + passengersNumber) + baggageWeight;
 }
 double GeneralAviationAircraft::calculateFreight_() const{return baggageWeight;}
+void GeneralAviationAircraft::readFromJson_(const nlohmann::json& obj)
+{
+    maxPilotCount = obj["maxPilotCount"];
+    maxPassengersNumber = obj["maxPassengerNumber"];
+}
+
 void GeneralAviationAircraft::display(std::ostream &os) const
 {
     os << "Maximum number of pilots: " << maxPilotCount << '\n';

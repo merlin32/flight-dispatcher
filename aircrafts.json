@@ -1,5 +1,6 @@
 [
   {
+        "category": "passenger",
         "type": "Airbus A320Neo",
         "range": 3400,
         "cruisingSpeed": 454,
@@ -15,11 +16,12 @@
         "fuelBurnIdle": 9,
         "fuelBurnLowAltitude": 30,
         "maxFreight": 16600.20,
-        "maxPassengerCount": 180,
         "takeoffReferenceDist": 2100,
         "climbRate": 1800,
         "descentRate": 2000,
         "climbSpeed": 250,
-        "minimumFlightDuration": 20
+        "minimumFlightDuration": 20,
+        "maxPassengerCount": 180,
+        "crewCount": 6
   }
 ]

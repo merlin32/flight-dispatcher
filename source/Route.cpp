@@ -80,6 +80,8 @@ void Route::setCruiseAltitude()
     double numerator = this->routeDistance * 60 + ratio1 * departure.getElevation() + ratio2 * arrival.getElevation();
     double denominator = ratio1 + ratio2;
     this->cruisingAltitude = (int) (numerator / denominator);
+    while (plane->getMaxCruisingAltitude() < cruisingAltitude && cruisingAltitude > 4000)
+        cruisingAltitude -= 1000;
 }
 void Route::setAirTime()
 {
@@ -120,7 +122,7 @@ bool Route::getCruisingAltitude() const
 bool Route::routeInit()
 {
     this->setRouteDistance();
-    if (this->getCruisingAltitude() == 0)
+    if (cruisingAltitude == 0)
         this->setCruiseAltitude();
     if (this->maxCruiseAltitudeExceeded() == true)
     {
@@ -159,12 +161,12 @@ bool Route::routeInit()
         std::cerr << "Flight exceeds the range of the selected aircraft!\n";
         return false;
     }
-    if (this->fuelPlanning.init(this->climbDuration, this->cruiseDuration, this->descentDuration, *this->plane) == false)
+    if (this->fuelPlanning.init(this->climbDuration, this->cruiseDuration, this->descentDuration, this->plane) == false)
     {
         std::cerr << "Invalid fuel data!\n";
         return false;
     }
-    if (this->perfCalc.init(*plane, fuelPlanning, departure, arrival, arrivalRunway) == false)
+    if (this->perfCalc.init(plane, fuelPlanning, departure, arrival, arrivalRunway) == false)
     {
         std::cerr << "Invalid payload data!\n";
         return false;
@@ -189,7 +191,7 @@ std::ostream& operator<<(std::ostream& os, const Route& rt)
     os << "Descent duration: " << rt.descentDuration << " MIN\n";
     os << "TOC: " << rt.TOC << " NM\n";
     os << "TOD: " << rt.TOD << " NM\n";
-    os << "Plane:\n" << rt.plane << "\n";
+    os << "Plane:\n" << *rt.plane << "\n";
     os << rt.fuelPlanning << "\n";
     os << rt.perfCalc << "\n";
 

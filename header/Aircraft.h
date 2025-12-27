@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <memory>
+#include <nlohmann/json.hpp>
 
 class Aircraft
 {
@@ -22,6 +23,7 @@ private:
     int minimumFlightDuration;
     virtual double calculatePayload_() const = 0;
     virtual double calculateFreight_() const = 0;
+    virtual void readFromJson_(const nlohmann::json& obj) = 0;
     virtual void display(std::ostream &) const {}
     virtual bool isDataValid_() const = 0;
 public:
@@ -64,9 +66,11 @@ public:
     [[nodiscard]] double getMaxTakeoffWeight() const;
     friend std::ostream& operator<<(std::ostream& os, const Aircraft& ac);
     //moved these calculations from FuelManagement to eliminate some getters
-    [[nodiscard]] double calculateTripFuel(const double& climbDuration, const double& cruiseDuration, const double& descentDuration) const;
+    [[nodiscard]] double calculateTripFuel(const double& climbDuration, const double& cruiseDuration,
+                                            const double& descentDuration, const double& TOW) const;
     [[nodiscard]] double calculateReserveFuel(const int& reserveTime) const;
     [[nodiscard]] double calculateTaxiFuel() const;
+    void readFromJson(const nlohmann::json& obj);
     //check functions have been moved from FuelManagement and PerformanceCalculation to get rid of some getters
     [[nodiscard]] bool fuelCapacityExceeded(const double& blockFuel) const;
     [[nodiscard]] bool maxPayloadExceeded(const double& payload) const;

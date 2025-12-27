@@ -8,7 +8,7 @@
 class Menu
 {
 private:
-    std::vector<Aircraft> aircraftsList;
+    std::vector<std::shared_ptr<Aircraft>> aircraftsList;
     std::vector<Airport> airportsList;
     std::vector<Waypoint> waypointsList;
 

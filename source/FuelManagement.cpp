@@ -33,13 +33,32 @@ double FuelManagement::getTaxiFuel() const{return this->taxiFuel;}
 double FuelManagement::getBlockFuel() const{return this->blockFuel;}
 double FuelManagement::getTripFuel() const{return this->tripFuel;}
 bool FuelManagement::init(const double& climbDuration, const double& cruiseDuration, const double& descentDuration,
-                          const Aircraft& plane)
+                          const std::shared_ptr<Aircraft>& plane)
 {
-    this->tripFuel = plane.calculateTripFuel(climbDuration, cruiseDuration, descentDuration);
+    //TRIP FUEL CALCULATION
+    //to take into account the TOW of the aircraft, the ZFW value is being estimated (emptyWeight + payload)
+    //to compute the trip fuel, the TOW value is being recalculated until the new trip fuel value is correct
+    double payload = plane->calculatePayload();
+    double emptyWeight = plane->getEmptyWeight();
+    double estimatedTripFuel = plane->calculateTripFuel(climbDuration, cruiseDuration, descentDuration, emptyWeight + payload);
+    for (int i = 0; i < 10; i++)
+    {
+        double currentContingency = estimatedTripFuel * this->contingencyPct;
+        double currentTOW = emptyWeight + payload + estimatedTripFuel +
+                            this->reserveFuel + currentContingency;
+        double newTripFuel = plane->calculateTripFuel(climbDuration, cruiseDuration, descentDuration, currentTOW);
+        if (std::abs(newTripFuel - estimatedTripFuel) < 1.0)
+        {
+            estimatedTripFuel = newTripFuel;
+            break;
+        }
+        estimatedTripFuel = newTripFuel;
+    }
+    this->tripFuel = estimatedTripFuel;
+    //other fuel parameters
     this->setContingencyFuel();
-    this->reserveFuel = plane.calculateReserveFuel(reserveTime);
-    if (this->taxiFuel== 0)
-        this->taxiFuel = plane.calculateTaxiFuel();
+    this->reserveFuel = plane->calculateReserveFuel(reserveTime);
+    if (this->taxiFuel== 0) this->taxiFuel = plane->calculateTaxiFuel();
     if (this->blockFuel == 0)
     {
         this->setBlockFuel();
@@ -58,7 +77,7 @@ bool FuelManagement::init(const double& climbDuration, const double& cruiseDurat
     this->setExtraFuel();
     this->setMinTakeoffFuel();
     this->setTakeoffFuel();
-    if (plane.fuelCapacityExceeded(blockFuel) == true)
+    if (plane->fuelCapacityExceeded(blockFuel) == true)
     {
         std::cerr << "Block fuel exceeds aircraft's maximum fuel capacity!\n";
         return false;

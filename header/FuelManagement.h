@@ -35,7 +35,7 @@ public:
     [[nodiscard]] double getBlockFuel() const;
     [[nodiscard]] double getTripFuel() const;
     [[nodiscard]] bool init(const double& climbDuration, const double& cruiseDuration, const double& descentDuration,
-                            const Aircraft& plane);
+                            const std::shared_ptr<Aircraft>& plane);
     friend std::ostream& operator<<(std::ostream& os, const FuelManagement& flm);
 };
 

@@ -40,6 +40,13 @@ double CargoAircraft::calculateFreight_() const
         totalContainersWeight += containersWeights[i];
     return totalContainersWeight;
 }
+void CargoAircraft::readFromJson_(const nlohmann::json& obj)
+{
+    maxContainersNum = obj["maxContainersNum"];
+    crewCount = obj["crewCount"];
+    maxContainerWeight = obj["maxContainerWeight"];
+}
+
 void CargoAircraft::display(std::ostream &os) const
 {
     os << "Maximum containers available to load: " << maxContainersNum << '\n';

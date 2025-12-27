@@ -72,6 +72,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         source/CargoAircraft.cpp
         header/GeneralAviationAircraft.h
         source/GeneralAviationAircraft.cpp
+        header/AircraftFactory.h
+        source/AircraftFactory.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

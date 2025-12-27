@@ -33,7 +33,18 @@ void PassengerAircraft::setPassengerNumber(const int& inputPassengerNumber){this
 //on average, a person is estimated to weight around 75 kg
 double PassengerAircraft::calculatePayload_() const{return 75 * (passengerNumber + crewCount) + freight;}
 //on average, a person is estimated to have 10kg of baggage
-double PassengerAircraft::calculateFreight_() const{return 10 * (passengerNumber + crewCount);}
+double PassengerAircraft::calculateFreight_() const
+{
+    if (freight == 0)
+        return 10 * (passengerNumber + crewCount);
+    return freight;
+}
+void PassengerAircraft::readFromJson_(const nlohmann::json& obj)
+{
+    maxPassengerCount = obj["maxPassengerCount"];
+    crewCount = obj["crewCount"];
+}
+
 void PassengerAircraft::display(std::ostream &os) const
 {
     os << "Maximum passenger capacity: " << maxPassengerCount << '\n';

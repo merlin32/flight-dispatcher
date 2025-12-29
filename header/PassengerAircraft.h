@@ -6,7 +6,7 @@
 class PassengerAircraft : public Aircraft
 {
 private:
-    int maxPassengerCount;
+    int maxPassengerCount = 0;
     int crewCount = 0;
     int freight = 0;
     int passengerNumber = 0;

@@ -3,16 +3,10 @@
 #include "../header/CargoAircraft.h"
 #include "../header/GeneralAviationAircraft.h"
 #include "../header/Exceptions.h"
-#include <nlohmann/json.hpp>
 
-std::shared_ptr<Aircraft> AircraftFactory::createAircraft(const nlohmann::json& obj)
+std::shared_ptr<Aircraft> AircraftFactory::createAircraft(const nlohmann::json& obj, const std::string& category)
 {
-
-    if (!obj.contains("category") || !obj["category"].is_string())
-        throw JsonFaultyRead("category");
-    std::string category = obj["category"];
     std::shared_ptr<Aircraft> plane;
-
     if (category == "passenger") plane = std::make_shared<PassengerAircraft>();
     else if (category == "cargo") plane = std::make_shared<CargoAircraft>();
     else if (category == "general aviation") plane = std::make_shared<GeneralAviationAircraft>();
@@ -20,5 +14,4 @@ std::shared_ptr<Aircraft> AircraftFactory::createAircraft(const nlohmann::json& 
 
     if (plane) plane->readFromJson(obj);
     return plane;
-
 }

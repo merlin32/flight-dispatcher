@@ -52,8 +52,6 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         header/Airport.h
         header/Runway.h
         source/Runway.cpp
-        header/Aircraft.h
-        source/Aircraft.cpp
         header/Waypoint.h
         source/Waypoint.cpp
         header/Metar.h
@@ -62,6 +60,11 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         source/FuelManagement.cpp
         source/PerformanceCalculation.cpp
         header/PerformanceCalculation.h
+        header/Exceptions.h
+        source/Exceptions.cpp
+        header/JsonUtils.h
+        header/Aircraft.h
+        source/Aircraft.cpp
         header/Route.h
         source/Route.cpp
         source/Menu.cpp
@@ -74,9 +77,6 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         source/GeneralAviationAircraft.cpp
         header/AircraftFactory.h
         source/AircraftFactory.cpp
-        header/Exceptions.h
-        source/Exceptions.cpp
-        header/JsonUtils.h
         source/JsonUtilsImpl.cpp
 )
 

@@ -15,8 +15,10 @@ void Menu::populateAircrafts(std::ifstream aircraftsJson)
     nlohmann::json data = nlohmann::json::parse(aircraftsJson);
     for (const auto& i : data)
     {
-
-        std::shared_ptr<Aircraft> temp = AircraftFactory::createAircraft(i);
+        if (!i.contains("category") || !i["category"].is_string())
+            throw JsonFaultyRead("category");
+        std::string category = i["category"];
+        std::shared_ptr<Aircraft> temp = AircraftFactory::createAircraft(i, category);
         if (temp)
             aircraftsList.push_back(temp);
 

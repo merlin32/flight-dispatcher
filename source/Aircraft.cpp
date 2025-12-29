@@ -3,11 +3,14 @@
 #include <algorithm>
 #include <nlohmann/json.hpp>
 
+#include "../header/Exceptions.h"
+#include "../header/JsonUtils.h"
+
 Aircraft::Aircraft()
 {
     this->range = 0;
     this->cruisingSpeed = 0;
-    this->wingSpan = 0;
+    this->wingspan = 0;
     this->maxTakeoffWeight = 0;
     this->maxPayload = 0;
     this->emptyWeight = 0;
@@ -29,7 +32,7 @@ Aircraft::Aircraft(std::string category_,
              std::string type_,
              const double& range_,
              const double& cruisingSpeed_,
-             const double& wingSpan_,
+             const double& wingspan_,
              const double& maxTakeoffWeight_,
              const double& maxPayload_,
              const double& emptyWeight_,
@@ -50,7 +53,7 @@ Aircraft::Aircraft(std::string category_,
           type{std::move(type_)},
           range{range_},
           cruisingSpeed{cruisingSpeed_},
-          wingSpan{wingSpan_},
+          wingspan{wingspan_},
           maxTakeoffWeight{maxTakeoffWeight_},
           maxPayload{maxPayload_},
           emptyWeight{emptyWeight_},
@@ -66,14 +69,37 @@ Aircraft::Aircraft(std::string category_,
           climbRate{climbRate_},
           descentRate{descentRate_},
           climbSpeed{climbSpeed_},
-          minimumFlightDuration(minimumFlightDuration_){}
+          minimumFlightDuration(minimumFlightDuration_)
+{
+    attributeValidation(category, "category");
+    attributeValidation(type, "category");
+    attributeValidation(range, "range");
+    attributeValidation(cruisingSpeed, "cruisingSpeed");
+    attributeValidation(wingspan, "wingspan");
+    attributeValidation(maxTakeoffWeight, "maxTakeoffWeight");
+    attributeValidation(maxPayload, "maxPayload");
+    attributeValidation(emptyWeight, "emptyWeight");
+    attributeValidation(fuelCapacity, "fuelCapacity");
+    attributeValidation(fuelBurnClimb, "fuelBurnClimb");
+    attributeValidation(fuelBurnCruise, "fuelBurnCruise");
+    attributeValidation(fuelBurnDescent, "fuelBurnDescent");
+    attributeValidation(maxCruisingAltitude, "maxCruisingAltitude");
+    attributeValidation(fuelBurnIdle, "fuelBurnIdle");
+    attributeValidation(fuelBurnLowAltitude, "fuelBurnLowAltitude");
+    attributeValidation(maxFreight, "maxFreight");
+    attributeValidation(takeoffReferenceDist, "takeoffReferenceDist");
+    attributeValidation(climbRate, "climbRate");
+    attributeValidation(descentRate, "descentRate");
+    attributeValidation(climbSpeed, "climbSpeed");
+    attributeValidation(minimumFlightDuration, "minimumFlightDuration");
+}
 std::ostream& operator<<(std::ostream& os, const Aircraft& ac)
 {
     os << "Category: " << ac.category << '\n';
     os << "Type: " << ac.type << '\n';
     os << "Range: " << ac.range << " NM\n";
     os << "Cruising Speed: " << ac.cruisingSpeed << " KTS\n";
-    os << "Wing Span: " << ac.wingSpan << " M\n";
+    os << "Wing Span: " << ac.wingspan << " M\n";
     os << "Maximum Takeoff Weight: " << ac.maxTakeoffWeight << " KG\n";
     os << "Maximum Payload: " << ac.maxPayload << " KG\n";
     os << "Empty Weight: " << ac.emptyWeight << " KG\n";
@@ -128,27 +154,27 @@ double Aircraft::calculatePayload() const{return calculatePayload_();}
 bool Aircraft::isDataValid() const {return isDataValid_();}
 void Aircraft::readFromJson(const nlohmann::json& obj)
 {
-    category = obj["category"];
-    type = obj["type"];
-    range = obj["range"];
-    cruisingSpeed = obj["cruisingSpeed"];
-    wingSpan = obj["wingSpan"];
-    maxTakeoffWeight = obj["maxTakeoffWeight"];
-    maxPayload = obj["maxPayload"];
-    emptyWeight = obj["emptyWeight"];
-    fuelCapacity = obj["fuelCapacity"];
-    fuelBurnClimb = obj["fuelBurnClimb"];
-    fuelBurnCruise = obj["fuelBurnCruise"];
-    fuelBurnDescent = obj["fuelBurnDescent"];
-    maxCruisingAltitude = obj["maxCruisingAltitude"];
-    fuelBurnIdle = obj["fuelBurnIdle"];
-    fuelBurnLowAltitude = obj["fuelBurnLowAltitude"];
-    maxFreight = obj["maxFreight"];
-    takeoffReferenceDist = obj["takeoffReferenceDist"];
-    climbRate = obj["climbRate"];
-    descentRate = obj["descentRate"];
-    climbSpeed = obj["climbSpeed"];
-    minimumFlightDuration = obj["minimumFlightDuration"];
+    category = readAttribute<std::string>(obj, "category");
+    type = readAttribute<std::string>(obj, "type");
+    range = readAttribute<double>(obj, "range");
+    cruisingSpeed = readAttribute<double>(obj, "cruisingSpeed");
+    wingspan = readAttribute<double>(obj, "wingspan");
+    maxTakeoffWeight = readAttribute<double>(obj, "maxTakeoffWeight");
+    maxPayload = readAttribute<double>(obj, "maxPayload");
+    emptyWeight = readAttribute<double>(obj, "emptyWeight");
+    fuelCapacity = readAttribute<double>(obj, "fuelCapacity");
+    fuelBurnClimb = readAttribute<double>(obj, "fuelBurnClimb");
+    fuelBurnCruise = readAttribute<double>(obj, "fuelBurnCruise");
+    fuelBurnDescent = readAttribute<double>(obj, "fuelBurnDescent");
+    maxCruisingAltitude = readAttribute<int>(obj, "maxCruisingAltitude");
+    fuelBurnIdle = readAttribute<double>(obj, "fuelBurnIdle");
+    fuelBurnLowAltitude = readAttribute<double>(obj, "fuelBurnLowAltitude");
+    maxFreight = readAttribute<double>(obj, "maxFreight");
+    takeoffReferenceDist = readAttribute<double>(obj, "takeoffReferenceDist");
+    climbRate = readAttribute<int>(obj, "climbRate");
+    descentRate = readAttribute<int>(obj, "descentRate");
+    climbSpeed = readAttribute<double>(obj, "climbSpeed");
+    minimumFlightDuration = readAttribute<int>(obj, "minimumFlightDuration");
     readFromJson_(obj);
 }
 bool Aircraft::compareAircraftTypes(const std::shared_ptr<Aircraft>& plane1, const std::shared_ptr<Aircraft>& plane2)
@@ -171,6 +197,24 @@ bool Aircraft::validAircraft(const std::vector<std::shared_ptr<Aircraft>>& aircr
     std::cerr << "Invalid aircraft type! Enter a valid aircraft type!\n";
     return false;
 }
+void Aircraft::attributeValidation(const std::string& value, const std::string& attributeName)
+{
+    if (value.empty())
+        throw InvalidObjectCreation("Aircraft", attributeName);
+}
+void Aircraft::attributeValidation(const double& value, const std::string& attributeName)
+{
+    if (value < 0)
+        throw InvalidObjectCreation("Aircraft", attributeName);
+}
+void Aircraft::attributeValidation(const int& value, const std::string& attributeName)
+{
+    if (value < 0)
+        throw InvalidObjectCreation("Aircraft", attributeName);
+}
+
+
+
 
 
 

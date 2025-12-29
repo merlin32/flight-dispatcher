@@ -1,6 +1,7 @@
 #include "../header/PerformanceCalculation.h"
 #include <iostream>
-#include <cmath>
+
+#include "../header/Exceptions.h"
 
 void PerformanceCalculation::setPayload(const std::shared_ptr<Aircraft>& plane)
 {
@@ -26,7 +27,7 @@ void PerformanceCalculation::setTakeoffDistance(const double& takeoffReferenceDi
     this->takeoffDistance = distance;
 }
 void PerformanceCalculation::setLandingDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight,
-                                                const Metar& metar, const int& runwayDirection, const int& runwayConditon)
+                                                const Metar& metar, const int& runwayDirection, const int& runwayCondition)
 {
     double massesRatio = this->LDW / maxTakeoffWeight;
     double qnhsRatio = metar.calculateQhnsRatio();
@@ -38,7 +39,7 @@ void PerformanceCalculation::setLandingDistance(const double& takeoffReferenceDi
     else windFactor = 1 - 0.01 * headWindSpeed;
     //runwayFactor deduction
     double runwayFactor;
-    switch(runwayConditon)
+    switch(runwayCondition)
     {
         case 0: runwayFactor = 1; break;
         case 1: runwayFactor = 1.20; break;
@@ -49,20 +50,15 @@ void PerformanceCalculation::setLandingDistance(const double& takeoffReferenceDi
 }
 double PerformanceCalculation::getTakeoffDistance() const{return this->takeoffDistance;}
 double PerformanceCalculation::getLandingDistance() const{return this->landingDistance;}
-double PerformanceCalculation::getFreight() const{return this->freight;}
-bool PerformanceCalculation::init(const std::shared_ptr<Aircraft>& plane, const FuelManagement& fuelPlanning, const Airport& departure,
+void PerformanceCalculation::init(const std::shared_ptr<Aircraft>& plane, const FuelManagement& fuelPlanning, const Airport& departure,
                                   const Airport& arrival, const std::string& arrivalRunway)
 {
     if (plane->isDataValid() == false)
-        return false;
+        throw InvalidFlightPlanParameters("Invalid payload data!");
     if (plane->maxFreightExceeded(freight) == true)
-    {
-        std::cerr << "Maximum freight value has been exceeded!\n";
-        return false;
-    }
+        throw InvalidFlightPlanParameters("Maximum freight value has been exceeded!");
     this->setPayload(plane);
-    if (this->getFreight() == 0)
-        this->setFreight(plane);
+    this->setFreight(plane);
     this->setZFW(plane->getEmptyWeight());
     this->setTOW(fuelPlanning.getBlockFuel(), fuelPlanning.getTaxiFuel());
     this->setLDW(fuelPlanning.getTripFuel());
@@ -75,16 +71,9 @@ bool PerformanceCalculation::init(const std::shared_ptr<Aircraft>& plane, const 
                                       arrival.getRunway(arrivalRunway).getRwDirection(),
                                       arrival.getRunway(arrivalRunway).getRwCondition());
     if (plane->maxPayloadExceeded(payload) == true)
-    {
-        std::cerr << "Maximum payload value has been exceeded!\n";
-        return false;
-    }
+        throw InvalidFlightPlanParameters("Maximum payload value has been exceeded!");
     if (plane->maxTakeoffWeightExceeded(TOW) == true)
-    {
-        std::cerr << "Maximum takeoff weight value has been exceeded!\n";
-        return false;
-    }
-    return true;
+        throw InvalidFlightPlanParameters("Maximum takeoff weight value has been exceeded!");
 }
 std::ostream& operator<<(std::ostream& os, const PerformanceCalculation& pfc)
 {

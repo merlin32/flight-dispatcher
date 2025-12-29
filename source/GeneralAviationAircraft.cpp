@@ -1,4 +1,5 @@
 #include "../header/GeneralAviationAircraft.h"
+#include "../header/JsonUtils.h"
 #include <iostream>
 #include <nlohmann/json.hpp>
 
@@ -6,7 +7,7 @@ GeneralAviationAircraft::GeneralAviationAircraft(const std::string& category_,
              const std::string& type_,
              const double& range_,
              const double& cruisingSpeed_,
-             const double& wingSpan_,
+             const double& wingspan_,
              const double& maxTakeoffWeight_,
              const double& maxPayload_,
              const double& emptyWeight_,
@@ -23,9 +24,9 @@ GeneralAviationAircraft::GeneralAviationAircraft(const std::string& category_,
              const int& descentRate_,
              const double& climbSpeed_,
              const int& minimumFlightDuration_,
-             const int& maxPilotCount_,
-             const int& maxPassengersNumber_) : Aircraft{category_, type_, range_, cruisingSpeed_,
-             wingSpan_, maxTakeoffWeight_, maxPayload_, emptyWeight_, fuelCapacity_,
+             const int& maxPilotCount_ = 1,
+             const int& maxPassengersNumber_ = 0) : Aircraft{category_, type_, range_, cruisingSpeed_,
+             wingspan_, maxTakeoffWeight_, maxPayload_, emptyWeight_, fuelCapacity_,
              fuelBurnClimb_, fuelBurnCruise_, fuelBurnDescent_, maxCruisingAltitude_,
              fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,
              climbRate_, descentRate_, climbSpeed_, minimumFlightDuration_},
@@ -38,8 +39,8 @@ double GeneralAviationAircraft::calculatePayload_() const
 double GeneralAviationAircraft::calculateFreight_() const{return baggageWeight;}
 void GeneralAviationAircraft::readFromJson_(const nlohmann::json& obj)
 {
-    maxPilotCount = obj["maxPilotCount"];
-    maxPassengersNumber = obj["maxPassengersNumber"];
+    maxPilotCount = readAttribute<int>(obj, "maxPilotCount");
+    maxPassengersNumber = readAttribute<int>(obj, "maxPassengersNumber");
 }
 
 void GeneralAviationAircraft::display(std::ostream &os) const

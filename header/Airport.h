@@ -14,6 +14,7 @@ private:
     std::string iataCode;
     std::vector<Runway> airportRunways;
     Metar airportWeather;
+    static void attributeValidation(const std::string& value, const std::string& attributeName);
 public:
     Airport();
     explicit Airport(std::string icaoCode_, const unsigned short int& elevation_, std::string airportName_, std::string iataCode_,

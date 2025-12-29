@@ -9,9 +9,9 @@ class FuelManagement
 private:
     //not implemented yet: alternateFuel
     double tripFuel = 0;
-    double contingencyPct;
+    double contingencyPct = 0;
     double contingencyFuel = 0;
-    int reserveTime;
+    int reserveTime = 0;
     double reserveFuel = 0;
     double taxiFuel = 0;
     double blockFuel = 0;
@@ -34,7 +34,7 @@ public:
     [[nodiscard]] double getTaxiFuel() const;
     [[nodiscard]] double getBlockFuel() const;
     [[nodiscard]] double getTripFuel() const;
-    [[nodiscard]] bool init(const double& climbDuration, const double& cruiseDuration, const double& descentDuration,
+    void init(const double& climbDuration, const double& cruiseDuration, const double& descentDuration,
                             const std::shared_ptr<Aircraft>& plane);
     friend std::ostream& operator<<(std::ostream& os, const FuelManagement& flm);
 };

@@ -17,6 +17,7 @@ private:
     unsigned short int dewpoint;
     unsigned short int qnh;
     std::string additionalChanges;
+    static void stringAttributesValidation(const std::string& value, const std::string& attributeName);
 public:
     Metar();
     explicit Metar(std::string airportIcao_,

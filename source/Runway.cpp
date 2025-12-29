@@ -1,11 +1,18 @@
 #include "../header/Runway.h"
+#include "../header/Exceptions.h"
 
-Runway::Runway(std::string runwayID_, const double& runwayLength_, const double& runwayWidth_, RwCond runwayCondition_, const bool& runwayInUse_) :
+Runway::Runway(std::string runwayID_, const double& runwayLength_, const double& runwayWidth_, int runwayCondition_ = 0,
+                const bool& runwayInUse_ = true) :
                 runwayID{std::move(runwayID_)},
                 runwayLength{runwayLength_},
                 runwayWidth{runwayWidth_},
                 runwayCondition{runwayCondition_},
-                runwayInUse{runwayInUse_}{};
+                runwayInUse{runwayInUse_}
+{
+    if (runwayID.empty()) throw InvalidObjectCreation("Runway", "runwayID");
+    if (runwayLength < 400) throw InvalidObjectCreation("Runway", "runwayLength");
+    if (runwayWidth < 10) throw InvalidObjectCreation("Runway", "runwayWidth");
+};
 Runway::Runway(const Runway& other)
     : runwayID{other.runwayID},
       runwayLength{other.runwayLength},
@@ -54,11 +61,11 @@ std::ostream& operator<<(std::ostream& os, const Runway& rw)
     os << "Runway width: " << rw.runwayWidth << " m\n";
     switch (rw.runwayCondition)
     {
-        case Dry:
-            os << "Runway condition: DRY\n";
-            break;
-        case Wet:
+        case 1:
             os << "Runway condition: WET\n";
+            break;
+        default:
+            os << "Runway condition: DRY\n";
             break;
     }
     if (rw.runwayInUse)
@@ -79,12 +86,7 @@ int Runway::getRwDirection() const
 }
 int Runway::getRwCondition() const
 {
-    switch (this->runwayCondition)
-    {
-        case Dry: return 0;
-        case Wet: return 1;
-        default: return -1;
-    }
+    return this->runwayCondition;
 }
 bool Runway::getRwStatus() const {return this->runwayInUse;}
 

@@ -1,6 +1,8 @@
 #include "../header/Metar.h"
 #include <cmath>
 
+#include "../header/Exceptions.h"
+
 Metar::Metar()
 {
     this->temperature = 0;
@@ -26,7 +28,19 @@ Metar::Metar(std::string airportIcao_,
             temperature{temperature_},
             dewpoint{dewpoint_},
             qnh{qnh_},
-            additionalChanges{std::move(additionalChanges_)}{}
+            additionalChanges{std::move(additionalChanges_)}
+{
+    stringAttributesValidation(airportIcao, "airportIcao");
+    stringAttributesValidation(dateAndTime, "dateAndTime");
+    stringAttributesValidation(windInfo, "windInfo");
+    stringAttributesValidation(visibility, "visibility");
+    stringAttributesValidation(specialConditions, "specialConditions");
+    stringAttributesValidation(cloudsInfo, "cloudsInfo");
+    if (temperature < -90 || temperature > 57) throw InvalidObjectCreation("Metar", "temperature");
+    if (dewpoint < -80 || dewpoint > 40 || dewpoint > temperature) throw InvalidObjectCreation("Metar", "dewpoint");
+    if (qnh < 920 || qnh > 1084) throw InvalidObjectCreation("Metar", "qnh");
+    stringAttributesValidation(additionalChanges, "additionalChanges");
+}
 Metar::~Metar() = default;
 double Metar::calculateQhnsRatio() const{return 1013.0 / qnh;} //1013 represents the standard air pressure}
 double Metar::calculateTemperaturesRatio() const{return (temperature + 273.15) / 288.15;} //288.15 represents the standard air temperature in Kelvins
@@ -56,4 +70,9 @@ std::ostream& operator<<(std::ostream& os, const Metar& mt)
     if (mt.additionalChanges != " ")
         os << mt.additionalChanges << "\n";
     return os;
+}
+void Metar::stringAttributesValidation(const std::string& value, const std::string& attributeName)
+{
+    if (value.empty())
+        throw InvalidObjectCreation("Metar", attributeName);
 }

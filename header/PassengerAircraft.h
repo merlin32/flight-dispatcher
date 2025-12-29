@@ -6,7 +6,7 @@
 class PassengerAircraft : public Aircraft
 {
 private:
-    int maxPassengerCount = 0;
+    int maxPassengerCount;
     int crewCount = 0;
     int freight = 0;
     int passengerNumber = 0;
@@ -21,7 +21,7 @@ public:
              const std::string& type_,
              const double& range_,
              const double& cruisingSpeed_,
-             const double& wingSpan_,
+             const double& wingspan_,
              const double& maxTakeoffWeight_,
              const double& maxPayload_,
              const double& emptyWeight_,

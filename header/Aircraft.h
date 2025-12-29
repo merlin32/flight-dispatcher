@@ -12,7 +12,7 @@ private:
     std::string category;
     std::string type;
     double range;
-    double cruisingSpeed, wingSpan, maxTakeoffWeight;
+    double cruisingSpeed, wingspan, maxTakeoffWeight;
     double maxPayload, emptyWeight, fuelCapacity;
     double fuelBurnClimb, fuelBurnCruise, fuelBurnDescent;
     int maxCruisingAltitude;
@@ -27,13 +27,16 @@ private:
     virtual void readFromJson_(const nlohmann::json& obj) = 0;
     virtual void display(std::ostream &) const {}
     [[nodiscard]] virtual bool isDataValid_() const = 0;
+    static void attributeValidation(const std::string& value, const std::string& attributeName);
+    static void attributeValidation(const double& value, const std::string& attributeName);
+    static void attributeValidation(const int& value, const std::string& attributeName);
 public:
     Aircraft();
     explicit Aircraft(std::string category_,
              std::string type_,
              const double& range_,
              const double& cruisingSpeed_,
-             const double& wingSpan_,
+             const double& wingspan_,
              const double& maxTakeoffWeight_,
              const double& maxPayload_,
              const double& emptyWeight_,
@@ -85,7 +88,6 @@ public:
 protected:
     Aircraft(const Aircraft& other) = default;
     Aircraft &operator=(const Aircraft& other) = default;
-
 
 };
 

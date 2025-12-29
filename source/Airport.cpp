@@ -1,6 +1,8 @@
 #include "../header/Airport.h"
 #include <algorithm>
 
+#include "../header/Exceptions.h"
+
 Airport::Airport()
 {
     this->elevation = 0;
@@ -11,7 +13,12 @@ Airport::Airport(std::string icaoCode_, const unsigned short int& elevation_, st
                     airportName{std::move(airportName_)},
                     iataCode{std::move(iataCode_)},
                     airportRunways{std::move(airportRunways_)},
-                    airportWeather{airportWeather_}{}
+                    airportWeather{airportWeather_}
+{
+    attributeValidation(icaoCode, "icaoCode");
+    attributeValidation(airportName, "airportName");
+    attributeValidation(iataCode, "iataCode");
+}
 Airport::~Airport() = default;
 std::ostream& operator<<(std::ostream& os, const Airport& ap)
 {
@@ -66,6 +73,11 @@ bool Airport::validRunway(const std::string& runwayCode, const Airport& ap)
     return false;
 }
 bool Airport::compareAirportsIcao(const Airport& ap1, const Airport& ap2) {return ap1.getIcao() < ap2.getIcao();}
+void Airport::attributeValidation(const std::string& value, const std::string& attributeName)
+{
+    if (value.empty())
+        throw InvalidObjectCreation("Airport", attributeName);
+}
 
 
 

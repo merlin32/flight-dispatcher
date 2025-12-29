@@ -1,20 +1,26 @@
 #include "../header/FuelManagement.h"
 #include <iostream>
 
+#include "../header/Exceptions.h"
+
 FuelManagement::FuelManagement(const double& contingencyPct_, const int& reserveTime_, const double& taxiFuel_, const double& blockFuel_)
 {
     //contingencyPct value needs to be 0.1 if auto is selected in the route initialization
-    if (contingencyPct_ != 0) this->contingencyPct = contingencyPct_;
-    else this->contingencyPct = 0.1;
+    if (contingencyPct_ > 0) this->contingencyPct = contingencyPct_;
+    else if (contingencyPct_ == 0) this->contingencyPct = 0.1;
+    if (contingencyPct < 0) throw InvalidObjectCreation("FuelManagement", "contingencyPct");
     //reserveTime value needs to be 30 if auto is selected in the route initialization
-    if (reserveTime_ != 0) this->reserveTime = reserveTime_;
-    else this->reserveTime = 30;
+    if (reserveTime_ > 0) this->reserveTime = reserveTime_;
+    else if (reserveTime_ == 0) this->reserveTime = 30;
+    if (reserveTime < 0 || reserveTime > 120) throw InvalidObjectCreation("FuelManagement", "reserveTime");
     //taxiFuel value can be inserted or calculated afterwards
-    if (taxiFuel_ != 0) this->taxiFuel = taxiFuel_;
-    else this->taxiFuel = 0;
+    if (taxiFuel_ > 0) this->taxiFuel = taxiFuel_;
+    else if (taxiFuel_ == 0) this->taxiFuel = 0;
+    if (taxiFuel < 0 || taxiFuel > blockFuel) throw InvalidObjectCreation("FuelManagement", "taxiFuel");
     //same as taxiFuel
-    if (blockFuel_ != 0) this->blockFuel = blockFuel_;
-    else this->blockFuel = 0;
+    if (blockFuel_ > 0) this->blockFuel = blockFuel_;
+    else if (blockFuel_ == 0) this->blockFuel = 0;
+    if (blockFuel < 0) throw InvalidObjectCreation("FuelManagement", "blockFuel");
 }
 FuelManagement::~FuelManagement() = default;
 //contingencyFuel = extra fuel needed in case of any unwanted event
@@ -32,7 +38,7 @@ bool FuelManagement::isFuelSufficient() const{return this->calculatedBlockFuel <
 double FuelManagement::getTaxiFuel() const{return this->taxiFuel;}
 double FuelManagement::getBlockFuel() const{return this->blockFuel;}
 double FuelManagement::getTripFuel() const{return this->tripFuel;}
-bool FuelManagement::init(const double& climbDuration, const double& cruiseDuration, const double& descentDuration,
+void FuelManagement::init(const double& climbDuration, const double& cruiseDuration, const double& descentDuration,
                           const std::shared_ptr<Aircraft>& plane)
 {
     //TRIP FUEL CALCULATION
@@ -69,20 +75,13 @@ bool FuelManagement::init(const double& climbDuration, const double& cruiseDurat
     {
         this->setCalculatedBlockFuel();
         if (this->isFuelSufficient() == false)
-        {
-            std::cerr << "Inserted block fuel is invalid: not enough fuel to complete the trip!\n";
-            return false;
-        }
+            throw InvalidFlightPlanParameters("Inserted block fuel is invalid: not enough fuel to complete the trip!");
     }
     this->setExtraFuel();
     this->setMinTakeoffFuel();
     this->setTakeoffFuel();
     if (plane->fuelCapacityExceeded(blockFuel) == true)
-    {
-        std::cerr << "Block fuel exceeds aircraft's maximum fuel capacity!\n";
-        return false;
-    }
-    return true;
+        throw InvalidFlightPlanParameters("Block fuel exceeds aircraft's maximum fuel capacity!");
 }
 std::ostream& operator<<(std::ostream& os, const FuelManagement& flm)
 {

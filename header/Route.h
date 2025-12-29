@@ -9,7 +9,6 @@ class Route
 {
 private:
     //not implemented yet: alternate selection
-    int cruisingAltitude;
     double routeDistance = 0;
     std::string callsign;
     Airport departure, arrival;
@@ -24,16 +23,18 @@ private:
     std::shared_ptr<Aircraft> plane;
     FuelManagement fuelPlanning;
     PerformanceCalculation perfCalc;
+    int cruisingAltitude;
 public:
-    explicit Route(const int& cruisingAltitude_, std::string callsign_,
+    explicit Route(std::string callsign_,
                     const Airport& departure_, const Airport& arrival_, std::string departureRunway_, std::string arrivalRunway_,
                     const std::vector<Waypoint>& waypoints_, std::shared_ptr<Aircraft> plane_,
-                    const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_);
+                    const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_,
+                    const int& cruisingAltitude_);
     Route(const Route& other);
     Route &operator=(Route other);
     friend void swap(Route &rt1, Route &rt2) noexcept;
     friend std::ostream& operator<<(std::ostream& os, const Route& rt);
-    [[nodiscard]] bool routeInit();
+    void routeInit();
 private:
     void setRouteDistance();
     void setClimbDuration();

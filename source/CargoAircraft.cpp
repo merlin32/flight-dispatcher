@@ -1,4 +1,5 @@
 #include "../header/CargoAircraft.h"
+#include "../header/JsonUtils.h"
 #include <iostream>
 #include <nlohmann/json.hpp>
 
@@ -6,7 +7,7 @@ CargoAircraft::CargoAircraft(const std::string& category_,
              const std::string& type_,
              const double& range_,
              const double& cruisingSpeed_,
-             const double& wingSpan_,
+             const double& wingspan_,
              const double& maxTakeoffWeight_,
              const double& maxPayload_,
              const double& emptyWeight_,
@@ -23,14 +24,14 @@ CargoAircraft::CargoAircraft(const std::string& category_,
              const int& descentRate_,
              const double& climbSpeed_,
              const int& minimumFlightDuration_,
-             const int& maxContainersNum_,
-             const int& crewCount_,
-             const double& maxContainerWeight_) : Aircraft{category_, type_, range_, cruisingSpeed_,
-             wingSpan_, maxTakeoffWeight_, maxPayload_, emptyWeight_, fuelCapacity_,
+             const int& maxContainersNum_ = 0,
+             const int& crewCount_ = 2,
+             const double& maxContainerWeight_ = 0) : Aircraft{category_, type_, range_, cruisingSpeed_,
+             wingspan_, maxTakeoffWeight_, maxPayload_, emptyWeight_, fuelCapacity_,
              fuelBurnClimb_, fuelBurnCruise_, fuelBurnDescent_, maxCruisingAltitude_,
              fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,
              climbRate_, descentRate_, climbSpeed_, minimumFlightDuration_}, maxContainersNum{maxContainersNum_},
-             crewCount{crewCount_}, maxContainerWeight{maxContainerWeight_} {}
+             crewCount{crewCount_}, maxContainerWeight{maxContainerWeight_}{}
 std::shared_ptr<Aircraft> CargoAircraft::clone() const{return std::make_shared<CargoAircraft>(*this);}
 double CargoAircraft::calculatePayload_() const
 {
@@ -45,9 +46,9 @@ double CargoAircraft::calculateFreight_() const
 }
 void CargoAircraft::readFromJson_(const nlohmann::json& obj)
 {
-    maxContainersNum = obj["maxContainersNum"];
-    crewCount = obj["crewCount"];
-    maxContainerWeight = obj["maxContainerWeight"];
+    maxContainersNum = readAttribute<int>(obj, "maxContainersNum");
+    crewCount = readAttribute<int>(obj, "crewCount");
+    maxContainerWeight = readAttribute<double>(obj, "maxContainerWeight");
 }
 
 void CargoAircraft::display(std::ostream &os) const

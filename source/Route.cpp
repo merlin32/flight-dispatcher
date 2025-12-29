@@ -1,13 +1,20 @@
 #include "../header/Route.h"
+#include "../header/Exceptions.h"
 
-Route::Route(const int& cruisingAltitude_, std::string callsign_,
-                    const Airport& departure_, const Airport& arrival_, std::string departureRunway_, std::string arrivalRunway_,
-                    const std::vector<Waypoint>& waypoints_, std::shared_ptr<Aircraft> plane_,
-                    const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_):
-                    cruisingAltitude{cruisingAltitude_}, callsign{std::move(callsign_)},
+Route::Route(std::string callsign_,
+             const Airport& departure_, const Airport& arrival_, std::string departureRunway_, std::string arrivalRunway_,
+             const std::vector<Waypoint>& waypoints_, std::shared_ptr<Aircraft> plane_,
+             const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_,
+             const int& cruisingAltitude_ = 1000):
+                    callsign{std::move(callsign_)},
                     departure{departure_}, arrival{arrival_}, departureRunway{std::move(departureRunway_)},
                     arrivalRunway{std::move(arrivalRunway_)}, waypoints{std::move(waypoints_)}, plane{std::move(plane_)},
-                    fuelPlanning{fuelPlanning_}, perfCalc{perfCalc_}{}
+                    fuelPlanning{fuelPlanning_}, perfCalc{perfCalc_}, cruisingAltitude{cruisingAltitude_}
+{
+    if (callsign.empty()) throw InvalidObjectCreation("Route", "callsign");
+    if (departureRunway.empty()) throw InvalidObjectCreation("Route", "departureRunway");
+    if (arrivalRunway.empty()) throw InvalidObjectCreation("Route", "arrivalRunway");
+}
 Route::Route(const Route& other) : cruisingAltitude{other.cruisingAltitude},
                     callsign{other.callsign},
                     departure{other.departure},
@@ -112,16 +119,11 @@ bool Route::aircraftRangeExceeded() const
 {
     return this->routeDistance > this->plane->getRange();
 }
-bool Route::routeInit()
+void Route::routeInit()
 {
     this->setRouteDistance();
     if (cruisingAltitude == 0)
         this->setCruiseAltitude();
-    if (this->maxCruiseAltitudeExceeded() == true)
-    {
-        std::cerr << "Cruise altitude exceeds aircraft's maximum cruising altitude!\n";
-        return false;
-    }
     this->setClimbDuration();
     this->setDescentDuration();
     this->setTOC();
@@ -129,42 +131,27 @@ bool Route::routeInit()
     this->setCruiseDuration();
     this->setAirTime();
     this->setBlockTime();
-    if (this->flightTooShort() == true)
+    try
     {
-        std::cerr << "Flight duration is too short for the selected aircraft!\n";
-        return false;
+        if (this->maxCruiseAltitudeExceeded() == true)
+            throw InvalidFlightPlanParameters("Cruise altitude exceeds aircraft's maximum cruising altitude!");
+        if (this->flightTooShort() == true)
+            throw InvalidFlightPlanParameters("Flight duration is too short for the selected aircraft!");
+        if (this->terrainDanger() == true)
+            throw InvalidFlightPlanParameters("Impossible to create the flight plan: cruising altitude is below waypoint minimum!");
+        if (this->rwTooShortDepar() == true)
+            throw InvalidFlightPlanParameters("Selected departure runway is too short for this configuration!");
+        if (this->rwTooShortArrival() == true)
+            throw InvalidFlightPlanParameters("Selected arrival runway is too short for this configuration!");
+        if (this->aircraftRangeExceeded() == true)
+            throw InvalidFlightPlanParameters("Flight exceeds the range of the selected aircraft!");
+        this->fuelPlanning.init(this->climbDuration, this->cruiseDuration, this->descentDuration, this->plane);
+        this->perfCalc.init(plane, fuelPlanning, departure, arrival, arrivalRunway);
     }
-    if (this->terrainDanger() == true)
+    catch (const InvalidFlightPlanParameters& err)
     {
-        std::cerr << "Impossible to create the flight plan: cruising altitude is below waypoint minimum!\n";
-        return false;
+        std::cerr << err.what() << '\n';
     }
-    if (this->rwTooShortDepar() == true)
-    {
-        std::cerr << "Selected departure runway is too short for this configuration!\n";
-        return false;
-    }
-    if (this->rwTooShortArrival() == true)
-    {
-        std::cerr << "Selected arrival runway is too short for this configuration!\n";
-        return false;
-    }
-    if (this->aircraftRangeExceeded() == true)
-    {
-        std::cerr << "Flight exceeds the range of the selected aircraft!\n";
-        return false;
-    }
-    if (this->fuelPlanning.init(this->climbDuration, this->cruiseDuration, this->descentDuration, this->plane) == false)
-    {
-        std::cerr << "Invalid fuel data!\n";
-        return false;
-    }
-    if (this->perfCalc.init(plane, fuelPlanning, departure, arrival, arrivalRunway) == false)
-    {
-        std::cerr << "Invalid payload data!\n";
-        return false;
-    }
-    return true;
 }
 std::ostream& operator<<(std::ostream& os, const Route& rt)
 {

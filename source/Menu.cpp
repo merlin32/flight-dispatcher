@@ -5,6 +5,8 @@
 #include "../header/CargoAircraft.h"
 #include "../header/GeneralAviationAircraft.h"
 #include "../header/PassengerAircraft.h"
+#include "../header/Exceptions.h"
+#include "../header/JsonUtils.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
 
@@ -13,9 +15,11 @@ void Menu::populateAircrafts(std::ifstream aircraftsJson)
     nlohmann::json data = nlohmann::json::parse(aircraftsJson);
     for (const auto& i : data)
     {
+
         std::shared_ptr<Aircraft> temp = AircraftFactory::createAircraft(i);
         if (temp)
             aircraftsList.push_back(temp);
+
     }
     aircraftsJson.close();
     std::sort(aircraftsList.begin(),aircraftsList.end(), Aircraft::compareAircraftTypes);
@@ -26,34 +30,38 @@ void Menu::populateAirports(std::ifstream airportsJson)
     for (const auto& i : data)
     {
         std::vector<Runway> runwaysList;
+        if (!i.contains("airportRunways"))
+            throw JsonFaultyRead("airportRunways");
         for (const auto& j : i["airportRunways"])
         {
             Runway rw{
-                j["runwayID"],
-                j["runwayLength"],
-                j["runwayWidth"],
-                j["runwayCondition"],
-                j["runwayInUse"]
+                readAttribute<std::string>(j, "runwayID"),
+                readAttribute<double>(j, "runwayLength"),
+                readAttribute<double>(j, "runwayWidth"),
+                readAttribute<int>(j, "runwayCondition"),
+                readAttribute<bool>(j, "runwayInUse")
             };
             runwaysList.push_back(rw);
         }
+        if (!i.contains("metar"))
+            throw JsonFaultyRead("metar");
         Metar mt{
-            i["metar"][0]["airportIcao"],
-            i["metar"][0]["dateAndTime"],
-            i["metar"][0]["windInfo"],
-            i["metar"][0]["visibility"],
-            i["metar"][0]["specialConditions"],
-            i["metar"][0]["cloudsInfo"],
-            i["metar"][0]["temperature"],
-            i["metar"][0]["dewpoint"],
-            i["metar"][0]["qnh"],
-            i["metar"][0]["additionalChanges"]
+            readAttribute<std::string>(i["metar"][0], "airportIcao"),
+            readAttribute<std::string>(i["metar"][0], "dateAndTime"),
+            readAttribute<std::string>(i["metar"][0], "windInfo"),
+            readAttribute<std::string>(i["metar"][0], "visibility"),
+            readAttribute<std::string>(i["metar"][0], "specialConditions"),
+            readAttribute<std::string>(i["metar"][0], "cloudsInfo"),
+            readAttribute<unsigned short int>(i["metar"][0], "temperature"),
+            readAttribute<unsigned short int>(i["metar"][0], "dewpoint"),
+            readAttribute<unsigned short int>(i["metar"][0], "qnh"),
+            readAttribute<std::string>(i["metar"][0], "additionalChanges")
         };
         Airport ap{
-            i["icaoCode"],
-            i["elevation"],
-            i["airportName"],
-            i["iataCode"],
+            readAttribute<std::string>(i, "icaoCode"),
+            readAttribute<unsigned short int>(i, "elevation"),
+            readAttribute<std::string>(i, "airportName"),
+            readAttribute<std::string>(i, "iataCode"),
             runwaysList,
             mt
         };
@@ -68,12 +76,12 @@ void Menu::populateWaypoints(std::ifstream waypointsJson)
     for (const auto& i : data)
     {
             Waypoint wp{
-                i["waypointCode"],
-                i["longitude"],
-                i["latitude"],
-                i["maxAltitude"],
-                i["minAltitude"],
-                i["weatherAffected"]
+                readAttribute<std::string>(i, "waypointCode"),
+                readAttribute<double>(i, "longitude"),
+                readAttribute<double>(i, "latitude"),
+                readAttribute<int>(i, "maxAltitude"),
+                readAttribute<int>(i, "minAltitude"),
+                readAttribute<bool>(i, "weatherAffected")
             };
             waypointsList.push_back(wp);
     }
@@ -89,20 +97,11 @@ void Menu::initLocalData()
     airportsJson.open("airports.json");
     waypointsJson.open("waypoints.json");
     if (!aircraftsJson.is_open())
-    {
-        std::cerr << "Error opening aircrafts.json!\n";
-        return;
-    }
+        throw InvalidFile("aircrafts.json");
     if (!airportsJson.is_open())
-    {
-        std::cerr << "Error opening airports.json!\n";
-        return;
-    }
+        throw InvalidFile("airports.json");
     if (!waypointsJson.is_open())
-    {
-        std::cerr << "Error opening waypoints.json!\n";
-        return;
-    }
+        throw InvalidFile("waypoints.json");
     populateAircrafts(std::move(aircraftsJson));
     populateAirports(std::move(airportsJson));
     populateWaypoints(std::move(waypointsJson));
@@ -212,7 +211,7 @@ void Menu::flpCreation()
         auto passengerAc = std::dynamic_pointer_cast<PassengerAircraft>(ac);
         if (passengerAc)
         {
-            double freight;
+            int freight;
             int passengers;
             while (true)
             {
@@ -323,15 +322,15 @@ void Menu::flpCreation()
     PerformanceCalculation perfCalc;
     perfCalc.setPayload(ac);
     //flight plan creation
-    Route rt1{cruiseAltInput, callSgn, depart, arrival,
+    Route rt1{ callSgn, depart, arrival,
         departRw, arrivalRw,
-             routeWaypoints, ac, fuelPlanning, perfCalc};
-    if (rt1.routeInit() == false)
-    {
-        std::cerr << "Invalid flight plan data!\n";
-        return;
-    }
+             routeWaypoints, ac, fuelPlanning, perfCalc, cruiseAltInput};
+    rt1.routeInit();
     std::cout << rt1;
+
+    std::cout << "\nPress Enter to continue...";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.get();
 }
 
 void Menu::mainMenu()

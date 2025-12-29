@@ -1,4 +1,5 @@
 #include "../header/PassengerAircraft.h"
+#include "../header/JsonUtils.h"
 #include <iostream>
 #include <nlohmann/json.hpp>
 
@@ -6,7 +7,7 @@ PassengerAircraft::PassengerAircraft(const std::string& category_,
              const std::string& type_,
              const double& range_,
              const double& cruisingSpeed_,
-             const double& wingSpan_,
+             const double& wingspan_,
              const double& maxTakeoffWeight_,
              const double& maxPayload_,
              const double& emptyWeight_,
@@ -23,13 +24,13 @@ PassengerAircraft::PassengerAircraft(const std::string& category_,
              const int& descentRate_,
              const double& climbSpeed_,
              const int& minimumFlightDuration_,
-             const int& maxPassengerCount_,
-             const int& crewCount_) : Aircraft{category_, type_, range_, cruisingSpeed_,
-             wingSpan_, maxTakeoffWeight_, maxPayload_, emptyWeight_, fuelCapacity_,
+             const int& maxPassengerCount_ = 0,
+             const int& crewCount_ = 2) : Aircraft{category_, type_, range_, cruisingSpeed_,
+             wingspan_, maxTakeoffWeight_, maxPayload_, emptyWeight_, fuelCapacity_,
              fuelBurnClimb_, fuelBurnCruise_, fuelBurnDescent_, maxCruisingAltitude_,
              fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,
              climbRate_, descentRate_, climbSpeed_, minimumFlightDuration_}, maxPassengerCount{maxPassengerCount_},
-             crewCount{crewCount_} {}
+             crewCount{crewCount_}{}
 std::shared_ptr<Aircraft> PassengerAircraft::clone() const{return std::make_shared<PassengerAircraft>(*this);}
 void PassengerAircraft::setFreight(const int& inputFreight){ this->freight = inputFreight;}
 void PassengerAircraft::setPassengerNumber(const int& inputPassengerNumber){this->passengerNumber = inputPassengerNumber;}
@@ -44,8 +45,8 @@ double PassengerAircraft::calculateFreight_() const
 }
 void PassengerAircraft::readFromJson_(const nlohmann::json& obj)
 {
-    maxPassengerCount = obj["maxPassengerCount"];
-    crewCount = obj["crewCount"];
+    maxPassengerCount = readAttribute<int>(obj, "maxPassengerCount");
+    crewCount = readAttribute<int>(obj, "crewCount");
 }
 
 void PassengerAircraft::display(std::ostream &os) const

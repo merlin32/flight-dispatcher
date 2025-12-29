@@ -7,8 +7,8 @@
 class GeneralAviationAircraft : public Aircraft
 {
 private:
-    int maxPilotCount = 0;
-    int maxPassengersNumber = 0;
+    int maxPilotCount;
+    int maxPassengersNumber;
     int pilotsCount = 0;
     int passengersNumber = 0;
     double baggageWeight = 0.0;
@@ -25,7 +25,7 @@ public:
              const std::string& type_,
              const double& range_,
              const double& cruisingSpeed_,
-             const double& wingSpan_,
+             const double& wingspan_,
              const double& maxTakeoffWeight_,
              const double& maxPayload_,
              const double& emptyWeight_,

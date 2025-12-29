@@ -74,6 +74,10 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         source/GeneralAviationAircraft.cpp
         header/AircraftFactory.h
         source/AircraftFactory.cpp
+        header/Exceptions.h
+        source/Exceptions.cpp
+        header/JsonUtils.h
+        source/JsonUtilsImpl.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

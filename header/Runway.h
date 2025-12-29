@@ -4,18 +4,16 @@
 #include <string>
 #include <iostream>
 
-enum RwCond {Dry, Wet};
-
 class Runway
 {
 private:
     std::string runwayID;
     double runwayLength;
     double runwayWidth;
-    RwCond runwayCondition;
+    int runwayCondition;
     bool runwayInUse;
 public:
-    explicit Runway(std::string runwayID_, const double& runwayLength_, const double& runwayWidth_, RwCond runwayCondition_, const bool& runwayInUse_);
+    explicit Runway(std::string runwayID_, const double& runwayLength_, const double& runwayWidth_, int runwayCondition_, const bool& runwayInUse_);
     Runway(const Runway& other);
     Runway& operator=(const Runway& other);
     Runway(Runway&& other) noexcept;

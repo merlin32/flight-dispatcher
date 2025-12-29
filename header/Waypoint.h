@@ -13,10 +13,10 @@ private:
     std::string waypointCode;
     double longitude = 0;
     double latitude = 0;
-    int maxAltitude = 0;
-    int minAltitude = 0;
+    int maxAltitude;
+    int minAltitude;
     double distanceToPrevious = 0;
-    bool weatherAffected = false;
+    bool weatherAffected;
 public:
     Waypoint() = default;
     explicit Waypoint(std::string waypointCode_, const double& longitude_, const double& latitude_,

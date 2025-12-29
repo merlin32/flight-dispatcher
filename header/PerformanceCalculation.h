@@ -19,14 +19,13 @@ private:
     void setTotalWeight(const double& blockFuel);
     void setTakeoffDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight, const Metar& metar);
     void setLandingDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight,
-                            const Metar& metar, const int& runwayDirection, const int& runwayConditon);
+                            const Metar& metar, const int& runwayDirection, const int& runwayCondition);
 public:
     void setPayload(const std::shared_ptr<Aircraft>& plane);
     void setFreight(const std::shared_ptr<Aircraft>& plane);
     [[nodiscard]] double getTakeoffDistance() const;
     [[nodiscard]] double getLandingDistance() const;
-    [[nodiscard]] double getFreight() const;
-    [[nodiscard]] bool init(const std::shared_ptr<Aircraft>& plane, const FuelManagement& fuelPlanning, const Airport& departure,
+    void init(const std::shared_ptr<Aircraft>& plane, const FuelManagement& fuelPlanning, const Airport& departure,
                                   const Airport& arrival, const std::string& arrivalRunway);
     friend std::ostream& operator<<(std::ostream& os, const PerformanceCalculation& pfc);
 };

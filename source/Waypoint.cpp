@@ -1,10 +1,16 @@
 #include "../header/Waypoint.h"
+#include "../header/Exceptions.h"
 #include <cmath>
 
 Waypoint::Waypoint(std::string waypointCode_, const double& longitude_, const double& latitude_,
-                   const int& maxAltitude_, const int& minAltitude_, const bool& weatherAffected_):
+                   const int& maxAltitude_ = 50000, const int& minAltitude_ = 1000, const bool& weatherAffected_ = false):
                         waypointCode{std::move(waypointCode_)}, longitude{longitude_}, latitude{latitude_},
-                        maxAltitude{maxAltitude_}, minAltitude{minAltitude_}, weatherAffected{weatherAffected_}{}
+                        maxAltitude{maxAltitude_}, minAltitude{minAltitude_}, weatherAffected{weatherAffected_}
+{
+    if (waypointCode.empty()) throw InvalidObjectCreation("Waypoint", "waypointCode");
+    if (longitude < -180 || longitude > 180) throw InvalidObjectCreation("Waypoint", "longitude");
+    if (latitude < -90 || latitude > 90) throw InvalidObjectCreation("Waypoint", "latitude");
+}
 Waypoint::~Waypoint() = default;
 void Waypoint::setDistanceToPrevious(const Waypoint& other)
 {

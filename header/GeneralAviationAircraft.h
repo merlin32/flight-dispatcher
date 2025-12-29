@@ -7,8 +7,8 @@
 class GeneralAviationAircraft : public Aircraft
 {
 private:
-    int maxPilotCount;
-    int maxPassengersNumber;
+    int maxPilotCount = 0;
+    int maxPassengersNumber = 0;
     int pilotsCount = 0;
     int passengersNumber = 0;
     double baggageWeight = 0.0;

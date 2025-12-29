@@ -8,10 +8,10 @@
 class CargoAircraft : public Aircraft
 {
 private:
-    int maxContainersNum;
+    int maxContainersNum = 0;
     int crewCount = 1;
     int containersNum = 0;
-    double maxContainerWeight;
+    double maxContainerWeight = 0;
     std::vector<double> containersWeights;
     [[nodiscard]] double calculatePayload_() const override;
     [[nodiscard]] double calculateFreight_() const override;

@@ -15,7 +15,7 @@ Route::Route(std::string callsign_,
     if (departureRunway.empty()) throw InvalidObjectCreation("Route", "departureRunway");
     if (arrivalRunway.empty()) throw InvalidObjectCreation("Route", "arrivalRunway");
 }
-Route::Route(const Route& other) : cruisingAltitude{other.cruisingAltitude},
+Route::Route(const Route& other) :
                     callsign{other.callsign},
                     departure{other.departure},
                     arrival{other.arrival},
@@ -24,7 +24,8 @@ Route::Route(const Route& other) : cruisingAltitude{other.cruisingAltitude},
                     waypoints{other.waypoints},
                     plane{other.plane},
                     fuelPlanning{other.fuelPlanning},
-                    perfCalc{other.perfCalc}{}
+                    perfCalc{other.perfCalc},
+                    cruisingAltitude{other.cruisingAltitude}{}
 Route& Route::operator=(Route other)
 {
     if (this != &other)

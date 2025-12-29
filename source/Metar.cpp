@@ -15,8 +15,8 @@ Metar::Metar(std::string airportIcao_,
               std::string visibility_,
               std::string specialConditions_,
               std::string cloudsInfo_,
-              unsigned short int temperature_,
-              unsigned short int dewpoint_,
+              short int temperature_,
+              short int dewpoint_,
               unsigned short int qnh_,
               std::string additionalChanges_):
             airportIcao{std::move(airportIcao_)},
@@ -36,8 +36,6 @@ Metar::Metar(std::string airportIcao_,
     stringAttributesValidation(visibility, "visibility");
     stringAttributesValidation(specialConditions, "specialConditions");
     stringAttributesValidation(cloudsInfo, "cloudsInfo");
-    if (temperature < -90 || temperature > 57) throw InvalidObjectCreation("Metar", "temperature");
-    if (dewpoint < -80 || dewpoint > 40 || dewpoint > temperature) throw InvalidObjectCreation("Metar", "dewpoint");
     if (qnh < 920 || qnh > 1084) throw InvalidObjectCreation("Metar", "qnh");
     stringAttributesValidation(additionalChanges, "additionalChanges");
 }

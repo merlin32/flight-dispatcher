@@ -13,8 +13,8 @@ private:
     std::string visibility;
     std::string specialConditions;
     std::string cloudsInfo;
-    unsigned short int temperature;
-    unsigned short int dewpoint;
+    short int temperature;
+    short int dewpoint;
     unsigned short int qnh;
     std::string additionalChanges;
     static void stringAttributesValidation(const std::string& value, const std::string& attributeName);
@@ -26,8 +26,8 @@ public:
               std::string visibility_,
               std::string specialConditions_,
               std::string cloudsInfo_,
-              unsigned short int temperature_,
-              unsigned short int dewpoint_,
+              short int temperature_,
+              short int dewpoint_,
               unsigned short int qnh_,
               std::string additionalChanges_);
     ~Metar();

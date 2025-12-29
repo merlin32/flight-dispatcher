@@ -52,8 +52,8 @@ void Menu::populateAirports(std::ifstream airportsJson)
             readAttribute<std::string>(i["metar"][0], "visibility"),
             readAttribute<std::string>(i["metar"][0], "specialConditions"),
             readAttribute<std::string>(i["metar"][0], "cloudsInfo"),
-            readAttribute<unsigned short int>(i["metar"][0], "temperature"),
-            readAttribute<unsigned short int>(i["metar"][0], "dewpoint"),
+            readAttribute<short int>(i["metar"][0], "temperature"),
+            readAttribute<short int>(i["metar"][0], "dewpoint"),
             readAttribute<unsigned short int>(i["metar"][0], "qnh"),
             readAttribute<std::string>(i["metar"][0], "additionalChanges")
         };
@@ -341,7 +341,7 @@ void Menu::mainMenu()
     std::cout << "\t1) Create new flight plan\n";
     std::cout << "\t2) Open existing flight plan\n";
     std::cout << "\t3) Exit\n";
-    short unsigned int option;
+    unsigned short int option;
     std::cin >> option;
     switch (option)
     {

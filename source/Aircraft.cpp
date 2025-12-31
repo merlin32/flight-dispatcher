@@ -134,7 +134,7 @@ double Aircraft::calculateReserveFuel (const int& reserveTime)const{return reser
 double Aircraft::calculateTaxiFuel() const{return TAXI_TIME_DURATION * fuelBurnIdle;}
 //durations calculation
 double Aircraft::calculateClimbDuration(const double& delta) const{return delta / climbRate;}
-double Aircraft::calculateCruiseDuration(const double& delta) const{return delta / cruisingSpeed;}
+double Aircraft::calculateCruiseDuration(const double& delta) const{return 60 * delta / cruisingSpeed;}
 double Aircraft::calculateDescentDuration(const double& delta) const{return delta / descentRate;}
 double Aircraft::distanceWhileClimbing(const double& climbDuration) const{return climbDuration * climbSpeed / 60;}
 double Aircraft::distanceWhileDescending(const double& descentDuration) const{return descentDuration * cruisingSpeed / 60;}

@@ -25,7 +25,17 @@ Route::Route(const Route& other) :
                     plane{other.plane},
                     fuelPlanning{other.fuelPlanning},
                     perfCalc{other.perfCalc},
-                    cruisingAltitude{other.cruisingAltitude}{}
+                    cruisingAltitude{other.cruisingAltitude}
+{
+    routeDistance = other.routeDistance;
+    blockTime = other.blockTime;
+    airTime = other.airTime;
+    climbDuration = other.climbDuration;
+    cruiseDuration = other.cruiseDuration;
+    descentDuration = other.descentDuration;
+    TOC = other.TOC;
+    TOD = other.TOD;
+}
 Route& Route::operator=(Route other)
 {
     if (this != &other)
@@ -66,7 +76,7 @@ void Route::setClimbDuration()
 }
 void Route::setCruiseDuration()
 {
-    double delta = TOC - TOD;
+    double delta = TOD - TOC;
     this->cruiseDuration = plane->calculateCruiseDuration(delta);
 }
 void Route::setDescentDuration()

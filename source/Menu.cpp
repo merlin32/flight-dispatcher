@@ -331,7 +331,7 @@ void Menu::flpCreation()
              routeWaypoints, ac, fuelPlanning, perfCalc, cruiseAltInput};
         rt1.routeInit();
         std::cout << rt1;
-        flightPlans.emplace_back(rt1);
+        flightPlans.emplace_back(std::move(rt1));
         continuationConfirm();
     }
     catch (const InvalidFlightPlanParameters& err)

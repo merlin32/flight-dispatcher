@@ -352,7 +352,7 @@ void Menu::flpSelection()
     }
     std::cout << flightPlans.size() + 1 << ") Back\n\n";
     std::cout << "|>";
-    unsigned short int option;
+    size_t option;
     std::cin >> option;
     try
     {

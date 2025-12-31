@@ -29,7 +29,6 @@ public:
                                             Waypoint& selectedWaypoint);
     [[nodiscard]] static bool compareWaypointCodes(const Waypoint& wp1, const Waypoint& wp2);
     [[nodiscard]] bool belowMinAlt(const int& currentAlt) const;
-    [[nodiscard]] bool waypctCodeMatch(const std::string& currentWaypctCode) const;
     void displayWaypointCode() const;
     friend std::ostream& operator<<(std::ostream& os, const Waypoint& wp);
 };

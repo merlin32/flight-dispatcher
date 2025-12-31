@@ -128,29 +128,23 @@ void Route::routeInit()
     this->setCruiseDuration();
     this->setAirTime();
     this->setBlockTime();
-    try
-    {
-        if (this->plane->flightTooShort(airTime) == true)
-            throw InvalidFlightPlanParameters("Flight duration is too short for the selected aircraft!");
-        if (this->terrainDanger() == true)
-            throw InvalidFlightPlanParameters("Impossible to create the flight plan: cruising altitude is below waypoint minimum!");
-        if (this->rwTooShortDepar() == true)
-            throw InvalidFlightPlanParameters("Selected departure runway is too short for this configuration!");
-        if (this->rwTooShortArrival() == true)
-            throw InvalidFlightPlanParameters("Selected arrival runway is too short for this configuration!");
-        if (this->plane->aircraftRangeExceeded(routeDistance) == true)
-            throw InvalidFlightPlanParameters("Flight exceeds the range of the selected aircraft!");
-        if (this->plane->aircraftTooWide(this->departure.getRunway(departureRunway).getWidth()))
-            throw InvalidFlightPlanParameters("Aircraft too wide for the departure runway!");
-        if (this->plane->aircraftTooWide(this->arrival.getRunway(arrivalRunway).getWidth()))
-            throw InvalidFlightPlanParameters("Aircraft too wide for the arrival runway!");
-        this->fuelPlanning.init(this->climbDuration, this->cruiseDuration, this->descentDuration, this->plane);
-        this->perfCalc.init(plane, fuelPlanning, departure, arrival, arrivalRunway);
-    }
-    catch (const InvalidFlightPlanParameters& err)
-    {
-        std::cerr << err.what() << '\n';
-    }
+
+    if (this->plane->flightTooShort(airTime) == true)
+        throw InvalidFlightPlanParameters("Flight duration is too short for the selected aircraft!");
+    if (this->terrainDanger() == true)
+        throw InvalidFlightPlanParameters("Impossible to create the flight plan: cruising altitude is below waypoint minimum!");
+    if (this->rwTooShortDepar() == true)
+        throw InvalidFlightPlanParameters("Selected departure runway is too short for this configuration!");
+    if (this->rwTooShortArrival() == true)
+        throw InvalidFlightPlanParameters("Selected arrival runway is too short for this configuration!");
+    if (this->plane->aircraftRangeExceeded(routeDistance) == true)
+        throw InvalidFlightPlanParameters("Flight exceeds the range of the selected aircraft!");
+    if (this->plane->aircraftTooWide(this->departure.getRunway(departureRunway).getWidth()))
+        throw InvalidFlightPlanParameters("Aircraft too wide for the departure runway!");
+    if (this->plane->aircraftTooWide(this->arrival.getRunway(arrivalRunway).getWidth()))
+        throw InvalidFlightPlanParameters("Aircraft too wide for the arrival runway!");
+    this->fuelPlanning.init(this->climbDuration, this->cruiseDuration, this->descentDuration, this->plane);
+    this->perfCalc.init(plane, fuelPlanning, departure, arrival, arrivalRunway);
 }
 std::ostream& operator<<(std::ostream& os, const Route& rt)
 {

@@ -324,13 +324,20 @@ void Menu::flpCreation()
     PerformanceCalculation perfCalc;
     perfCalc.setPayload(ac);
     //flight plan creation
-    Route rt1{ callSgn, depart, arrival,
+    try
+    {
+        Route rt1{ callSgn, depart, arrival,
         departRw, arrivalRw,
              routeWaypoints, ac, fuelPlanning, perfCalc, cruiseAltInput};
-    rt1.routeInit();
-    std::cout << rt1;
-    flightPlans.emplace_back(rt1);
-    continuationConfirm();
+        rt1.routeInit();
+        std::cout << rt1;
+        flightPlans.emplace_back(rt1);
+        continuationConfirm();
+    }
+    catch (const InvalidFlightPlanParameters& err)
+    {
+        std::cerr << err.what() << '\n';
+    }
 }
 
 void Menu::flpSelection()

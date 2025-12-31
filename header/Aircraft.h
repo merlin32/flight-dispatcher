@@ -9,7 +9,7 @@
 class Aircraft
 {
 private:
-    static constexpr double RUNWAY_WIDTH_PCT = 0.7;
+    static constexpr double RUNWAY_WIDTH_PCT = 0.6;
     static constexpr int TAXI_TIME_DURATION = 20;
     std::string category;
     std::string type;

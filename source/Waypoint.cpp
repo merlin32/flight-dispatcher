@@ -63,7 +63,6 @@ bool Waypoint::compareWaypointCodes(const Waypoint& wp1, const Waypoint& wp2)
     return wp1.waypointCode < wp2.waypointCode;
 }
 bool Waypoint::belowMinAlt(const int& currentAlt) const {return currentAlt < minAltitude;}
-bool Waypoint::waypctCodeMatch(const std::string& currentWaypctCode) const {return currentWaypctCode == waypointCode;}
 void Waypoint::displayWaypointCode() const{std::cout << waypointCode;}
 
 

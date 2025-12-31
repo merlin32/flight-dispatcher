@@ -152,7 +152,7 @@ bool Aircraft::maxCruiseAltitudeExceeded(const int& cruiseAltitude) const {retur
 bool Aircraft::flightTooShort(const double& airTime) const {return airTime < minimumFlightDuration;}
 bool Aircraft::aircraftRangeExceeded(const double& routeDistance) const{return routeDistance > range;}
 bool Aircraft::categoryMatch(const std::string& currentCategory) const{return currentCategory == category;}
-bool Aircraft::aircraftTooWide(const double& runwayWidth) const{return runwayWidth >= wingspan * RUNWAY_WIDTH_PCT;}
+bool Aircraft::aircraftTooWide(const double& runwayWidth) const{return runwayWidth < wingspan * RUNWAY_WIDTH_PCT;}
 //getters
 double Aircraft::getEmptyWeight() const{return this->emptyWeight;}
 double Aircraft::getTakeoffReferenceDist() const{return this->takeoffReferenceDist;}

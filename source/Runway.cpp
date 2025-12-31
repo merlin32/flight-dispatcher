@@ -1,5 +1,6 @@
 #include "../header/Runway.h"
 #include "../header/Exceptions.h"
+#include <iostream>
 
 Runway::Runway(std::string runwayID_, const double& runwayLength_, const double& runwayWidth_, int runwayCondition_ = 0,
                 const bool& runwayInUse_ = true) :
@@ -75,20 +76,30 @@ std::ostream& operator<<(std::ostream& os, const Runway& rw)
 
     return os;
 }
-
-double Runway::getLength() const {return this->runwayLength;}
-std::string Runway::getRunwayID() const{return this->runwayID;}
-int Runway::getRwDirection() const
+double Runway::getWidth() const {return this->runwayWidth;}
+int Runway::calculateRwDirection() const
 {
     std::string rwDirection = this->runwayID.substr(2, 2);
     int direction = std::stoi(rwDirection);
     return direction;
 }
-int Runway::getRwCondition() const
-{
-    return this->runwayCondition;
-}
 bool Runway::getRwStatus() const {return this->runwayInUse;}
+double Runway::runwayFactorDeduction() const
+{
+    switch(runwayCondition)
+    {
+        case 0: return 1;
+        case 1: return 1.20;
+        default: return 1;
+    }
+}
+bool Runway::runwayCodeMatch(const std::string& testValue) const {return testValue == runwayID;}
+//a runway is too short for takeoff if the takeoffDistance + 0.15 * takeoffDistance > runwayLength
+bool Runway::runwayTooShortTakeoff(const double& takeoffDistance) const {return runwayLength < takeoffDistance * TAKEOFF_SAFETY_FACTOR;}
+//a runway is too short for landing if the landingDistance + 0.60 * landingDistance > runwayLength
+bool Runway::runwayTooShortLanding(const double& landingDistance) const {return runwayLength < landingDistance * LANDING_SAFETY_FACTOR;}
+
+
 
 
 

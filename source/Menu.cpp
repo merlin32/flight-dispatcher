@@ -61,7 +61,7 @@ void Menu::populateAirports(std::ifstream airportsJson)
         };
         Airport ap{
             readAttribute<std::string>(i, "icaoCode"),
-            readAttribute<unsigned short int>(i, "elevation"),
+            readAttribute<int>(i, "elevation"),
             readAttribute<std::string>(i, "airportName"),
             readAttribute<std::string>(i, "iataCode"),
             runwaysList,
@@ -208,7 +208,7 @@ void Menu::flpCreation()
             break;
     }
 
-    if (ac->getCategory() == "passenger")
+    if (ac->categoryMatch("passenger") == true)
     {
         auto passengerAc = std::dynamic_pointer_cast<PassengerAircraft>(ac);
         if (passengerAc)
@@ -228,7 +228,7 @@ void Menu::flpCreation()
             passengerAc->setPassengerNumber(passengers);
         }
     }
-    if (ac->getCategory() == "cargo")
+    if (ac->categoryMatch("cargo") == true)
     {
         auto cargoAc = std::dynamic_pointer_cast<CargoAircraft>(ac);
         if (cargoAc)
@@ -254,7 +254,7 @@ void Menu::flpCreation()
             cargoAc->setContainersWeights(containersWeights);
         }
     }
-    if (ac->getCategory() == "general aviation")
+    if (ac->categoryMatch("general aviation") == true)
     {
         auto generalAvAc = std::dynamic_pointer_cast<GeneralAviationAircraft>(ac);
         if (generalAvAc)
@@ -329,11 +329,40 @@ void Menu::flpCreation()
              routeWaypoints, ac, fuelPlanning, perfCalc, cruiseAltInput};
     rt1.routeInit();
     std::cout << rt1;
-
-    std::cout << "\nPress Enter to continue...";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cin.get();
+    flightPlans.emplace_back(rt1);
+    continuationConfirm();
 }
+
+void Menu::flpSelection()
+{
+    std::cout << "=======================================\n";
+    std::cout << "===== Flight Plan Selection Menu  =====\n";
+    std::cout << "=======================================\n\n";
+    for (size_t i = 0; i < flightPlans.size(); i++)
+    {
+        std::cout << i + 1 << ") ";
+        flightPlans[i].displayShortInfo();
+    }
+    std::cout << flightPlans.size() + 1 << ") Back\n\n";
+    std::cout << "|>";
+    unsigned short int option;
+    std::cin >> option;
+    try
+    {
+        if (option > flightPlans.size() + 1)
+            throw AppException("No such option available");
+        if (option == flightPlans.size() + 1)
+            return;
+
+        std::cout << flightPlans[option - 1];
+        continuationConfirm();
+    }
+    catch (const AppException& err)
+    {
+        std::cerr << err.what() << '\n';
+    }
+}
+
 
 void Menu::mainMenu()
 {
@@ -343,14 +372,22 @@ void Menu::mainMenu()
     std::cout << "\t1) Create new flight plan\n";
     std::cout << "\t2) Open existing flight plan\n";
     std::cout << "\t3) Exit\n";
+    std::cout << "|>";
     unsigned short int option;
     std::cin >> option;
     switch (option)
     {
         case 1: flpCreation(); break;
-        //case 2: accessFlp(); break;
+        case 2: flpSelection(); break;
         case 3: exit(0);
         default: std::cerr << "Unknown option! Please enter a valid option!\n"; break;
     }
     std::cout << "\n\n\n";
+}
+
+void Menu::continuationConfirm() const
+{
+    std::cout << "\nPress Enter to continue...";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.get();
 }

@@ -18,34 +18,23 @@ void PerformanceCalculation::setTOW(const double& blockFuel, const double& taxiF
 //LDW = landing weight
 void PerformanceCalculation::setLDW(const double& tripFuel){this->LDW = this->TOW - tripFuel;}
 void PerformanceCalculation::setTotalWeight(const double& blockFuel){this->totalWeight = this->ZFW + blockFuel;}
-void PerformanceCalculation::setTakeoffDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight, const Metar& metar)
+void PerformanceCalculation::setTakeoffDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight,
+                                                const double& qnhsRatio, const double& temperaturesRatio)
 {
     double massesRatio = this->TOW / maxTakeoffWeight;
-    double qnhsRatio = metar.calculateQhnsRatio();
-    double temperaturesRatio = metar.calculateTemperaturesRatio();
     double distance = takeoffReferenceDist * massesRatio * qnhsRatio * temperaturesRatio;
     this->takeoffDistance = distance;
 }
 void PerformanceCalculation::setLandingDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight,
-                                                const Metar& metar, const int& runwayDirection, const int& runwayCondition)
+                            const double& qnhsRatio, const double& temperaturesRatio,
+                            const double& windSpeed, const int& runwayFactor)
 {
     double massesRatio = this->LDW / maxTakeoffWeight;
-    double qnhsRatio = metar.calculateQhnsRatio();
-    double temperaturesRatio = metar.calculateTemperaturesRatio();
     //wind factor calculation
-    double headWindSpeed = metar.calculateWindSpeed(runwayDirection);
     double windFactor;
-    if (headWindSpeed < 0) windFactor = 1 + 0.01 * (-headWindSpeed);
-    else windFactor = 1 - 0.01 * headWindSpeed;
-    //runwayFactor deduction
-    double runwayFactor;
-    switch(runwayCondition)
-    {
-        case 0: runwayFactor = 1; break;
-        case 1: runwayFactor = 1.20; break;
-        default: runwayFactor = 1; break;
-    }
-    double distance = (0.7 * takeoffReferenceDist) * massesRatio * qnhsRatio * temperaturesRatio * windFactor * runwayFactor;
+    if (windSpeed < 0) windFactor = 1 + WIND_SPEED_PCT * (-windSpeed);
+    else windFactor = 1 - WIND_SPEED_PCT * windSpeed;
+    double distance = (TAKEOFF_REF_DIST_PCT * takeoffReferenceDist) * massesRatio * qnhsRatio * temperaturesRatio * windFactor * runwayFactor;
     this->landingDistance = distance;
 }
 double PerformanceCalculation::getTakeoffDistance() const{return this->takeoffDistance;}
@@ -65,11 +54,17 @@ void PerformanceCalculation::init(const std::shared_ptr<Aircraft>& plane, const 
     this->setTotalWeight(fuelPlanning.getBlockFuel());
     double takeoffReferenceDistance = plane->getTakeoffReferenceDist();
     double maxTakeoffWeight = plane->getMaxTakeoffWeight();
-    this->setTakeoffDistance(takeoffReferenceDistance, maxTakeoffWeight, departure.getMetar());
+    Metar departMetar = departure.getMetar();
+    Metar arrivalMetar = arrival.getMetar();
+    Runway arrRw = arrival.getRunway(arrivalRunway);
+    this->setTakeoffDistance(takeoffReferenceDistance, maxTakeoffWeight,
+                    arrivalMetar.calculateQhnsRatio(),
+                             arrivalMetar.calculateTemperaturesRatio());
     this->setLandingDistance(takeoffReferenceDistance, maxTakeoffWeight,
-                                      arrival.getMetar(),
-                                      arrival.getRunway(arrivalRunway).getRwDirection(),
-                                      arrival.getRunway(arrivalRunway).getRwCondition());
+                                      arrivalMetar.calculateQhnsRatio(),
+                                      arrivalMetar.calculateTemperaturesRatio(),
+                                      arrivalMetar.calculateWindSpeed(arrRw.calculateRwDirection()),
+                                      arrRw.runwayFactorDeduction());
     if (plane->maxPayloadExceeded(payload) == true)
         throw InvalidFlightPlanParameters("Maximum payload value has been exceeded!");
     if (plane->maxTakeoffWeightExceeded(TOW) == true)

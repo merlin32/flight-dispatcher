@@ -8,6 +8,8 @@
 class PerformanceCalculation
 {
 private:
+    static constexpr double TAKEOFF_REF_DIST_PCT = 0.7;
+    static constexpr double WIND_SPEED_PCT = 0.01;
     double payload = 0, freight = 0;
     double totalWeight = 0;
     double ZFW = 0, TOW = 0;
@@ -17,9 +19,11 @@ private:
     void setTOW(const double& blockFuel, const double& taxiFuel);
     void setLDW(const double& tripFuel);
     void setTotalWeight(const double& blockFuel);
-    void setTakeoffDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight, const Metar& metar);
+    void setTakeoffDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight,
+                            const double& qnhsRatio, const double& temperaturesRatio);
     void setLandingDistance(const double& takeoffReferenceDist, const double& maxTakeoffWeight,
-                            const Metar& metar, const int& runwayDirection, const int& runwayCondition);
+                            const double& qnhsRatio, const double& temperaturesRatio,
+                            const double& windSpeed, const int& runwayFactor);
 public:
     void setPayload(const std::shared_ptr<Aircraft>& plane);
     void setFreight(const std::shared_ptr<Aircraft>& plane);

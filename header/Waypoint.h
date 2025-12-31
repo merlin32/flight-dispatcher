@@ -5,11 +5,12 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <algorithm>
 
 class Waypoint
 {
 private:
+    static constexpr double EARTH_RADIUS_NM = 3437.7;
+    static constexpr double PI = 3.14159265358979323846;
     std::string waypointCode;
     double longitude = 0;
     double latitude = 0;
@@ -24,11 +25,12 @@ public:
     ~Waypoint();
     void setDistanceToPrevious(const Waypoint& other);
     [[nodiscard]] double getDistanceToPrevious() const;
-    [[nodiscard]] int getMinAltitude() const;
-    [[nodiscard]] std::string getWaypointCode() const;
     [[nodiscard]] static bool validWaypoint(const std::vector<Waypoint>& waypointsList, const std::string& waypointName,
                                             Waypoint& selectedWaypoint);
     [[nodiscard]] static bool compareWaypointCodes(const Waypoint& wp1, const Waypoint& wp2);
+    [[nodiscard]] bool belowMinAlt(const int& currentAlt) const;
+    [[nodiscard]] bool waypctCodeMatch(const std::string& currentWaypctCode) const;
+    void displayWaypointCode() const;
     friend std::ostream& operator<<(std::ostream& os, const Waypoint& wp);
 };
 #endif //WAYPOINT_H

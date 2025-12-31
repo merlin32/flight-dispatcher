@@ -1,6 +1,7 @@
 #include "../header/Waypoint.h"
 #include "../header/Exceptions.h"
 #include <cmath>
+#include <algorithm>
 
 Waypoint::Waypoint(std::string waypointCode_, const double& longitude_, const double& latitude_,
                    const int& maxAltitude_ = 50000, const int& minAltitude_ = 1000, const bool& weatherAffected_ = false):
@@ -15,12 +16,10 @@ Waypoint::~Waypoint() = default;
 void Waypoint::setDistanceToPrevious(const Waypoint& other)
 {
     //the haversine formula can be found here: https://www.movable-type.co.uk/scripts/latlong.html
-    double EarthRadiusNM = 3437.7;
-    double pi = 3.14159265358979323846;
-    double lat1 = this->latitude * pi / 180.0;
-    double lon1 = this->longitude * pi / 180.0;
-    double lat2 = other.latitude * pi / 180.0;
-    double lon2 = other.longitude * pi / 180.0;
+    double lat1 = this->latitude * PI / 180.0;
+    double lon1 = this->longitude * PI / 180.0;
+    double lat2 = other.latitude * PI / 180.0;
+    double lon2 = other.longitude * PI / 180.0;
     //deltas
     double dLat = lat2 - lat1;
     double dLon = lon2 - lon1;
@@ -29,12 +28,10 @@ void Waypoint::setDistanceToPrevious(const Waypoint& other)
                std::cos(lat1) * std::cos(lat2) *
                std::sin(dLon / 2) * std::sin(dLon / 2);
     double c = 2 * std::atan2(std::sqrt(a), std::sqrt(1 - a));
-    double distance = EarthRadiusNM * c;
+    double distance = EARTH_RADIUS_NM * c;
     this->distanceToPrevious = distance;
 }
 double Waypoint::getDistanceToPrevious() const{return this->distanceToPrevious;}
-int Waypoint::getMinAltitude() const{return this->minAltitude;}
-std::string Waypoint::getWaypointCode() const{return this->waypointCode;}
 std::ostream& operator<<(std::ostream& os, const Waypoint& wp)
 {
     os << "Waypoint code: " << wp.waypointCode << '\n';
@@ -51,9 +48,9 @@ bool Waypoint::validWaypoint(const std::vector<Waypoint>& waypointsList, const s
     auto position = std::lower_bound(waypointsList.begin(), waypointsList.end(),
                                     waypointName, [](const Waypoint& w, const std::string& name)
                                     {
-                                        return w.getWaypointCode() < name;
+                                        return w.waypointCode < name;
                                     });
-    if (position != waypointsList.end() && position->getWaypointCode() == waypointName)
+    if (position != waypointsList.end() && position->waypointCode == waypointName)
     {
         selectedWaypoint = *position;
         return true;
@@ -63,8 +60,13 @@ bool Waypoint::validWaypoint(const std::vector<Waypoint>& waypointsList, const s
 }
 bool Waypoint::compareWaypointCodes(const Waypoint& wp1, const Waypoint& wp2)
 {
-    return wp1.getWaypointCode() < wp2.getWaypointCode();
+    return wp1.waypointCode < wp2.waypointCode;
 }
+bool Waypoint::belowMinAlt(const int& currentAlt) const {return currentAlt < minAltitude;}
+bool Waypoint::waypctCodeMatch(const std::string& currentWaypctCode) const {return currentWaypctCode == waypointCode;}
+void Waypoint::displayWaypointCode() const{std::cout << waypointCode;}
+
+
 
 
 

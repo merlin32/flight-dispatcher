@@ -131,26 +131,36 @@ double Aircraft::calculateTripFuel(const double& climbDuration, const double& cr
 //reserveFuel = the extra fuel the aircraft must have for this flight
 double Aircraft::calculateReserveFuel (const int& reserveTime)const{return reserveTime * fuelBurnLowAltitude;}
 //when taxiFuel is not inserted, we approximate that the taxi time takes around 20 minutes
-double Aircraft::calculateTaxiFuel() const{return 20 * fuelBurnIdle;}
+double Aircraft::calculateTaxiFuel() const{return TAXI_TIME_DURATION * fuelBurnIdle;}
+//durations calculation
+double Aircraft::calculateClimbDuration(const double& delta) const{return delta / climbRate;}
+double Aircraft::calculateCruiseDuration(const double& delta) const{return delta / cruisingSpeed;}
+double Aircraft::calculateDescentDuration(const double& delta) const{return delta / descentRate;}
+double Aircraft::distanceWhileClimbing(const double& climbDuration) const{return climbDuration * climbSpeed / 60;}
+double Aircraft::distanceWhileDescending(const double& descentDuration) const{return descentDuration * cruisingSpeed / 60;}
+//ratio functions
+double Aircraft::climbSpeedVsRateRatio() const{return climbSpeed / climbRate;}
+double Aircraft::cruiseSpeedVsDescentRateRatio() const{return cruisingSpeed / descentRate;}
+//block taxi time
+int Aircraft::calculateDefaultTaxiTime() {return 2 * TAXI_TIME_DURATION;}
+//check functions
 bool Aircraft::fuelCapacityExceeded(const double& blockFuel) const {return blockFuel > fuelCapacity;}
 bool Aircraft::maxPayloadExceeded(const double& payload) const {return payload > maxPayload;}
 bool Aircraft::maxFreightExceeded(const double& freight) const {return freight > maxFreight;}
 bool Aircraft::maxTakeoffWeightExceeded(const double& TOW) const{return TOW > maxTakeoffWeight;}
-int Aircraft::getMaxCruisingAltitude() const {return this->maxCruisingAltitude;}
-int Aircraft::getClimbRate() const {return this->climbRate;}
-int Aircraft::getDescentRate() const {return this->descentRate;}
-double Aircraft::getCruisingSpeed() const{return this->cruisingSpeed;}
-double Aircraft::getClimbSpeed() const{return this->climbSpeed;}
-int Aircraft::getMinimumFlightDuration() const{return this->minimumFlightDuration;}
-double Aircraft::getRange() const{return this->range;}
-std::string Aircraft::getType() const{return this->type;}
+bool Aircraft::maxCruiseAltitudeExceeded(const int& cruiseAltitude) const {return cruiseAltitude > maxCruisingAltitude;}
+bool Aircraft::flightTooShort(const double& airTime) const {return airTime < minimumFlightDuration;}
+bool Aircraft::aircraftRangeExceeded(const double& routeDistance) const{return routeDistance > range;}
+bool Aircraft::categoryMatch(const std::string& currentCategory) const{return currentCategory == category;}
+bool Aircraft::aircraftTooWide(const double& runwayWidth) const{return runwayWidth >= wingspan * RUNWAY_WIDTH_PCT;}
+//getters
 double Aircraft::getEmptyWeight() const{return this->emptyWeight;}
 double Aircraft::getTakeoffReferenceDist() const{return this->takeoffReferenceDist;}
 double Aircraft::getMaxTakeoffWeight() const{return this->maxTakeoffWeight;}
-std::string Aircraft::getCategory() const {return this->category;}
 //virtual functions calls
 double Aircraft::calculateFreight() const{return calculateFreight_();}
 double Aircraft::calculatePayload() const{return calculatePayload_();}
+//validations
 bool Aircraft::isDataValid() const {return isDataValid_();}
 void Aircraft::readFromJson(const nlohmann::json& obj)
 {
@@ -179,7 +189,7 @@ void Aircraft::readFromJson(const nlohmann::json& obj)
 }
 bool Aircraft::compareAircraftTypes(const std::shared_ptr<Aircraft>& plane1, const std::shared_ptr<Aircraft>& plane2)
 {
-    return plane1->getType() < plane2->getType();
+    return plane1->type < plane2->type;
 }
 bool Aircraft::validAircraft(const std::vector<std::shared_ptr<Aircraft>>& aircraftsList, const std::string& inputType,
                                 std::shared_ptr<Aircraft>& plane)
@@ -187,9 +197,9 @@ bool Aircraft::validAircraft(const std::vector<std::shared_ptr<Aircraft>>& aircr
     auto position = std::lower_bound(aircraftsList.begin(), aircraftsList.end(), inputType,
                                     [](const std::shared_ptr<Aircraft>& a, const std::string& tp)
                                     {
-                                        return a->getType() < tp;
+                                        return a->type < tp;
                                     });
-    if (position != aircraftsList.end() && (*position)->getType() == inputType)
+    if (position != aircraftsList.end() && (*position)->type == inputType)
     {
         plane = *position;
         return true;
@@ -212,6 +222,9 @@ void Aircraft::attributeValidation(const int& value, const std::string& attribut
     if (value < 0)
         throw InvalidObjectCreation("Aircraft", attributeName);
 }
+//others
+void Aircraft::displayAircraftType() {std::cout << type;}
+
 
 
 

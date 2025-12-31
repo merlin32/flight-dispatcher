@@ -7,6 +7,12 @@
 class Metar
 {
 private:
+    static constexpr double STD_QNH = 1013; //1013 represents the standard air pressure
+    static constexpr double STD_TEMP = 288.15; //288.15 represents the standard air temperature in Kelvins
+    static constexpr double DEG_TO_KEV_CONST = 273.15;
+    static constexpr unsigned short int LOWEST_QNH = 920;
+    static constexpr unsigned short int HIGHEST_QNH = 1084;
+    static constexpr double PI = 3.14159265358979323846;
     std::string airportIcao;
     std::string dateAndTime;
     std::string windInfo;

@@ -35,7 +35,7 @@ CargoAircraft::CargoAircraft(const std::string& category_,
 std::shared_ptr<Aircraft> CargoAircraft::clone() const{return std::make_shared<CargoAircraft>(*this);}
 double CargoAircraft::calculatePayload_() const
 {
-    return 80 * crewCount + calculateFreight_();
+    return 75 * crewCount + calculateFreight_();
 }
 double CargoAircraft::calculateFreight_() const
 {

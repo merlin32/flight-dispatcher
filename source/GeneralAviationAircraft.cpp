@@ -34,7 +34,7 @@ GeneralAviationAircraft::GeneralAviationAircraft(const std::string& category_,
 std::shared_ptr<Aircraft> GeneralAviationAircraft::clone() const{return std::make_shared<GeneralAviationAircraft>(*this);}
 double GeneralAviationAircraft::calculatePayload_() const
 {
-    return 80 * (pilotsCount + passengersNumber) + baggageWeight;
+    return 75 * (pilotsCount + passengersNumber) + baggageWeight;
 }
 double GeneralAviationAircraft::calculateFreight_() const{return baggageWeight;}
 void GeneralAviationAircraft::readFromJson_(const nlohmann::json& obj)

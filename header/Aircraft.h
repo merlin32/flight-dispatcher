@@ -9,6 +9,8 @@
 class Aircraft
 {
 private:
+    static constexpr double RUNWAY_WIDTH_PCT = 0.7;
+    static constexpr int TAXI_TIME_DURATION = 20;
     std::string category;
     std::string type;
     double range;
@@ -58,33 +60,38 @@ public:
     [[nodiscard]] double calculatePayload() const;
     [[nodiscard]] double calculateFreight() const;
     [[nodiscard]] bool isDataValid() const;
-    [[nodiscard]] int getMaxCruisingAltitude() const;
-    [[nodiscard]] int getClimbRate() const;
-    [[nodiscard]] int getDescentRate() const;
-    [[nodiscard]] double getCruisingSpeed() const;
-    [[nodiscard]] double getClimbSpeed() const;
-    [[nodiscard]] int getMinimumFlightDuration() const;
-    [[nodiscard]] double getRange() const;
-    [[nodiscard]] std::string getType() const;
     [[nodiscard]] double getEmptyWeight() const;
     [[nodiscard]] double getTakeoffReferenceDist() const;
     [[nodiscard]] double getMaxTakeoffWeight() const;
-    [[nodiscard]] std::string getCategory() const;
     friend std::ostream& operator<<(std::ostream& os, const Aircraft& ac);
-    //moved these calculations from FuelManagement to eliminate some getters
+    //moved these calculations from FuelManagement and Route to eliminate some getters
     [[nodiscard]] double calculateTripFuel(const double& climbDuration, const double& cruiseDuration,
                                             const double& descentDuration, const double& TOW) const;
     [[nodiscard]] double calculateReserveFuel(const int& reserveTime) const;
     [[nodiscard]] double calculateTaxiFuel() const;
+    [[nodiscard]] double calculateClimbDuration(const double& delta) const;
+    [[nodiscard]] double calculateCruiseDuration(const double& delta) const;
+    [[nodiscard]] double calculateDescentDuration(const double& delta) const;
+    [[nodiscard]] double distanceWhileClimbing(const double& climbDuration) const;
+    [[nodiscard]] double distanceWhileDescending(const double& descentDuration) const;
+    [[nodiscard]] double climbSpeedVsRateRatio() const;
+    [[nodiscard]] double cruiseSpeedVsDescentRateRatio() const;
+    [[nodiscard]] static int calculateDefaultTaxiTime();
     void readFromJson(const nlohmann::json& obj);
-    //check functions have been moved from FuelManagement and PerformanceCalculation to get rid of some getters
+    //check functions have been moved from FuelManagement, PerformanceCalculation and Route to get rid of some getters
     [[nodiscard]] bool fuelCapacityExceeded(const double& blockFuel) const;
     [[nodiscard]] bool maxPayloadExceeded(const double& payload) const;
     [[nodiscard]] bool maxFreightExceeded(const double& freight) const;
     [[nodiscard]] bool maxTakeoffWeightExceeded(const double& TOW) const;
+    [[nodiscard]] bool maxCruiseAltitudeExceeded(const int& cruiseAltitude) const;
+    [[nodiscard]] bool flightTooShort(const double& airTime) const;
+    [[nodiscard]] bool aircraftRangeExceeded(const double& routeDistance) const;
+    [[nodiscard]] bool categoryMatch(const std::string& currentCategory) const;
+    [[nodiscard]] bool aircraftTooWide(const double& runwayWidth) const;
     [[nodiscard]] static bool compareAircraftTypes(const std::shared_ptr<Aircraft>& plane1, const std::shared_ptr<Aircraft>& plane2);
     [[nodiscard]] static bool validAircraft(const std::vector<std::shared_ptr<Aircraft>>& aircraftsList, const std::string& inputType,
                                             std::shared_ptr<Aircraft>& plane);
+    void displayAircraftType();
 protected:
     Aircraft(const Aircraft& other) = default;
     Aircraft &operator=(const Aircraft& other) = default;

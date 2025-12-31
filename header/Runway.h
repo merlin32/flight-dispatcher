@@ -2,11 +2,12 @@
 #define RUNWAY_H
 
 #include <string>
-#include <iostream>
 
 class Runway
 {
 private:
+    static constexpr double TAKEOFF_SAFETY_FACTOR = 1.15;
+    static constexpr double LANDING_SAFETY_FACTOR = 1.60;
     std::string runwayID;
     double runwayLength;
     double runwayWidth;
@@ -20,10 +21,12 @@ public:
     Runway& operator=(Runway&& other) noexcept;
     ~Runway();
     friend std::ostream& operator<<(std::ostream& os, const Runway& rw);
-    [[nodiscard]] double getLength() const;
-    [[nodiscard]] std::string getRunwayID() const;
-    [[nodiscard]] int getRwDirection() const;
-    [[nodiscard]] int getRwCondition() const;
+    [[nodiscard]] double getWidth() const;
     [[nodiscard]] bool getRwStatus() const;
+    [[nodiscard]] int calculateRwDirection() const;
+    [[nodiscard]] double runwayFactorDeduction() const;
+    [[nodiscard]] bool runwayCodeMatch(const std::string& testValue) const;
+    [[nodiscard]] bool runwayTooShortTakeoff(const double& takeoffDistance) const;
+    [[nodiscard]] bool runwayTooShortLanding(const double& landingDistance) const;
 };
 #endif //RUNWAY_H

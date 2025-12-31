@@ -61,33 +61,37 @@ void Route::setRouteDistance()
 }
 void Route::setClimbDuration()
 {
-    this->climbDuration = (double)(this->cruisingAltitude - this->departure.getElevation()) / plane->getClimbRate();
+    double delta = this->cruisingAltitude - this->departure.getElevation();
+    this->climbDuration = plane->calculateClimbDuration(delta);
 }
 void Route::setCruiseDuration()
 {
-    this->cruiseDuration = (this->TOD - this->TOC) / plane->getCruisingSpeed();
+    double delta = TOC - TOD;
+    this->cruiseDuration = plane->calculateCruiseDuration(delta);
 }
 void Route::setDescentDuration()
 {
-    this->descentDuration = (double)(this->cruisingAltitude - arrival.getElevation()) / plane->getDescentRate();
+    double delta = this->cruisingAltitude - arrival.getElevation();
+    this->descentDuration = plane->calculateDescentDuration(delta);
 }
 void Route::setTOD()
 {
-    this->TOD = (descentDuration * plane->getCruisingSpeed()) / 60;
+    double descentDistance = plane->distanceWhileDescending(descentDuration);
+    this->TOD = routeDistance - descentDistance;
 }
 void Route::setTOC()
 {
-    this->TOC = (climbDuration * plane->getClimbSpeed()) / 60;
+    this->TOC = plane->distanceWhileClimbing(climbDuration);
 }
 void Route::setCruiseAltitude()
 {
-    double ratio1 = plane->getClimbSpeed() / plane->getClimbRate();
-    double ratio2 = plane->getCruisingSpeed() / plane->getDescentRate();
+    double ratio1 = plane->climbSpeedVsRateRatio();
+    double ratio2 = plane->cruiseSpeedVsDescentRateRatio();
     double numerator = this->routeDistance * 60 + ratio1 * departure.getElevation() + ratio2 * arrival.getElevation();
     double denominator = ratio1 + ratio2;
     this->cruisingAltitude = (int) (numerator / denominator);
-    while (plane->getMaxCruisingAltitude() < cruisingAltitude && cruisingAltitude > 4000)
-        cruisingAltitude -= 1000;
+    while (plane->maxCruiseAltitudeExceeded(cruisingAltitude) && cruisingAltitude > MINIMUM_CRUISE_ALT)
+        cruisingAltitude -= ALT_DECREMENT;
 }
 void Route::setAirTime()
 {
@@ -95,30 +99,22 @@ void Route::setAirTime()
 }
 void Route::setBlockTime()
 {
-    this->blockTime = this->airTime + 40; //40 minutes for taxi combined (departure + arrival)
+    this->blockTime = this->airTime + Aircraft::calculateDefaultTaxiTime(); //40 minutes for taxi combined (departure + arrival)
 }
-bool Route::maxCruiseAltitudeExceeded() const {return this->cruisingAltitude > plane->getMaxCruisingAltitude();}
 bool Route::terrainDanger() const
 {
     for (const auto& waypct: waypoints)
-        if (this->cruisingAltitude < waypct.getMinAltitude())
+        if (waypct.belowMinAlt(this->cruisingAltitude) == true)
             return true;
     return false;
 }
-bool Route::flightTooShort() const{return this->airTime < plane->getMinimumFlightDuration();}
-//bool Route::rwTooNarrowDepart() const {} those methods will be implemented soon
-//bool Route::rwTooNarrowArrival() const{}
 bool Route::rwTooShortDepar() const
 {
-    return this->perfCalc.getTakeoffDistance() > this->departure.getRunway(departureRunway).getLength();
+    return this->departure.getRunway(departureRunway).runwayTooShortTakeoff(this->perfCalc.getTakeoffDistance());
 }
 bool Route::rwTooShortArrival() const
 {
-    return this->perfCalc.getLandingDistance() > this->arrival.getRunway(arrivalRunway).getLength();
-}
-bool Route::aircraftRangeExceeded() const
-{
-    return this->routeDistance > this->plane->getRange();
+    return this->arrival.getRunway(arrivalRunway).runwayTooShortLanding(this->perfCalc.getLandingDistance());
 }
 void Route::routeInit()
 {
@@ -134,9 +130,7 @@ void Route::routeInit()
     this->setBlockTime();
     try
     {
-        if (this->maxCruiseAltitudeExceeded() == true)
-            throw InvalidFlightPlanParameters("Cruise altitude exceeds aircraft's maximum cruising altitude!");
-        if (this->flightTooShort() == true)
+        if (this->plane->flightTooShort(airTime) == true)
             throw InvalidFlightPlanParameters("Flight duration is too short for the selected aircraft!");
         if (this->terrainDanger() == true)
             throw InvalidFlightPlanParameters("Impossible to create the flight plan: cruising altitude is below waypoint minimum!");
@@ -144,8 +138,12 @@ void Route::routeInit()
             throw InvalidFlightPlanParameters("Selected departure runway is too short for this configuration!");
         if (this->rwTooShortArrival() == true)
             throw InvalidFlightPlanParameters("Selected arrival runway is too short for this configuration!");
-        if (this->aircraftRangeExceeded() == true)
+        if (this->plane->aircraftRangeExceeded(routeDistance) == true)
             throw InvalidFlightPlanParameters("Flight exceeds the range of the selected aircraft!");
+        if (this->plane->aircraftTooWide(this->departure.getRunway(departureRunway).getWidth()))
+            throw InvalidFlightPlanParameters("Aircraft too wide for the departure runway!");
+        if (this->plane->aircraftTooWide(this->arrival.getRunway(arrivalRunway).getWidth()))
+            throw InvalidFlightPlanParameters("Aircraft too wide for the arrival runway!");
         this->fuelPlanning.init(this->climbDuration, this->cruiseDuration, this->descentDuration, this->plane);
         this->perfCalc.init(plane, fuelPlanning, departure, arrival, arrivalRunway);
     }
@@ -160,8 +158,12 @@ std::ostream& operator<<(std::ostream& os, const Route& rt)
     os << "== Flight plan details ==\n";
     os << "=========================\n";
     os << "Callsign: " << rt.callsign << "\n";
-    os << "Departure: " << rt.departure.getIcao() << " (Runway: " << rt.departureRunway << ")\n";
-    os << "Arrival: " << rt.arrival.getIcao() << " (Runway: " << rt.arrivalRunway << ")\n";
+    os << "Departure: ";
+    rt.departure.displayIcaoCode();
+    os << " (Runway: " << rt.departureRunway << ")\n";
+    os << "Arrival: ";
+    rt.arrival.displayIcaoCode();
+    os << " (Runway: " << rt.arrivalRunway << ")\n";
     os << "Cruising altitude: " << rt.cruisingAltitude << " FT\n";
     os << "Route distance: " << rt.routeDistance << " NM\n";
     os << "Block time: " << rt.blockTime << " MIN\n";
@@ -171,16 +173,29 @@ std::ostream& operator<<(std::ostream& os, const Route& rt)
     os << "Descent duration: " << rt.descentDuration << " MIN\n";
     os << "TOC: " << rt.TOC << " NM\n";
     os << "TOD: " << rt.TOD << " NM\n";
-    os << "Plane:\n" << *rt.plane << "\n";
+    os << "=========================\n";
+    os << "===== Plane Details =====\n";
+    os << "=========================\n";
+    os << *rt.plane << "\n";
     os << rt.fuelPlanning << "\n";
     os << rt.perfCalc << "\n";
 
     os << "Route:\n";
     for (size_t i = 0; i < rt.waypoints.size(); ++i) {
-        os << rt.waypoints[i].getWaypointCode();
+        rt.waypoints[i].displayWaypointCode();
         if (i != rt.waypoints.size() - 1)
             os << " DCT ";
     }
     os << '\n';
     return os;
 }
+void Route::displayShortInfo() const
+{
+    departure.displayIcaoCode();
+    std::cout << " - ";
+    arrival.displayIcaoCode();
+    std::cout << ": ";
+    plane->displayAircraftType();
+    std::cout << '\n';
+}
+

@@ -9,6 +9,8 @@ class Route
 {
 private:
     //not implemented yet: alternate selection
+    static constexpr int MINIMUM_CRUISE_ALT = 4000;
+    static constexpr int ALT_DECREMENT = 1000;
     double routeDistance = 0;
     std::string callsign;
     Airport departure, arrival;
@@ -35,6 +37,7 @@ public:
     friend void swap(Route &rt1, Route &rt2) noexcept;
     friend std::ostream& operator<<(std::ostream& os, const Route& rt);
     void routeInit();
+    void displayShortInfo() const;
 private:
     void setRouteDistance();
     void setClimbDuration();
@@ -45,15 +48,9 @@ private:
     void setCruiseAltitude();
     void setAirTime();
     void setBlockTime();
-    [[nodiscard]] bool maxCruiseAltitudeExceeded() const;
     [[nodiscard]] bool terrainDanger() const;
-    [[nodiscard]] bool flightTooShort() const;
-    //Work in progress
-    // [[nodiscard]] bool rwTooNarrowDepart() const;
-    // [[nodiscard]] bool rwTooNarrowArrival() const;
     [[nodiscard]] bool rwTooShortDepar() const;
     [[nodiscard]] bool rwTooShortArrival() const;
-    [[nodiscard]] bool aircraftRangeExceeded() const;
 };
 
 #endif //ROUTE_H

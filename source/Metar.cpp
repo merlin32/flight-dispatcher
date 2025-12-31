@@ -36,18 +36,17 @@ Metar::Metar(std::string airportIcao_,
     stringAttributesValidation(visibility, "visibility");
     stringAttributesValidation(specialConditions, "specialConditions");
     stringAttributesValidation(cloudsInfo, "cloudsInfo");
-    if (qnh < 920 || qnh > 1084) throw InvalidObjectCreation("Metar", "qnh");
+    if (qnh < LOWEST_QNH || qnh > HIGHEST_QNH) throw InvalidObjectCreation("Metar", "qnh");
     stringAttributesValidation(additionalChanges, "additionalChanges");
 }
 Metar::~Metar() = default;
-double Metar::calculateQhnsRatio() const{return 1013.0 / qnh;} //1013 represents the standard air pressure}
-double Metar::calculateTemperaturesRatio() const{return (temperature + 273.15) / 288.15;} //288.15 represents the standard air temperature in Kelvins
+double Metar::calculateQhnsRatio() const{return STD_QNH / qnh;}
+double Metar::calculateTemperaturesRatio() const{return (temperature + DEG_TO_KEV_CONST) / STD_TEMP;}
 double Metar::calculateWindSpeed(const int& runwayDirection) const
 {
     unsigned int windDirection = std::stoi(windInfo.substr(0, 3));
     unsigned int windSpeed     = std::stoi(windInfo.substr(3, 2));
-    double pi = 3.14159265358979323846;
-    double angleRad = (windDirection - (runwayDirection * 10)) * pi / 180.0;
+    double angleRad = (windDirection - (runwayDirection * 10)) * PI / 180.0;
     return windSpeed * cos(angleRad);
 }
 

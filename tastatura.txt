@@ -4,6 +4,10 @@ LROP
 LRCL
 RW08L
 RW07
+m
+BUKEL
+MOBRA
+end
 Airbus A320Neo
 5000
 120
@@ -19,6 +23,7 @@ LROP
 LRCL
 RW08L
 RW07
+a
 Boeing 747-8F
 10
 1374
@@ -43,6 +48,7 @@ LROP
 LRCL
 RW08L
 RW07
+a
 Beechcraft King Air 350
 2
 5

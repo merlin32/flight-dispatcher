@@ -59,6 +59,23 @@ auto
 auto
 auto
 
+1
+WZZ3403
+LROP
+LRCL
+RW08L
+RW07
+a
+end
+Airbus A320Neo
+2000
+180
+auto
+auto
+auto
+auto
+auto
+
 2
 1
 
@@ -70,5 +87,8 @@ auto
 
 2
 4
+
+2
+5
 
 3

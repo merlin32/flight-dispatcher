@@ -1,6 +1,7 @@
 #include "../header/Metar.h"
 #include "../header/JsonUtils.h"
 #include <cmath>
+#include <iostream>
 
 #include "../header/Exceptions.h"
 

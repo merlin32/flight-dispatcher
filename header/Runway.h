@@ -10,10 +10,10 @@ private:
     static constexpr double TAKEOFF_SAFETY_FACTOR = 1.15;
     static constexpr double LANDING_SAFETY_FACTOR = 1.60;
     std::string runwayID;
-    double runwayLength;
-    double runwayWidth;
-    int runwayCondition;
-    bool runwayInUse;
+    double runwayLength = 3000;
+    double runwayWidth = 45;
+    int runwayCondition = 0;
+    bool runwayInUse = true;
 public:
     Runway() = default;
     explicit Runway(std::string runwayID_, const double& runwayLength_, const double& runwayWidth_, int runwayCondition_, const bool& runwayInUse_);

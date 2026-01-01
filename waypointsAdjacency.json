@@ -1,0 +1,10 @@
+
+  {
+    "LROP": ["BUKEL", "SOKRU"],
+    "BUKEL": ["LROP", "MOBRA", "EDETA"],
+    "EDETA": ["MOBRA", "BUKEL","SOKRU", "AKUPO"],
+    "MOBRA": ["LRCL", "EDETA", "SOKRU", "AKUPO"],
+    "LRCL": ["MOBRA", "AKUPO"],
+    "SOKRU": ["LROP","MOBRA", "EDETA"],
+    "AKUPO": ["LRCL", "MOBRA"]
+  }

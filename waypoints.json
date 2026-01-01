@@ -13,7 +13,7 @@
     "latitude": 45.0778,
     "maxAltitude": 45000,
     "minAltitude": 5000,
-    "weatherAffected": false
+    "weatherAffected": true
   },
   {
     "waypointCode": "MOBRA",
@@ -21,13 +21,37 @@
     "latitude": 45.8644,
     "maxAltitude": 45000,
     "minAltitude": 5000,
-    "weatherAffected": false
+    "weatherAffected": true
   },
   {
     "waypointCode": "LRCL",
     "longitude": 23.6862,
     "latitude": 46.7852,
     "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false
+  },
+  {
+    "waypointCode": "EDETA",
+    "longitude": 24.931111,
+    "latitude": 45.7688,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false
+  },
+  {
+    "waypointCode": "SOKRU",
+    "longitude": 25.330278,
+    "latitude": 44.992778,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false
+  },
+  {
+    "waypointCode": "AKUPO",
+    "longitude": 24.395556,
+    "latitude": 47.001111,
+    "maxAltitude": 17500,
     "minAltitude": 3036,
     "weatherAffected": false
   }

@@ -66,8 +66,8 @@ void swap(Route& rt1, Route& rt2) noexcept
 }
 void Route::setRouteDistance()
 {
-    for (const auto& waypct : waypoints)
-        this->routeDistance += waypct.getDistanceToPrevious();
+    for (auto i = waypoints.begin(); i != waypoints.end() - 1; i++)
+        this->routeDistance += Waypoint::calculateDistance(*i, *(i + 1));
 }
 void Route::setClimbDuration()
 {

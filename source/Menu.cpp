@@ -7,6 +7,7 @@
 #include "../header/PassengerAircraft.h"
 #include "../header/Exceptions.h"
 #include "../header/JsonUtils.h"
+#include "../header/Waypoint.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
 
@@ -90,23 +91,41 @@ void Menu::populateWaypoints(std::ifstream waypointsJson)
     waypointsJson.close();
     std::sort(waypointsList.begin(), waypointsList.end(), Waypoint::compareWaypointCodes);
 }
+void Menu::populateAdjacencyList(std::ifstream waypointsAdjacencyJson)
+{
+    nlohmann::json data = nlohmann::json::parse(waypointsAdjacencyJson);
+    for (auto it = data.begin(); it != data.end(); it++)
+    {
+        std::string waypointCode = it.key();
+        std::vector<std::string> connections = it.value().get<std::vector<std::string>>();
+        waypointsAdjacencyList[waypointCode] = connections;
+    }
+    waypointsAdjacencyJson.close();
+}
+
+
 void Menu::initLocalData()
 {
     std::ifstream aircraftsJson;
     std::ifstream airportsJson;
     std::ifstream waypointsJson;
+    std::ifstream waypointsAdjacencyJson;
     aircraftsJson.open("aircrafts.json");
     airportsJson.open("airports.json");
     waypointsJson.open("waypoints.json");
+    waypointsAdjacencyJson.open("waypointsAdjacency.json");
     if (!aircraftsJson.is_open())
         throw InvalidFile("aircrafts.json");
     if (!airportsJson.is_open())
         throw InvalidFile("airports.json");
     if (!waypointsJson.is_open())
         throw InvalidFile("waypoints.json");
+    if (!waypointsAdjacencyJson.is_open())
+        throw InvalidFile("waypointsAdjacency.json");
     populateAircrafts(std::move(aircraftsJson));
     populateAirports(std::move(airportsJson));
     populateWaypoints(std::move(waypointsJson));
+    populateAdjacencyList(std::move(waypointsAdjacencyJson));
 }
 void Menu::flpCreation()
 {
@@ -164,7 +183,7 @@ void Menu::flpCreation()
     //the arrival airport waypoint is then inserted into the routeWaypoints
     //the program also checks whether the selected waypoint exists or not
     //for each waypoint, except the first one, we calculate its distance to the previous one
-    std::cout << "================================\n";
+    /*std::cout << "================================\n";
     std::cout << "===== Waypoints selection ======\n";
     std::cout << "================================\n";
     std::cout << "Type (end) to stop selection!\n";
@@ -194,7 +213,16 @@ void Menu::flpCreation()
     {
         Waypoint previous = routeWaypoints[i-1];
         routeWaypoints[i].setDistanceToPrevious(previous);
-    }
+    }*/
+    Waypoint departureWaypoint;
+    Waypoint arrivalWaypoint;
+    if (Waypoint::validWaypoint(waypointsList, departIcao, departureWaypoint) == false)
+        throw AppException("Invalid waypoint");
+    if (Waypoint::validWaypoint(waypointsList, arrivalIcao, arrivalWaypoint) == false)
+        throw AppException("Invalid waypoint");
+    std::vector<Waypoint> routeWaypoints = Waypoint::pathFinder(departureWaypoint, arrivalWaypoint, waypointsList, waypointsAdjacencyList);
+
+
 
     //aircraft selection
     std::shared_ptr<Aircraft> ac;

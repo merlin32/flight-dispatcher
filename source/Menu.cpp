@@ -127,6 +127,55 @@ void Menu::initLocalData()
     populateWaypoints(std::move(waypointsJson));
     populateAdjacencyList(std::move(waypointsAdjacencyJson));
 }
+void Menu::manualWaypointSelection(const std::string& departIcao, const std::string& arrivalIcao,
+                                    std::vector<Waypoint>& routeWaypoints)
+{
+    //waypoints selection
+    //first, the departure airport is inserted into routeWaypoints, than the user enters the desired waypoints
+    //to mark the end, the user must type "end"
+    //the arrival airport waypoint is then inserted into the routeWaypoints
+    //the program also checks whether the selected waypoint exists or not
+    //for each waypoint, except the first one, we calculate its distance to the previous one
+    std::cout << "================================\n";
+    std::cout << "===== Waypoints selection ======\n";
+    std::cout << "================================\n";
+    std::cout << "Type (end) to stop selection!\n";
+    std::string currentWaypoint;
+    Waypoint departureWaypoint;
+    Waypoint arrivalWaypoint;
+    int counter = 1;
+    if (Waypoint::validWaypoint(waypointsList, departIcao, departureWaypoint) == true)
+        routeWaypoints.push_back(departureWaypoint);
+    while (true)
+    {
+        std::cout << "Waypoint " << counter << ": ";
+        std::cin >> currentWaypoint;
+        if (currentWaypoint == "end")
+            break;
+        Waypoint temp;
+        if (Waypoint::validWaypoint(waypointsList, currentWaypoint, temp))
+        {
+            routeWaypoints.push_back(temp);
+            counter++;
+        }
+    }
+    if (Waypoint::validWaypoint(waypointsList, arrivalIcao, arrivalWaypoint) == true)
+        routeWaypoints.push_back(arrivalWaypoint);
+    for (size_t i = 1; i < routeWaypoints.size(); i++)
+        Waypoint previous = routeWaypoints[i-1];
+}
+void Menu::automaticWaypointSelection(const std::string& departIcao, const std::string& arrivalIcao,
+                                        std::vector<Waypoint>& routeWaypoints)
+{
+    Waypoint departureWaypoint;
+    Waypoint arrivalWaypoint;
+    if (Waypoint::validWaypoint(waypointsList, departIcao, departureWaypoint) == false)
+        throw AppException("Invalid waypoint");
+    if (Waypoint::validWaypoint(waypointsList, arrivalIcao, arrivalWaypoint) == false)
+        throw AppException("Invalid waypoint");
+    routeWaypoints = Waypoint::pathFinder(departureWaypoint, arrivalWaypoint, waypointsList, waypointsAdjacencyList);
+}
+
 void Menu::flpCreation()
 {
     //flight plan creation
@@ -177,53 +226,17 @@ void Menu::flpCreation()
         if (Airport::validRunway(arrivalRw, arrival) == true)
             break;
     }
-    //waypoints selection
-    //first, the departure airport is inserted into routeWaypoints, than the user enters the desired waypoints
-    //to mark the end, the user must type "end"
-    //the arrival airport waypoint is then inserted into the routeWaypoints
-    //the program also checks whether the selected waypoint exists or not
-    //for each waypoint, except the first one, we calculate its distance to the previous one
-    /*std::cout << "================================\n";
-    std::cout << "===== Waypoints selection ======\n";
-    std::cout << "================================\n";
-    std::cout << "Type (end) to stop selection!\n";
+    //waypoint selection
     std::vector<Waypoint> routeWaypoints;
-    std::string currentWaypoint;
-    Waypoint departureWaypoint;
-    Waypoint arrivalWaypoint;
-    int counter = 1;
-    if (Waypoint::validWaypoint(waypointsList, departIcao, departureWaypoint) == true)
-        routeWaypoints.push_back(departureWaypoint);
-    while (true)
-    {
-        std::cout << "Waypoint " << counter << ": ";
-        std::cin >> currentWaypoint;
-        if (currentWaypoint == "end")
-            break;
-        Waypoint temp;
-        if (Waypoint::validWaypoint(waypointsList, currentWaypoint, temp))
-        {
-            routeWaypoints.push_back(temp);
-            counter++;
-        }
-    }
-    if (Waypoint::validWaypoint(waypointsList, arrivalIcao, arrivalWaypoint) == true)
-        routeWaypoints.push_back(arrivalWaypoint);
-    for (size_t i = 1; i < routeWaypoints.size(); i++)
-    {
-        Waypoint previous = routeWaypoints[i-1];
-        routeWaypoints[i].setDistanceToPrevious(previous);
-    }*/
-    Waypoint departureWaypoint;
-    Waypoint arrivalWaypoint;
-    if (Waypoint::validWaypoint(waypointsList, departIcao, departureWaypoint) == false)
-        throw AppException("Invalid waypoint");
-    if (Waypoint::validWaypoint(waypointsList, arrivalIcao, arrivalWaypoint) == false)
-        throw AppException("Invalid waypoint");
-    std::vector<Waypoint> routeWaypoints = Waypoint::pathFinder(departureWaypoint, arrivalWaypoint, waypointsList, waypointsAdjacencyList);
-
-
-
+    char option;
+    std::cout << "Waypoint selection: manual or automatic? [m/a]: ";
+    std::cin >> option;
+    if (option == 'm')
+        manualWaypointSelection(departIcao, arrivalIcao, routeWaypoints);
+    else if (option == 'a')
+        automaticWaypointSelection(departIcao, arrivalIcao, routeWaypoints);
+    else
+        throw AppException("Invalid option for waypoint selection");
     //aircraft selection
     std::shared_ptr<Aircraft> ac;
     while (true)

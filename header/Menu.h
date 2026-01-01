@@ -18,6 +18,10 @@ private:
     void populateWaypoints(std::ifstream waypointsJson);
     void populateAdjacencyList(std::ifstream waypointsAdjacencyJson);
     void continuationConfirm() const;
+    void manualWaypointSelection(const std::string& departIcao, const std::string& arrivalIcao,
+                                                    std::vector<Waypoint>& routeWaypoints);
+    void automaticWaypointSelection(const std::string& departIcao, const std::string& arrivalIcao,
+                                                    std::vector<Waypoint>& routeWaypoints);
 public:
     void initLocalData();
     void flpCreation();

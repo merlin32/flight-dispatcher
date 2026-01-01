@@ -74,5 +74,33 @@
             "minimumFlightDuration": 10,
             "maxPilotCount": 2,
             "maxPassengersNumber": 8
+      },
+      {
+            "category": "fighter jet",
+            "type": "F-16C Fighting Falcon",
+            "range": 2280,
+            "cruisingSpeed": 480,
+            "wingspan": 9.96,
+            "maxTakeoffWeight": 19187,
+            "maxPayload": 7700,
+            "emptyWeight": 8570,
+            "fuelCapacity": 3228,
+            "fuelBurnClimb": 68.0,
+            "fuelBurnCruise": 38.2,
+            "fuelBurnDescent": 12.5,
+            "maxCruisingAltitude": 50000,
+            "fuelBurnIdle": 10.0,
+            "fuelBurnLowAltitude": 85.0,
+            "maxFreight": 4000,
+            "takeoffReferenceDist": 850,
+            "climbRate": 6000,
+            "descentRate": 15000,
+            "climbSpeed": 350,
+            "minimumFlightDuration": 5,
+            "maxPilotCount": 1,
+            "maxNumberOfPilots": 1,
+            "maxMissileCount": 6,
+            "maxMissileWeight": 150,
+            "maxCannonAmmoWeight": 100
       }
 ]

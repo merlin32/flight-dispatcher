@@ -75,6 +75,24 @@ auto
 auto
 auto
 
+1
+WZZ3403
+LROP
+LRCL
+RW08L
+RW07
+a
+F-16C Fighting Falcon
+1
+4
+100
+40
+auto
+0.05
+10
+auto
+auto
+
 2
 1
 

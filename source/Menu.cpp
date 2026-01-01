@@ -5,6 +5,7 @@
 #include "../header/CargoAircraft.h"
 #include "../header/GeneralAviationAircraft.h"
 #include "../header/PassengerAircraft.h"
+#include "../header/FighterJet.h"
 #include "../header/Exceptions.h"
 #include "../header/JsonUtils.h"
 #include "../header/Waypoint.h"
@@ -319,7 +320,34 @@ void Menu::flpCreation()
             generalAvAc->setBaggageWeight(baggageWeight);
         }
     }
+    if (ac->categoryMatch("fighter jet") == true)
+    {
+        //in this case, to obtain a result, the aircraft's parameters have been set to "dry power" values
+        //dry power = normal flight, similar to any other aircraft
+        auto fighterAc = std::dynamic_pointer_cast<FighterJet>(ac);
+        if (fighterAc)
+        {
+            int numberOfPilots;
+            int numberOfMissiles;
+            double missileWeight;
+            double cannonAmmoWeight;
+            while (true)
+            {
+                std::cout << "Number of pilots: ";
+                std::cin >> numberOfPilots;
+                std::cout << "Number of missiles: ";
+                std::cin >> numberOfMissiles;
+                std::cout << "Missile weight: ";
+                std::cin >> missileWeight;
+                std::cout << "Cannon ammo weight: ";
+                std::cin >> cannonAmmoWeight;
+                fighterAc->fighterJetInit(numberOfPilots, numberOfMissiles, missileWeight, cannonAmmoWeight);
+                if (fighterAc->isDataValid() == true)
+                    break;
+            }
 
+        }
+    }
     //cruising altitude selection
     std::cout << "Cruise altitude: ";
     std::string cruiseAlt;

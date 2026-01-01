@@ -1,6 +1,5 @@
 #include "../header/FighterJet.h"
 #include "../header/JsonUtils.h"
-#include <nlohmann/json.hpp>
 #include <iostream>
 
 FighterJet::FighterJet(const std::string& category_,

@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <unordered_map>
 
 class Waypoint
@@ -24,9 +24,9 @@ private:
     private:
         friend class Waypoint;
         std::string wpCode;
-        double fCost = INFINITY;
-        double gCost = INFINITY;
-        double hCost = INFINITY;
+        double fCost = INFINITY; //the total estimated cost of the path through this node (f = g + h).
+        double gCost = INFINITY; //the actual cost/distance from the starting point to the current node.
+        double hCost = INFINITY; //the heuristic or the estimated cost from the current node to the destination.
         std::string parentWaypoint;
         class AStarNodeCompare
         {
@@ -35,7 +35,7 @@ private:
         };
         public:
             AStarNode() = default;
-            explicit AStarNode(const std::string& wpCode_);
+            explicit AStarNode(std::string wpCode_);
     };
 public:
     Waypoint() = default;

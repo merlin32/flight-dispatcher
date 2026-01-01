@@ -65,7 +65,7 @@ bool Waypoint::compareWaypointCodes(const Waypoint& wp1, const Waypoint& wp2)
 }
 bool Waypoint::belowMinAlt(const int& currentAlt) const {return currentAlt < minAltitude;}
 void Waypoint::displayWaypointCode() const{std::cout << waypointCode;}
-Waypoint::AStarNode::AStarNode(const std::string& wpCode_) : wpCode{std::move(wpCode_)}{}
+Waypoint::AStarNode::AStarNode(std::string wpCode_) : wpCode{std::move(wpCode_)}{}
 bool Waypoint::AStarNode::AStarNodeCompare::operator()(const AStarNode* a, const AStarNode* b) const
 {
     if (a->fCost != b->fCost)
@@ -91,41 +91,50 @@ std::vector<Waypoint> Waypoint::pathFinder(const Waypoint& depart, const Waypoin
         nodeDetails[wp.waypointCode] = AStarNode(wp.waypointCode);
         waypointLookup[wp.waypointCode] = &wp;
     }
-    //creating a set for nodes which haven't been visited
+    //creating one set for the nodes which we have to visit and one set for the nodes we have visited already
+    //each set is sorted considering the fCost parameter
+    //in the fCosts are equal, we compare the hCosts and as a last resort we compare the wpCode
     std::set<AStarNode*, AStarNode::AStarNodeCompare> openList;
     std::set<AStarNode*, AStarNode::AStarNodeCompare> closedList;
     //initializing the first node, which is our departure
+    //gCost is 0 for the starting node --> fCost = hCost for this step
     std::string departCode = depart.waypointCode;
     nodeDetails[departCode].gCost = 0;
-    nodeDetails[departCode].hCost = arrival.calculateDistance(depart, arrival);
+    nodeDetails[departCode].hCost = calculateDistance(depart, arrival);
     nodeDetails[departCode].fCost = nodeDetails[departCode].hCost;
+    //adding the starting point to the openList
     openList.insert(&nodeDetails[departCode]);
     bool foundArrival = false;
-
     while (!openList.empty())
     {
+        //declaring a pointer to the node with the lowest fCost and adding it to the closedList
         AStarNode* current = *openList.begin();
         openList.erase(current);
         closedList.insert(current);
-
+        //destination reached
         if (current->wpCode == arrival.waypointCode)
         {
             foundArrival = true;
             break;
         }
-        for (const std::string& neighborCode : waypointsAdjacencyList.at(current->wpCode)) {
+        //checking which might be the next optimal choice
+        for (const std::string& neighborCode : waypointsAdjacencyList.at(current->wpCode))
+        {
+            //we iterate through each node's connections given by the adjacency list
+            //if the node is not present in the closedList, we calculate the fCost, gCost and hCost
             AStarNode& neighbor = nodeDetails[neighborCode];
             if (closedList.contains(&neighbor) == false)
             {
                 const Waypoint* neighborWp = waypointLookup[neighborCode];
                 const Waypoint* currentWp = waypointLookup[current->wpCode];
-
+                //each node can be made inactive due to severe weather, so there is a check for weatherAffected
                 if (neighborWp->weatherAffected == false)
                 {
-                    double gNew = current->gCost + currentWp->calculateDistance(*neighborWp, *currentWp);
-                    double hNew = neighborWp->calculateDistance(*neighborWp, arrival);
+                    double gNew = current->gCost + calculateDistance(*neighborWp, *currentWp);
+                    double hNew = calculateDistance(*neighborWp, arrival);
                     double fNew = gNew + hNew;
-
+                    //if the node hasn't been visited yet or has been visited, but we found a better path, we update the costs
+                    //first the node is deleted from the set, updated and reintroduced so that there won't be any error with the set
                     if (neighbor.fCost == INFINITY || fNew < neighbor.fCost) {
                         openList.erase(&neighbor);
                         neighbor.gCost = gNew;
@@ -139,6 +148,7 @@ std::vector<Waypoint> Waypoint::pathFinder(const Waypoint& depart, const Waypoin
 
         }
     }
+    //reconstructing the path which later on is reversed so that we get the path from departure to arrival
     if (foundArrival)
     {
         std::vector<Waypoint> path;
@@ -153,6 +163,7 @@ std::vector<Waypoint> Waypoint::pathFinder(const Waypoint& depart, const Waypoin
         std::reverse(path.begin(), path.end());
         return path;
     }
+    //in case there we didn't find any suitable path
     return {};
 }
 

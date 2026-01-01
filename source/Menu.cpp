@@ -33,42 +33,8 @@ void Menu::populateAirports(std::ifstream airportsJson)
     nlohmann::json data = nlohmann::json::parse(airportsJson);
     for (const auto& i : data)
     {
-        std::vector<Runway> runwaysList;
-        if (!i.contains("airportRunways"))
-            throw JsonFaultyRead("airportRunways");
-        for (const auto& j : i["airportRunways"])
-        {
-            Runway rw{
-                readAttribute<std::string>(j, "runwayID"),
-                readAttribute<double>(j, "runwayLength"),
-                readAttribute<double>(j, "runwayWidth"),
-                readAttribute<int>(j, "runwayCondition"),
-                readAttribute<bool>(j, "runwayInUse")
-            };
-            runwaysList.push_back(rw);
-        }
-        if (!i.contains("metar"))
-            throw JsonFaultyRead("metar");
-        Metar mt{
-            readAttribute<std::string>(i["metar"][0], "airportIcao"),
-            readAttribute<std::string>(i["metar"][0], "dateAndTime"),
-            readAttribute<std::string>(i["metar"][0], "windInfo"),
-            readAttribute<std::string>(i["metar"][0], "visibility"),
-            readAttribute<std::string>(i["metar"][0], "specialConditions"),
-            readAttribute<std::string>(i["metar"][0], "cloudsInfo"),
-            readAttribute<short int>(i["metar"][0], "temperature"),
-            readAttribute<short int>(i["metar"][0], "dewpoint"),
-            readAttribute<unsigned short int>(i["metar"][0], "qnh"),
-            readAttribute<std::string>(i["metar"][0], "additionalChanges")
-        };
-        Airport ap{
-            readAttribute<std::string>(i, "icaoCode"),
-            readAttribute<int>(i, "elevation"),
-            readAttribute<std::string>(i, "airportName"),
-            readAttribute<std::string>(i, "iataCode"),
-            runwaysList,
-            mt
-        };
+        Airport ap;
+        ap.readFromJson(i);
         airportsList.push_back(ap);
     }
     airportsJson.close();
@@ -79,14 +45,8 @@ void Menu::populateWaypoints(std::ifstream waypointsJson)
     nlohmann::json data = nlohmann::json::parse(waypointsJson);
     for (const auto& i : data)
     {
-            Waypoint wp{
-                readAttribute<std::string>(i, "waypointCode"),
-                readAttribute<double>(i, "longitude"),
-                readAttribute<double>(i, "latitude"),
-                readAttribute<int>(i, "maxAltitude"),
-                readAttribute<int>(i, "minAltitude"),
-                readAttribute<bool>(i, "weatherAffected")
-            };
+            Waypoint wp;
+            wp.readFromJson(i);
             waypointsList.push_back(wp);
     }
     waypointsJson.close();
@@ -263,11 +223,11 @@ void Menu::flpCreation()
                 std::cin >> freight;
                 std::cout << "Passengers: ";
                 std::cin >> passengers;
+                passengerAc->setFreight(freight);
+                passengerAc->setPassengerNumber(passengers);
                 if (passengerAc->isDataValid() == true)
                     break;
             }
-            passengerAc->setFreight(freight);
-            passengerAc->setPassengerNumber(passengers);
         }
     }
     if (ac->categoryMatch("cargo") == true)
@@ -289,11 +249,11 @@ void Menu::flpCreation()
                     std::cin >> temp;
                     containersWeights.push_back(temp);
                 }
+                cargoAc->setContainersNum(containersNum);
+                cargoAc->setContainersWeights(containersWeights);
                 if (cargoAc->isDataValid() == true)
                     break;
             }
-            cargoAc->setContainersNum(containersNum);
-            cargoAc->setContainersWeights(containersWeights);
         }
     }
     if (ac->categoryMatch("general aviation") == true)
@@ -312,12 +272,12 @@ void Menu::flpCreation()
                 std::cin >> passengersNumber;
                 std::cout << "Baggage quantity: ";
                 std::cin >> baggageWeight;
+                generalAvAc->setPilotsCount(pilotsCount);
+                generalAvAc->setPassengersNumber(passengersNumber);
+                generalAvAc->setBaggageWeight(baggageWeight);
                 if (generalAvAc->isDataValid() == true)
                     break;
             }
-            generalAvAc->setPilotsCount(pilotsCount);
-            generalAvAc->setPassengersNumber(passengersNumber);
-            generalAvAc->setBaggageWeight(baggageWeight);
         }
     }
     if (ac->categoryMatch("fighter jet") == true)

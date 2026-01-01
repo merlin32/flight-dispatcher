@@ -1,4 +1,5 @@
 #include "../header/Metar.h"
+#include "../header/JsonUtils.h"
 #include <cmath>
 
 #include "../header/Exceptions.h"
@@ -73,3 +74,17 @@ void Metar::stringAttributesValidation(const std::string& value, const std::stri
     if (value.empty())
         throw InvalidObjectCreation("Metar", attributeName);
 }
+void Metar::readFromJson(const nlohmann::json& obj)
+{
+    airportIcao = readAttribute<std::string>(obj, "airportIcao");
+    dateAndTime = readAttribute<std::string>(obj, "dateAndTime");
+    windInfo = readAttribute<std::string>(obj, "windInfo");
+    visibility = readAttribute<std::string>(obj, "visibility");
+    specialConditions = readAttribute<std::string>(obj, "specialConditions");
+    cloudsInfo = readAttribute<std::string>(obj, "cloudsInfo");
+    temperature = readAttribute<short int>(obj, "temperature");
+    dewpoint = readAttribute<short int>(obj, "dewpoint");
+    qnh = readAttribute<unsigned short int>(obj, "qnh");
+    additionalChanges = readAttribute<std::string>(obj, "additionalChanges");
+}
+

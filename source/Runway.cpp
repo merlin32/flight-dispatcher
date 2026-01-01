@@ -1,5 +1,6 @@
 #include "../header/Runway.h"
 #include "../header/Exceptions.h"
+#include "../header/JsonUtils.h"
 #include <iostream>
 
 Runway::Runway(std::string runwayID_, const double& runwayLength_, const double& runwayWidth_, int runwayCondition_ = 0,
@@ -98,6 +99,15 @@ bool Runway::runwayCodeMatch(const std::string& testValue) const {return testVal
 bool Runway::runwayTooShortTakeoff(const double& takeoffDistance) const {return runwayLength < takeoffDistance * TAKEOFF_SAFETY_FACTOR;}
 //a runway is too short for landing if the landingDistance + 0.60 * landingDistance > runwayLength
 bool Runway::runwayTooShortLanding(const double& landingDistance) const {return runwayLength < landingDistance * LANDING_SAFETY_FACTOR;}
+void Runway::readFromJson(const nlohmann::json& obj)
+{
+    runwayID = readAttribute<std::string>(obj, "runwayID");
+    runwayLength = readAttribute<double>(obj, "runwayLength");
+    runwayWidth = readAttribute<double>(obj, "runwayWidth");
+    runwayCondition = readAttribute<int>(obj, "runwayCondition");
+    runwayInUse = readAttribute<bool>(obj, "runwayInUse");
+}
+
 
 
 

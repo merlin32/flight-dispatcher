@@ -4,6 +4,7 @@
 #include "Runway.h"
 #include "Metar.h"
 #include <vector>
+#include <nlohmann/json_fwd.hpp>
 
 class Airport
 {
@@ -28,6 +29,7 @@ public:
     [[nodiscard]] static bool validRunway(const std::string& runwayCode, const Airport& ap);
     [[nodiscard]] static bool compareAirportsIcao(const Airport& ap1, const Airport& ap2);
     void displayIcaoCode() const;
+    void readFromJson(const nlohmann::json& obj);
 };
 
 #endif  //AIRPORT_H

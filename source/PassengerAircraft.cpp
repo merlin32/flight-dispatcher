@@ -1,7 +1,6 @@
 #include "../header/PassengerAircraft.h"
 #include "../header/JsonUtils.h"
 #include <iostream>
-#include <nlohmann/json.hpp>
 
 PassengerAircraft::PassengerAircraft(const std::string& category_,
              const std::string& type_,

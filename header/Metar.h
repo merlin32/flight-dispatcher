@@ -2,7 +2,7 @@
 #define METAR_H
 
 #include <string>
-#include <iostream>
+#include <nlohmann/json_fwd.hpp>
 
 class Metar
 {
@@ -41,5 +41,6 @@ public:
     [[nodiscard]] double calculateTemperaturesRatio() const;
     [[nodiscard]] double calculateWindSpeed(const int& runwayDirection) const;
     friend std::ostream&  operator<<(std::ostream& os, const Metar& mt);
+    void readFromJson(const nlohmann::json& obj);
 };
 #endif //METAR_H

@@ -2,6 +2,7 @@
 #define RUNWAY_H
 
 #include <string>
+#include <nlohmann/json_fwd.hpp>
 
 class Runway
 {
@@ -14,6 +15,7 @@ private:
     int runwayCondition;
     bool runwayInUse;
 public:
+    Runway() = default;
     explicit Runway(std::string runwayID_, const double& runwayLength_, const double& runwayWidth_, int runwayCondition_, const bool& runwayInUse_);
     Runway(const Runway& other);
     Runway& operator=(const Runway& other);
@@ -28,5 +30,6 @@ public:
     [[nodiscard]] bool runwayCodeMatch(const std::string& testValue) const;
     [[nodiscard]] bool runwayTooShortTakeoff(const double& takeoffDistance) const;
     [[nodiscard]] bool runwayTooShortLanding(const double& landingDistance) const;
+    void readFromJson(const nlohmann::json& obj);
 };
 #endif //RUNWAY_H

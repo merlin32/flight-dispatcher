@@ -1,7 +1,6 @@
 #include "../header/GeneralAviationAircraft.h"
 #include "../header/JsonUtils.h"
 #include <iostream>
-#include <nlohmann/json.hpp>
 
 GeneralAviationAircraft::GeneralAviationAircraft(const std::string& category_,
              const std::string& type_,

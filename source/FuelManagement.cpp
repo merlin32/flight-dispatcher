@@ -13,14 +13,14 @@ FuelManagement::FuelManagement(const double& contingencyPct_, const int& reserve
     if (reserveTime_ > 0) this->reserveTime = reserveTime_;
     else if (reserveTime_ == 0) this->reserveTime = 30;
     if (reserveTime < 0 || reserveTime > 120) throw InvalidObjectCreation("FuelManagement", "reserveTime");
-    //taxiFuel value can be inserted or calculated afterwards
-    if (taxiFuel_ > 0) this->taxiFuel = taxiFuel_;
-    else if (taxiFuel_ == 0) this->taxiFuel = 0;
-    if (taxiFuel < 0 || taxiFuel > blockFuel) throw InvalidObjectCreation("FuelManagement", "taxiFuel");
     //same as taxiFuel
     if (blockFuel_ > 0) this->blockFuel = blockFuel_;
     else if (blockFuel_ == 0) this->blockFuel = 0;
     if (blockFuel < 0) throw InvalidObjectCreation("FuelManagement", "blockFuel");
+    //taxiFuel value can be inserted or calculated afterwards
+    if (taxiFuel_ > 0) this->taxiFuel = taxiFuel_;
+    else if (taxiFuel_ == 0) this->taxiFuel = 0;
+    if (taxiFuel < 0 || (taxiFuel > blockFuel && blockFuel > 0)) throw InvalidObjectCreation("FuelManagement", "taxiFuel");
 }
 FuelManagement::~FuelManagement() = default;
 //contingencyFuel = extra fuel needed in case of any unwanted event

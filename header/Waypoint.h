@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cmath>
 #include <unordered_map>
+#include <nlohmann/json_fwd.hpp>
 
 class Waypoint
 {
@@ -52,6 +53,7 @@ public:
                                             const std::vector<Waypoint>& waypointsList,
                                             const std::unordered_map<std::string, std::vector<std::string>>& waypointsAdjacencyList);
     friend std::ostream& operator<<(std::ostream& os, const Waypoint& wp);
+    void readFromJson(const nlohmann::json& obj);
 };
 
 #endif //WAYPOINT_H

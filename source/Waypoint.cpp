@@ -1,5 +1,6 @@
 #include "../header/Waypoint.h"
 #include "../header/Exceptions.h"
+#include "../header/JsonUtils.h"
 #include <cmath>
 #include <algorithm>
 #include <unordered_map>
@@ -165,6 +166,15 @@ std::vector<Waypoint> Waypoint::pathFinder(const Waypoint& depart, const Waypoin
     }
     //in case there we didn't find any suitable path
     return {};
+}
+void Waypoint::readFromJson(const nlohmann::json& obj)
+{
+    waypointCode = readAttribute<std::string>(obj, "waypointCode");
+    longitude = readAttribute<double>(obj, "longitude");
+    latitude = readAttribute<double>(obj, "latitude");
+    maxAltitude = readAttribute<int>(obj, "maxAltitude");
+    minAltitude = readAttribute<int>(obj, "minAltitude");
+    weatherAffected = readAttribute<bool>(obj, "weatherAffected");
 }
 
 

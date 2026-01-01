@@ -1,7 +1,9 @@
 #include "../header/Airport.h"
-#include <algorithm>
-
+#include "../header/JsonUtils.h"
 #include "../header/Exceptions.h"
+#include <algorithm>
+#include <nlohmann/json.hpp>
+#include <iostream>
 
 Airport::Airport()
 {
@@ -76,6 +78,24 @@ void Airport::attributeValidation(const std::string& value, const std::string& a
         throw InvalidObjectCreation("Airport", attributeName);
 }
 void Airport::displayIcaoCode() const{std::cout << icaoCode;}
+void Airport::readFromJson(const nlohmann::json& obj)
+{
+    icaoCode = readAttribute<std::string>(obj, "icaoCode");
+    elevation = readAttribute<int>(obj, "elevation");
+    airportName = readAttribute<std::string>(obj, "airportName");
+    iataCode = readAttribute<std::string>(obj, "iataCode");
+    if (!obj.contains("airportRunways"))
+        throw JsonFaultyRead("airportRunways");
+    for (const auto& j : obj["airportRunways"])
+    {
+        Runway temp;
+        temp.readFromJson(j);
+        airportRunways.push_back(temp);
+    }
+    if (!obj.contains("metar"))
+        throw JsonFaultyRead("metar");
+    airportWeather.readFromJson(obj["metar"][0]);
+}
 
 
 

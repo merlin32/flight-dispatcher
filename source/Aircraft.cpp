@@ -1,10 +1,9 @@
 #include "../header/Aircraft.h"
-#include <iostream>
-#include <algorithm>
-#include <nlohmann/json.hpp>
-
 #include "../header/Exceptions.h"
 #include "../header/JsonUtils.h"
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 
 Aircraft::Aircraft()
 {

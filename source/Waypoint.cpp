@@ -65,7 +65,7 @@ bool Waypoint::compareWaypointCodes(const Waypoint& wp1, const Waypoint& wp2)
 }
 bool Waypoint::belowMinAlt(const int& currentAlt) const {return currentAlt < minAltitude;}
 void Waypoint::displayWaypointCode() const{std::cout << waypointCode;}
-Waypoint::AStarNode::AStarNode(const std::string& wpCode_) : wpCode{std::move(wpCode_)}, fCost{INFINITY}, gCost{INFINITY}, hCost{INFINITY}{}
+Waypoint::AStarNode::AStarNode(const std::string& wpCode_) : wpCode{std::move(wpCode_)}{}
 bool Waypoint::AStarNode::AStarNodeCompare::operator()(const AStarNode* a, const AStarNode* b) const
 {
     if (a->fCost != b->fCost)

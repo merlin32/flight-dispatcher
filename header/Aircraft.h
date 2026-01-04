@@ -90,10 +90,10 @@ public:
     [[nodiscard]] bool aircraftRangeExceeded(const double& routeDistance) const;
     [[nodiscard]] bool categoryMatch(const std::string& currentCategory) const;
     [[nodiscard]] bool aircraftTooWide(const double& runwayWidth) const;
-    [[nodiscard]] static bool compareAircraftTypes(const std::shared_ptr<Aircraft>& plane1, const std::shared_ptr<Aircraft>& plane2);
     [[nodiscard]] static bool findAircraft(const std::vector<std::shared_ptr<Aircraft>>& aircraftsList, const std::string& inputType,
                                             std::shared_ptr<Aircraft>& plane);
     void displayAircraftType();
+    friend bool operator<(const std::shared_ptr<Aircraft>& ac1, const std::shared_ptr<Aircraft>& ac2);
 protected:
     Aircraft(const Aircraft& other) = default;
     Aircraft &operator=(const Aircraft& other) = default;

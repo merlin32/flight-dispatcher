@@ -27,9 +27,10 @@ public:
     [[nodiscard]] Metar getMetar() const;
     [[nodiscard]] static bool findAirport(const std::vector<Airport>& airportsList, const std::string& candidate, Airport& ap);
     [[nodiscard]] static bool validRunway(const std::string& runwayCode, const Airport& ap);
-    [[nodiscard]] static bool compareAirportsIcao(const Airport& ap1, const Airport& ap2);
+    bool operator<(const Airport& other) const;
     void displayIcaoCode() const;
     void readFromJson(const nlohmann::json& obj);
+    void displayRunways() const;
 };
 
 #endif  //AIRPORT_H

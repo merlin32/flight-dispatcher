@@ -5,7 +5,8 @@
       "latitude": 44.5722,
       "maxAltitude": 45000,
       "minAltitude": 2314,
-      "weatherAffected": false
+      "weatherAffected": false,
+      "isAirport": true
   },
   {
     "waypointCode": "BUKEL",
@@ -13,7 +14,8 @@
     "latitude": 45.0778,
     "maxAltitude": 45000,
     "minAltitude": 5000,
-    "weatherAffected": true
+    "weatherAffected": true,
+    "isAirport": false
   },
   {
     "waypointCode": "MOBRA",
@@ -21,7 +23,8 @@
     "latitude": 45.8644,
     "maxAltitude": 45000,
     "minAltitude": 5000,
-    "weatherAffected": true
+    "weatherAffected": true,
+    "isAirport": false
   },
   {
     "waypointCode": "LRCL",
@@ -29,7 +32,8 @@
     "latitude": 46.7852,
     "maxAltitude": 45000,
     "minAltitude": 3036,
-    "weatherAffected": false
+    "weatherAffected": false,
+    "isAirport": true
   },
   {
     "waypointCode": "EDETA",
@@ -37,7 +41,8 @@
     "latitude": 45.7688,
     "maxAltitude": 45000,
     "minAltitude": 3036,
-    "weatherAffected": false
+    "weatherAffected": false,
+    "isAirport": false
   },
   {
     "waypointCode": "SOKRU",
@@ -45,7 +50,8 @@
     "latitude": 44.992778,
     "maxAltitude": 45000,
     "minAltitude": 3036,
-    "weatherAffected": false
+    "weatherAffected": false,
+    "isAirport": false
   },
   {
     "waypointCode": "AKUPO",
@@ -53,6 +59,70 @@
     "latitude": 47.001111,
     "maxAltitude": 17500,
     "minAltitude": 3036,
-    "weatherAffected": false
+    "weatherAffected": false,
+    "isAirport": false
+  },
+  {
+    "waypointCode": "LOWW",
+    "longitude": 16.570833,
+    "latitude": 48.110833,
+    "maxAltitude": 17500,
+    "minAltitude": 600,
+    "weatherAffected": false,
+    "isAirport": true
+  },
+  {
+    "waypointCode": "ULMIN",
+    "longitude": 23.398055,
+    "latitude": 45.813889,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false,
+    "isAirport": false
+  },
+  {
+    "waypointCode": "DEGET",
+    "longitude": 21.267222,
+    "latitude": 46.493611,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false,
+    "isAirport": false
+  },
+  {
+    "waypointCode": "BALUX",
+    "longitude": 19.129444,
+    "latitude": 47.340833,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false,
+    "isAirport": false
+  },
+  {
+    "waypointCode": "TORNO",
+    "longitude": 18.49,
+    "latitude": 47.539722,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false,
+    "isAirport": false
+  },
+  {
+    "waypointCode": "NATEX",
+    "longitude": 17.5,
+    "latitude": 47.746944,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false,
+    "isAirport": false
+  },
+  {
+    "waypointCode": "PESAT",
+    "longitude": 17.053056,
+    "latitude": 47.715,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false,
+    "isAirport": false
   }
 ]

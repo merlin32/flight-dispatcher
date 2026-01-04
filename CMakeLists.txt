@@ -80,6 +80,10 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         source/JsonUtilsImpl.cpp
         header/FighterJet.h
         source/FighterJet.cpp
+        header/VectorUtils.h
+        source/VectorUtilsImpl.cpp
+        header/WaypointBuilder.h
+        source/WaypointBuilder.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

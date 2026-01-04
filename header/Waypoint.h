@@ -12,6 +12,7 @@
 class Waypoint
 {
 private:
+    friend class WaypointBuilder;
     static constexpr double EARTH_RADIUS_NM = 3437.7;
     static constexpr double PI = 3.14159265358979323846;
     std::string waypointCode;
@@ -20,6 +21,7 @@ private:
     int maxAltitude = 0;
     int minAltitude = 0;
     bool weatherAffected = false;
+    bool isAirport = false;
     class AStarNode
     {
     private:
@@ -41,13 +43,15 @@ private:
 public:
     Waypoint() = default;
     explicit Waypoint(std::string waypointCode_, const double& longitude_, const double& latitude_,
-                        const int& maxAltitude_, const int& minAltitude_, const bool& weatherAffected_);
+                        const int& maxAltitude_, const int& minAltitude_, const bool& weatherAffected_,
+                        const bool& isAirport_);
     ~Waypoint();
     [[nodiscard]] static double calculateDistance(const Waypoint& wp1, const Waypoint& wp2);
     [[nodiscard]] static bool findWaypoint(const std::vector<Waypoint>& waypointsList, const std::string& waypointName,
                                             Waypoint& selectedWaypoint);
-    [[nodiscard]] static bool compareWaypointCodes(const Waypoint& wp1, const Waypoint& wp2);
+    bool operator<(const Waypoint& other) const;
     [[nodiscard]] bool belowMinAlt(const int& currentAlt) const;
+    [[nodiscard]] bool waypointIsAirport() const;
     void displayWaypointCode() const;
     static std::vector<Waypoint> pathFinder(const Waypoint& depart, const Waypoint& arrival,
                                             const std::vector<Waypoint>& waypointsList,

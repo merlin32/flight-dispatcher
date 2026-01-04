@@ -76,7 +76,7 @@ auto
 auto
 
 1
-WZZ3403
+MLT213
 LROP
 LRCL
 RW08L
@@ -93,6 +93,72 @@ y
 auto
 0.05
 10
+auto
+auto
+
+1
+DLH312
+LROP
+LOWW
+RW08L
+RW11
+a
+Airbus A320Neo
+3450
+89
+37000
+auto
+auto
+auto
+auto
+
+1
+DLH126
+LOWW
+LROP
+RW11
+RW08L
+a
+Airbus A320Neo
+1134
+180
+37000
+auto
+auto
+auto
+auto
+
+1
+IUL1250
+LRCL
+LOWW
+RW07
+RW11
+a
+Beechcraft King Air 350
+2
+5
+123
+25000
+auto
+auto
+auto
+auto
+
+1
+YRT443
+LOWW
+LRCL
+RW11
+RW07
+a
+Beechcraft King Air 350
+1
+3
+412
+25000
+auto
+auto
 auto
 auto
 
@@ -113,5 +179,17 @@ auto
 
 2
 6
+
+2
+7
+
+2
+8
+
+2
+9
+
+2
+10
 
 3

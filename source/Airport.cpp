@@ -71,7 +71,7 @@ bool Airport::validRunway(const std::string& runwayCode, const Airport& ap)
     std::cerr << "Invalid runway selection! Choose another runway!\n";
     return false;
 }
-bool Airport::compareAirportsIcao(const Airport& ap1, const Airport& ap2) {return ap1.icaoCode < ap2.icaoCode;}
+bool Airport::operator<(const Airport& other) const{return this->icaoCode < other.icaoCode;}
 void Airport::attributeValidation(const std::string& value, const std::string& attributeName)
 {
     if (value.empty())
@@ -96,6 +96,19 @@ void Airport::readFromJson(const nlohmann::json& obj)
         throw JsonFaultyRead("metar");
     airportWeather.readFromJson(obj["metar"][0]);
 }
+void Airport::displayRunways() const
+{
+    std::cout << "Available runways at " << icaoCode << '\n';
+    for (const auto& i : airportRunways)
+        if (i.getRwStatus() == true)
+        {
+            std::cout << '\t';
+            i.displayRunwayCode();
+            std::cout << '\n';
+        }
+    std::cout << '\n';
+}
+
 
 
 

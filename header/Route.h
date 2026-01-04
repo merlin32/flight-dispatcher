@@ -10,7 +10,7 @@ class Route
 private:
     //not implemented yet: alternate selection
     static constexpr int MINIMUM_CRUISE_ALT = 4000;
-    static constexpr int ALT_DECREMENT = 1000;
+    static constexpr int ALT_DECREMENT = 2000;
     double routeDistance = 0;
     std::string callsign;
     Airport departure, arrival;

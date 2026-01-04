@@ -92,6 +92,7 @@ Aircraft::Aircraft(std::string category_,
     attributeValidation(climbSpeed, "climbSpeed");
     attributeValidation(minimumFlightDuration, "minimumFlightDuration");
 }
+bool operator<(const std::shared_ptr<Aircraft>& ac1, const std::shared_ptr<Aircraft>& ac2) {return ac1->type < ac2->type;}
 std::ostream& operator<<(std::ostream& os, const Aircraft& ac)
 {
     os << "Category: " << ac.category << '\n';
@@ -187,10 +188,6 @@ void Aircraft::readFromJson(const nlohmann::json& obj)
     climbSpeed = readAttribute<double>(obj, "climbSpeed");
     minimumFlightDuration = readAttribute<int>(obj, "minimumFlightDuration");
     readFromJson_(obj);
-}
-bool Aircraft::compareAircraftTypes(const std::shared_ptr<Aircraft>& plane1, const std::shared_ptr<Aircraft>& plane2)
-{
-    return plane1->type < plane2->type;
 }
 bool Aircraft::findAircraft(const std::vector<std::shared_ptr<Aircraft>>& aircraftsList, const std::string& inputType,
                                 std::shared_ptr<Aircraft>& plane)

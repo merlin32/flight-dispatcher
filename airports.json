@@ -84,5 +84,55 @@
             "additionalChanges": "NOSIG="
           }
         ]
+  },
+  {
+    "icaoCode": "LOWW",
+    "elevation": 600,
+    "airportName": "SCHEWECHAT",
+    "iataCode": "VIE",
+    "airportRunways": [
+      {
+        "runwayID": "RW11",
+        "runwayLength": 3500,
+        "runwayWidth": 45.11,
+        "runwayCondition": 0,
+        "runwayInUse": true
+      },
+      {
+        "runwayID": "RW29",
+        "runwayLength": 3500,
+        "runwayWidth": 45.11,
+        "runwayCondition": 0,
+        "runwayInUse": true
+      },
+      {
+        "runwayID": "RW16",
+        "runwayLength": 3600,
+        "runwayWidth": 45.11,
+        "runwayCondition": 0,
+        "runwayInUse": false
+      },
+      {
+        "runwayID": "RW34",
+        "runwayLength": 3600,
+        "runwayWidth": 45.11,
+        "runwayCondition": 0,
+        "runwayInUse": false
+      }
+    ],
+    "metar": [
+      {
+        "airportIcao": "LOWW",
+        "dateAndTime": "042020Z",
+        "windInfo": "06003KT",
+        "visibility": "9999",
+        "specialConditions": "CAVOK",
+        "cloudsInfo": "NSC",
+        "temperature": -5,
+        "dewpoint": -10,
+        "qnh": 1014,
+        "additionalChanges": "NOSIG="
+      }
+    ]
   }
 ]

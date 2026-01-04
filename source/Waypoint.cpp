@@ -1,15 +1,18 @@
 #include "../header/Waypoint.h"
 #include "../header/Exceptions.h"
 #include "../header/JsonUtils.h"
+#include "../header/WaypointBuilder.h"
 #include <cmath>
 #include <algorithm>
 #include <unordered_map>
 #include <set>
 
 Waypoint::Waypoint(std::string waypointCode_, const double& longitude_, const double& latitude_,
-                   const int& maxAltitude_ = 50000, const int& minAltitude_ = 1000, const bool& weatherAffected_ = false):
+                   const int& maxAltitude_ = 50000, const int& minAltitude_ = 1000, const bool& weatherAffected_ = false,
+                   const bool& isAirport_ = false):
                         waypointCode{std::move(waypointCode_)}, longitude{longitude_}, latitude{latitude_},
-                        maxAltitude{maxAltitude_}, minAltitude{minAltitude_}, weatherAffected{weatherAffected_}
+                        maxAltitude{maxAltitude_}, minAltitude{minAltitude_}, weatherAffected{weatherAffected_},
+                        isAirport{isAirport_}
 {
     if (waypointCode.empty()) throw InvalidObjectCreation("Waypoint", "waypointCode");
     if (longitude < -180 || longitude > 180) throw InvalidObjectCreation("Waypoint", "longitude");
@@ -60,11 +63,9 @@ bool Waypoint::findWaypoint(const std::vector<Waypoint>& waypointsList, const st
     std::cerr << waypointName << " is not valid! Select another waypoint!\n";
     return false;
 }
-bool Waypoint::compareWaypointCodes(const Waypoint& wp1, const Waypoint& wp2)
-{
-    return wp1.waypointCode < wp2.waypointCode;
-}
+bool Waypoint::operator<(const Waypoint& other) const{return this->waypointCode < other.waypointCode;}
 bool Waypoint::belowMinAlt(const int& currentAlt) const {return currentAlt < minAltitude;}
+bool Waypoint::waypointIsAirport() const{return isAirport;}
 void Waypoint::displayWaypointCode() const{std::cout << waypointCode;}
 Waypoint::AStarNode::AStarNode(std::string wpCode_) : wpCode{std::move(wpCode_)}{}
 bool Waypoint::AStarNode::AStarNodeCompare::operator()(const AStarNode* a, const AStarNode* b) const
@@ -169,16 +170,10 @@ std::vector<Waypoint> Waypoint::pathFinder(const Waypoint& depart, const Waypoin
 }
 void Waypoint::readFromJson(const nlohmann::json& obj)
 {
-    waypointCode = readAttribute<std::string>(obj, "waypointCode");
-    longitude = readAttribute<double>(obj, "longitude");
-    latitude = readAttribute<double>(obj, "latitude");
-    maxAltitude = readAttribute<int>(obj, "maxAltitude");
-    minAltitude = readAttribute<int>(obj, "minAltitude");
-    weatherAffected = readAttribute<bool>(obj, "weatherAffected");
+    *this = WaypointBuilder().wpCode(readAttribute<std::string>(obj, "waypointCode"))
+                             .coords(readAttribute<double>(obj, "latitude"), readAttribute<double>(obj, "longitude"))
+                             .altitudeLimits(readAttribute<int>(obj, "minAltitude"), readAttribute<int>(obj, "maxAltitude"))
+                             .weatherAffected(readAttribute<bool>(obj, "weatherAffected"))
+                             .isAirport(readAttribute<bool>(obj, "isAirport"))
+                             .build();
 }
-
-
-
-
-
-

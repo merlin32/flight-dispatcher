@@ -31,5 +31,6 @@ public:
     [[nodiscard]] bool runwayTooShortTakeoff(const double& takeoffDistance) const;
     [[nodiscard]] bool runwayTooShortLanding(const double& landingDistance) const;
     void readFromJson(const nlohmann::json& obj);
+    void displayRunwayCode() const;
 };
 #endif //RUNWAY_H

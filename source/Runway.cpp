@@ -107,6 +107,11 @@ void Runway::readFromJson(const nlohmann::json& obj)
     runwayCondition = readAttribute<int>(obj, "runwayCondition");
     runwayInUse = readAttribute<bool>(obj, "runwayInUse");
 }
+void Runway::displayRunwayCode() const
+{
+    std::cout << runwayID;
+}
+
 
 
 

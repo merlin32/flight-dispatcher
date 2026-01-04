@@ -1,10 +1,17 @@
 
   {
     "LROP": ["BUKEL", "SOKRU"],
-    "BUKEL": ["LROP", "MOBRA", "EDETA"],
-    "EDETA": ["MOBRA", "BUKEL","SOKRU", "AKUPO"],
-    "MOBRA": ["LRCL", "EDETA", "SOKRU", "AKUPO"],
-    "LRCL": ["MOBRA", "AKUPO"],
-    "SOKRU": ["LROP","MOBRA", "EDETA"],
-    "AKUPO": ["LRCL", "MOBRA", "EDETA"]
+    "BUKEL": ["LROP", "MOBRA", "EDETA", "ULMIN"],
+    "EDETA": ["MOBRA", "BUKEL","SOKRU", "AKUPO", "ULMIN"],
+    "MOBRA": ["LRCL", "EDETA", "SOKRU", "AKUPO", "DEGET"],
+    "LRCL": ["MOBRA", "AKUPO", "DEGET"],
+    "SOKRU": ["LROP","MOBRA", "EDETA", "ULMIN"],
+    "AKUPO": ["LRCL", "MOBRA", "EDETA"],
+    "LOWW": ["PESAT"],
+    "ULMIN": ["SOKRU", "BUKEL", "EDETA", "DEGET"],
+    "DEGET": ["ULMIN", "MOBRA", "LRCL", "BALUX"],
+    "BALUX": ["DEGET", "TORNO"],
+    "TORNO": ["BALUX", "NATEX"],
+    "NATEX": ["TORNO", "PESAT"],
+    "PESAT": ["NATEX", "LOWW"]
   }

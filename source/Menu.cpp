@@ -10,6 +10,7 @@
 #include <nlohmann/json.hpp>
 
 #include "../header/FighterJet.h"
+#include "../header/VectorUtils.h"
 
 void Menu::populateAircrafts(std::ifstream aircraftsJson)
 {
@@ -25,7 +26,7 @@ void Menu::populateAircrafts(std::ifstream aircraftsJson)
 
     }
     aircraftsJson.close();
-    std::sort(aircraftsList.begin(),aircraftsList.end(), Aircraft::compareAircraftTypes);
+    sortClassArray<std::shared_ptr<Aircraft>>(aircraftsList);
 }
 void Menu::populateAirports(std::ifstream airportsJson)
 {
@@ -37,7 +38,7 @@ void Menu::populateAirports(std::ifstream airportsJson)
         airportsList.push_back(ap);
     }
     airportsJson.close();
-    std::sort(airportsList.begin(), airportsList.end(), Airport::compareAirportsIcao);
+    sortClassArray<Airport>(airportsList);
 }
 void Menu::populateWaypoints(std::ifstream waypointsJson)
 {
@@ -49,7 +50,7 @@ void Menu::populateWaypoints(std::ifstream waypointsJson)
             waypointsList.push_back(wp);
     }
     waypointsJson.close();
-    std::sort(waypointsList.begin(), waypointsList.end(), Waypoint::compareWaypointCodes);
+    sortClassArray<Waypoint>(waypointsList);
 }
 void Menu::populateAdjacencyList(std::ifstream waypointsAdjacencyJson)
 {
@@ -91,6 +92,18 @@ void Menu::manualWaypointSelection(const std::string& departIcao, const std::str
                                     std::vector<Waypoint>& routeWaypoints)
 {
     //waypoints selection
+    //displaying all the available waypoints
+    std::cout << "Available waypoints: \n";
+    for (const auto& i : waypointsList)
+    {
+        if (i.waypointIsAirport() == false)
+        {
+            std::cout << '\t';
+            i.displayWaypointCode();
+            std::cout << '\n';
+        }
+    }
+    std::cout << '\n';
     //first, the departure airport is inserted into routeWaypoints, than the user enters the desired waypoints
     //to mark the end, the user must type "end"
     //the arrival airport waypoint is then inserted into the routeWaypoints
@@ -145,6 +158,15 @@ void Menu::flpCreation()
     std::cout << "Callsign: ";
     std::string callSgn;
     std::cin >> callSgn;
+    //listing all available airports
+    std::cout << "Available airports: \n";
+    for (const auto& i : airportsList)
+    {
+        std::cout <<'\t';
+        i.displayIcaoCode();
+        std::cout << '\n';
+    }
+    std::cout << '\n';
     //departure selection. If the ICAO code is not present in airportsList, the user must enter again a valid code
     Airport depart;
     std::string departIcao;
@@ -165,6 +187,8 @@ void Menu::flpCreation()
         if (Airport::findAirport(airportsList, arrivalIcao, arrival) == true)
             break;
     }
+    //displaying available runways at the departure airport
+    depart.displayRunways();
     //departure runway selection.
     //the runway is being checked and if it doesn't exist, the user must enter again a valid runway code
     std::string departRw;
@@ -175,7 +199,8 @@ void Menu::flpCreation()
         if (Airport::validRunway(departRw, depart) == true)
             break;
     }
-
+    //displaying available runways at the arrival airport
+    arrival.displayRunways();
     //arrival runway selection.
     //the runway is being checked and if it doesn't exist, the user must enter again a valid runway code
     std::string arrivalRw;
@@ -197,6 +222,15 @@ void Menu::flpCreation()
         automaticWaypointSelection(departIcao, arrivalIcao, routeWaypoints);
     else
         throw AppException("Invalid option for waypoint selection");
+    //displaying all the available planes
+    std::cout << "Available planes: \n";
+    for (const auto& i : aircraftsList)
+    {
+        std::cout << '\t';
+        i->displayAircraftType();
+        std::cout << '\n';
+    }
+    std::cout << '\n';
     //aircraft selection
     std::shared_ptr<Aircraft> ac;
     while (true)

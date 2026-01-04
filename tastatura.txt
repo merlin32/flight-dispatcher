@@ -162,6 +162,89 @@ auto
 auto
 auto
 
+1
+GTI2134
+LTFM
+LOWW
+RW16L
+RW11
+a
+Boeing 747-8F
+10
+1374
+4821
+2596
+4012
+3187
+1649
+4973
+2865
+3541
+1208
+37000
+auto
+auto
+auto
+auto
+
+1
+GTI2134
+LOWW
+LTFM
+RW11
+RW16L
+a
+Boeing 747-8F
+10
+1374
+4821
+2596
+4012
+3187
+1649
+4973
+2865
+3541
+1208
+37000
+auto
+auto
+auto
+auto
+
+1
+YRT443
+LTFM
+LRCL
+RW17L
+RW07
+a
+Beechcraft King Air 350
+2
+5
+121
+26000
+auto
+auto
+auto
+auto
+
+1
+DLH126
+LRCL
+LTFM
+RW07
+RW17L
+a
+Airbus A320Neo
+980
+143
+36000
+auto
+auto
+auto
+auto
+
 2
 1
 
@@ -191,5 +274,17 @@ auto
 
 2
 10
+
+2
+11
+
+2
+12
+
+2
+13
+
+2
+14
 
 3

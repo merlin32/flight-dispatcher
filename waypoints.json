@@ -9,6 +9,15 @@
       "isAirport": true
   },
   {
+    "waypointCode": "LTFM",
+    "longitude": 28.727778,
+    "latitude": 41.262222,
+    "maxAltitude": 45000,
+    "minAltitude": 2325,
+    "weatherAffected": false,
+    "isAirport": true
+  },
+  {
     "waypointCode": "BUKEL",
     "longitude": 25.7257,
     "latitude": 45.0778,
@@ -67,7 +76,7 @@
     "longitude": 16.570833,
     "latitude": 48.110833,
     "maxAltitude": 17500,
-    "minAltitude": 600,
+    "minAltitude": 2600,
     "weatherAffected": false,
     "isAirport": true
   },
@@ -120,6 +129,60 @@
     "waypointCode": "PESAT",
     "longitude": 17.053056,
     "latitude": 47.715,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false,
+    "isAirport": false
+  },
+  {
+    "waypointCode": "POLUN",
+    "longitude": 25.223372,
+    "latitude": 44.121222,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false,
+    "isAirport": false
+  },
+  {
+    "waypointCode": "BULEN",
+    "longitude": 25.8166,
+    "latitude": 43.75,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false,
+    "isAirport": false
+  },
+  {
+    "waypointCode": "RIXEN",
+    "longitude": 28.766111,
+    "latitude": 42.082222,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false,
+    "isAirport": false
+  },
+  {
+    "waypointCode": "NALOX",
+    "longitude": 16.82,
+    "latitude": 46.869722,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false,
+    "isAirport": false
+  },
+  {
+    "waypointCode": "BABIT",
+    "longitude": 18.928889,
+    "latitude": 45.931667,
+    "maxAltitude": 45000,
+    "minAltitude": 3036,
+    "weatherAffected": false,
+    "isAirport": false
+  },
+  {
+    "waypointCode": "ETIDA",
+    "longitude": 22.417778,
+    "latitude": 43.685833,
     "maxAltitude": 45000,
     "minAltitude": 3036,
     "weatherAffected": false,

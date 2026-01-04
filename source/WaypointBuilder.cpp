@@ -27,5 +27,5 @@ WaypointBuilder& WaypointBuilder::isAirport(bool status)
 }
 Waypoint WaypointBuilder::build()
 {
-    return wp;
+    return std::move(wp);
 }

@@ -88,6 +88,18 @@ turboprop aircraft only)
 - EDETA
 - SOKRU
 - AKUPO
+- ULMIN
+- DEGET
+- BALUX
+- TORNO
+- NATEX
+- PESAT
+- POLUN
+- BULEN
+- RIXEN
+- NALOX
+- BABIT
+- ETIDA
 
 **Available airports:**
 - LROP (Aeroportul International Henri Coanda)
@@ -100,6 +112,24 @@ turboprop aircraft only)
   - Runways:
     - RW07
     - RW25
+- LOWW (Vienna International Airport)
+  - Runways:
+    - RW11
+    - RW29
+    - RW16
+    - RW34
+- LTFM (Istanbul Airport)
+  - Runways;
+    - RW16L
+    - RW34R
+    - RW16R
+    - RW34L
+    - RW17L
+    - RW35R
+    - RW17R
+    - RW35L
+    - RW18
+    - RW36
 ### Important!
 
 Aveți voie cu cod generat de modele de limbaj la care nu ați contribuit semnificativ doar dacă documentați riguros acest proces.
@@ -172,18 +202,18 @@ O cerință nu se consideră îndeplinită dacă este realizată doar prin cod g
 - [x] la sfârșit: commit separat cu adăugarea unei noi clase derivate fără a modifica restul codului, **pe lângă cele 3 derivate deja adăugate** din aceeași ierarhie
   - noua derivată nu poate fi una existentă care a fost ștearsă și adăugată din nou
   - noua derivată va fi integrată în codul existent (adică va fi folosită, nu adăugată doar ca să fie)
-- [ ] tag de `git` pe commit cu **toate bifele**: de exemplu `v0.2`
+- [x] tag de `git` pe commit cu **toate bifele**: de exemplu `v0.2`
 - [ ] code review #2 2 proiecte
 
 ## Tema 3
 
 #### Cerințe
-- [ ] 2 șabloane de proiectare (design patterns)
-- [ ] o clasă șablon cu sens; minim **2 instanțieri**
-  - [ ] preferabil și o funcție șablon (template) cu sens; minim 2 instanțieri
-- [ ] minim 85% din codul propriu să fie C++
+- [x] 2 șabloane de proiectare (design patterns)
+- [x] o clasă șablon cu sens; minim **2 instanțieri**
+  - [x] preferabil și o funcție șablon (template) cu sens; minim 2 instanțieri
+- [x] minim 85% din codul propriu să fie C++
 <!-- - [ ] o specializare pe funcție/clasă șablon -->
-- [ ] tag de `git` pe commit cu **toate bifele**: de exemplu `v0.3` sau `v1.0`
+- [x] tag de `git` pe commit cu **toate bifele**: de exemplu `v0.3` sau `v1.0`
 - [ ] code review #3 2 proiecte
 
 ## Instrucțiuni de compilare

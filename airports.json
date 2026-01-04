@@ -88,7 +88,7 @@
   {
     "icaoCode": "LOWW",
     "elevation": 600,
-    "airportName": "SCHEWECHAT",
+    "airportName": "Vienna International Airport",
     "iataCode": "VIE",
     "airportRunways": [
       {
@@ -131,6 +131,98 @@
         "temperature": -5,
         "dewpoint": -10,
         "qnh": 1014,
+        "additionalChanges": "NOSIG="
+      }
+    ]
+  },
+  {
+    "icaoCode": "LTFM",
+    "elevation": 325,
+    "airportName": "Istanbul Airport",
+    "iataCode": "IST",
+    "airportRunways": [
+      {
+        "runwayID": "RW16L",
+        "runwayLength": 3749.95,
+        "runwayWidth": 45.11,
+        "runwayCondition": 0,
+        "runwayInUse": true
+      },
+      {
+        "runwayID": "RW34R",
+        "runwayLength": 3749.95,
+        "runwayWidth": 45.11,
+        "runwayCondition": 0,
+        "runwayInUse": false
+      },
+      {
+        "runwayID": "RW16R",
+        "runwayLength": 3749.95,
+        "runwayWidth": 60.04,
+        "runwayCondition": 0,
+        "runwayInUse": true
+      },
+      {
+        "runwayID": "RW34L",
+        "runwayLength": 3749.95,
+        "runwayWidth": 60.04,
+        "runwayCondition": 0,
+        "runwayInUse": false
+      },
+      {
+        "runwayID": "RW17L",
+        "runwayLength": 4099.86,
+        "runwayWidth": 60.04,
+        "runwayCondition": 0,
+        "runwayInUse": true
+      },
+      {
+        "runwayID": "RW35R",
+        "runwayLength": 4099.86,
+        "runwayWidth": 60.04,
+        "runwayCondition": 0,
+        "runwayInUse": false
+      },
+      {
+        "runwayID": "RW17R",
+        "runwayLength": 4099.86,
+        "runwayWidth": 45.11,
+        "runwayCondition": 0,
+        "runwayInUse": true
+      },
+      {
+        "runwayID": "RW35L",
+        "runwayLength": 4099.86,
+        "runwayWidth": 45.11,
+        "runwayCondition": 0,
+        "runwayInUse": false
+      },
+      {
+        "runwayID": "RW18",
+        "runwayLength": 3059.88,
+        "runwayWidth": 45.11,
+        "runwayCondition": 0,
+        "runwayInUse": true
+      },
+      {
+        "runwayID": "RW36",
+        "runwayLength": 3059.88,
+        "runwayWidth": 45.11,
+        "runwayCondition": 0,
+        "runwayInUse": false
+      }
+    ],
+    "metar": [
+      {
+        "airportIcao": "LTFM",
+        "dateAndTime": "042220Z",
+        "windInfo": "21020KT",
+        "visibility": "9999",
+        "specialConditions": "CAVOK",
+        "cloudsInfo": "NSC",
+        "temperature": 14,
+        "dewpoint": 8,
+        "qnh": 1017,
         "additionalChanges": "NOSIG="
       }
     ]

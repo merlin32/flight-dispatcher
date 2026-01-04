@@ -356,16 +356,29 @@ void Menu::mainMenu()
     std::cout << "\t2) Open existing flight plan\n";
     std::cout << "\t3) Exit\n";
     std::cout << "|>";
-    unsigned short int option;
-    std::cin >> option;
-    switch (option)
+    try
     {
+        unsigned short int option;
+        if (!(std::cin >> option))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            throw AppException("Invalid input type");
+        }
+        switch (option)
+        {
         case 1: flpCreation(); break;
         case 2: flpSelection(); break;
         case 3: exit(0);
         default: std::cerr << "Unknown option! Please enter a valid option!\n"; break;
+        }
+        std::cout << "\n\n\n";
     }
-    std::cout << "\n\n\n";
+    catch (const AppException& err)
+    {
+        std::cerr << err.what() << '\n';
+    }
+
 }
 
 void Menu::continuationConfirm()

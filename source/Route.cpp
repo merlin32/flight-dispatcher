@@ -138,7 +138,6 @@ void Route::routeInit()
     this->setCruiseDuration();
     this->setAirTime();
     this->setBlockTime();
-
     if (this->plane->flightTooShort(airTime) == true)
         throw InvalidFlightPlanParameters("Flight duration is too short for the selected aircraft!");
     if (this->terrainDanger() == true)

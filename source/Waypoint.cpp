@@ -44,7 +44,7 @@ std::ostream& operator<<(std::ostream& os, const Waypoint& wp)
     os << "Weather Affected: " << wp.weatherAffected << '\n';
     return os;
 }
-bool Waypoint::validWaypoint(const std::vector<Waypoint>& waypointsList, const std::string& waypointName,
+bool Waypoint::findWaypoint(const std::vector<Waypoint>& waypointsList, const std::string& waypointName,
                             Waypoint& selectedWaypoint)
 {
     auto position = std::lower_bound(waypointsList.begin(), waypointsList.end(),

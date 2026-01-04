@@ -68,8 +68,6 @@ bool CargoAircraft::maxContainerWeightExceeded() const
             return true;
     return false;
 }
-void CargoAircraft::setContainersNum(const int& inputContainersNum){this->containersNum = inputContainersNum;}
-void CargoAircraft::setContainersWeights(const std::vector<double>& inputValues){this->containersWeights = inputValues;}
 bool CargoAircraft::isDataValid_() const
 {
     if (maxContainersNumExceeded() == true)
@@ -84,6 +82,20 @@ bool CargoAircraft::isDataValid_() const
     }
     return true;
 }
+void CargoAircraft::aircraftCategoryInit_()
+{
+    std::cout << "Number of containers: ";
+    std::cin >> containersNum;
+    std::cout << "Enter each container's weight: \n";
+    for (int i = 0; i < containersNum; i++)
+    {
+        double temp;
+        std::cout << "Container " << i + 1 << ": ";
+        std::cin >> temp;
+        containersWeights.push_back(temp);
+    }
+}
+
 
 
 

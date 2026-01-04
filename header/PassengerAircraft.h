@@ -14,6 +14,7 @@ private:
     [[nodiscard]] double calculateFreight_() const override;
     void readFromJson_(const nlohmann::json& obj) override;
     void display(std::ostream &os) const override;
+    void aircraftCategoryInit_() override;
     [[nodiscard]] bool isDataValid_() const override;
 public:
     PassengerAircraft() = default;
@@ -41,7 +42,5 @@ public:
              const int& maxPassengerCount_,
              const int& crewCount_);
     [[nodiscard]] std::shared_ptr<Aircraft> clone() const override;
-    void setFreight(const int& inputFreight);
-    void setPassengerNumber(const int& inputPassengerNumber);
 };
 #endif //PASSENGERAIRCRAFT_H

@@ -44,7 +44,7 @@ public:
                         const int& maxAltitude_, const int& minAltitude_, const bool& weatherAffected_);
     ~Waypoint();
     [[nodiscard]] static double calculateDistance(const Waypoint& wp1, const Waypoint& wp2);
-    [[nodiscard]] static bool validWaypoint(const std::vector<Waypoint>& waypointsList, const std::string& waypointName,
+    [[nodiscard]] static bool findWaypoint(const std::vector<Waypoint>& waypointsList, const std::string& waypointName,
                                             Waypoint& selectedWaypoint);
     [[nodiscard]] static bool compareWaypointCodes(const Waypoint& wp1, const Waypoint& wp2);
     [[nodiscard]] bool belowMinAlt(const int& currentAlt) const;

@@ -16,6 +16,7 @@ private:
     [[nodiscard]] double calculateFreight_() const override;
     void readFromJson_(const nlohmann::json& obj) override;
     void display(std::ostream &os) const override;
+    void aircraftCategoryInit_() override;
     [[nodiscard]] bool isDataValid_() const override;
     [[nodiscard]] bool maxPilotCountExceeded() const;
     [[nodiscard]] bool maxPassengersNumberExceeded() const;

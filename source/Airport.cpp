@@ -44,7 +44,7 @@ const Runway& Airport::getRunway(const std::string& runwayID) const
 }
 int Airport::getElevation() const{return this->elevation;}
 Metar Airport::getMetar() const{return this->airportWeather;}
-bool Airport::validAirport(const std::vector<Airport>& airportsList, const std::string& candidate, Airport& ap)
+bool Airport::findAirport(const std::vector<Airport>& airportsList, const std::string& candidate, Airport& ap)
 {
     //using lower_bound to find the first element not less than candidate using binary search, then searching for candidate
     //lambda function is used in order to search an airport by its ICAO code

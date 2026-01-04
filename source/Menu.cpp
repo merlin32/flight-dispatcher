@@ -3,9 +3,6 @@
 #include "../header/PerformanceCalculation.h"
 #include "../header/AircraftFactory.h"
 #include "../header/CargoAircraft.h"
-#include "../header/GeneralAviationAircraft.h"
-#include "../header/PassengerAircraft.h"
-#include "../header/FighterJet.h"
 #include "../header/Exceptions.h"
 #include "../header/JsonUtils.h"
 #include "../header/Waypoint.h"
@@ -57,7 +54,7 @@ void Menu::populateAdjacencyList(std::ifstream waypointsAdjacencyJson)
     nlohmann::json data = nlohmann::json::parse(waypointsAdjacencyJson);
     for (auto it = data.begin(); it != data.end(); it++)
     {
-        std::string waypointCode = it.key();
+        const std::string& waypointCode = it.key();
         std::vector<std::string> connections = it.value().get<std::vector<std::string>>();
         waypointsAdjacencyList[waypointCode] = connections;
     }
@@ -105,7 +102,7 @@ void Menu::manualWaypointSelection(const std::string& departIcao, const std::str
     Waypoint departureWaypoint;
     Waypoint arrivalWaypoint;
     int counter = 1;
-    if (Waypoint::validWaypoint(waypointsList, departIcao, departureWaypoint) == true)
+    if (Waypoint::findWaypoint(waypointsList, departIcao, departureWaypoint) == true)
         routeWaypoints.push_back(departureWaypoint);
     while (true)
     {
@@ -114,13 +111,13 @@ void Menu::manualWaypointSelection(const std::string& departIcao, const std::str
         if (currentWaypoint == "end")
             break;
         Waypoint temp;
-        if (Waypoint::validWaypoint(waypointsList, currentWaypoint, temp))
+        if (Waypoint::findWaypoint(waypointsList, currentWaypoint, temp))
         {
             routeWaypoints.push_back(temp);
             counter++;
         }
     }
-    if (Waypoint::validWaypoint(waypointsList, arrivalIcao, arrivalWaypoint) == true)
+    if (Waypoint::findWaypoint(waypointsList, arrivalIcao, arrivalWaypoint) == true)
         routeWaypoints.push_back(arrivalWaypoint);
     for (size_t i = 1; i < routeWaypoints.size(); i++)
         Waypoint previous = routeWaypoints[i-1];
@@ -130,9 +127,9 @@ void Menu::automaticWaypointSelection(const std::string& departIcao, const std::
 {
     Waypoint departureWaypoint;
     Waypoint arrivalWaypoint;
-    if (Waypoint::validWaypoint(waypointsList, departIcao, departureWaypoint) == false)
+    if (Waypoint::findWaypoint(waypointsList, departIcao, departureWaypoint) == false)
         throw AppException("Invalid waypoint");
-    if (Waypoint::validWaypoint(waypointsList, arrivalIcao, arrivalWaypoint) == false)
+    if (Waypoint::findWaypoint(waypointsList, arrivalIcao, arrivalWaypoint) == false)
         throw AppException("Invalid waypoint");
     routeWaypoints = Waypoint::pathFinder(departureWaypoint, arrivalWaypoint, waypointsList, waypointsAdjacencyList);
 }
@@ -153,7 +150,7 @@ void Menu::flpCreation()
     {
         std::cout << "Departure: ";
         std::cin >> departIcao;
-        if (Airport::validAirport(airportsList, departIcao, depart) == true)
+        if (Airport::findAirport(airportsList, departIcao, depart) == true)
             break;
     }
     //arrival selection. If the ICAO code is not present in airportsList, the user must enter again a valid code
@@ -163,7 +160,7 @@ void Menu::flpCreation()
     {
         std::cout << "Arrival: ";
         std::cin >> arrivalIcao;
-        if (Airport::validAirport(airportsList, arrivalIcao, arrival) == true)
+        if (Airport::findAirport(airportsList, arrivalIcao, arrival) == true)
             break;
     }
     //departure runway selection.
@@ -206,148 +203,41 @@ void Menu::flpCreation()
         std::string acType;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  //buffer clear
         std::getline(std::cin, acType);
-        if (Aircraft::validAircraft(aircraftsList, acType, ac) == true)
+        if (Aircraft::findAircraft(aircraftsList, acType, ac) == true)
             break;
     }
-
-    if (ac->categoryMatch("passenger") == true)
+    while (true)
     {
-        auto passengerAc = std::dynamic_pointer_cast<PassengerAircraft>(ac);
-        if (passengerAc)
-        {
-            int freight;
-            int passengers;
-            while (true)
-            {
-                std::cout << "Freight: ";
-                std::cin >> freight;
-                std::cout << "Passengers: ";
-                std::cin >> passengers;
-                passengerAc->setFreight(freight);
-                passengerAc->setPassengerNumber(passengers);
-                if (passengerAc->isDataValid() == true)
-                    break;
-            }
-        }
-    }
-    if (ac->categoryMatch("cargo") == true)
-    {
-        auto cargoAc = std::dynamic_pointer_cast<CargoAircraft>(ac);
-        if (cargoAc)
-        {
-            int containersNum;
-            std::vector<double> containersWeights{};
-            while (true)
-            {
-                std::cout << "Number of containers: ";
-                std::cin >> containersNum;
-                std::cout << "Enter each container's weight: \n";
-                for (int i = 0; i < containersNum; i++)
-                {
-                    double temp;
-                    std::cout << "Container " << i + 1 << ": ";
-                    std::cin >> temp;
-                    containersWeights.push_back(temp);
-                }
-                cargoAc->setContainersNum(containersNum);
-                cargoAc->setContainersWeights(containersWeights);
-                if (cargoAc->isDataValid() == true)
-                    break;
-            }
-        }
-    }
-    if (ac->categoryMatch("general aviation") == true)
-    {
-        auto generalAvAc = std::dynamic_pointer_cast<GeneralAviationAircraft>(ac);
-        if (generalAvAc)
-        {
-            int pilotsCount;
-            int passengersNumber;
-            double baggageWeight;
-            while (true)
-            {
-                std::cout << "Number of pilots: ";
-                std::cin >> pilotsCount;
-                std::cout << "Passengers: ";
-                std::cin >> passengersNumber;
-                std::cout << "Baggage quantity: ";
-                std::cin >> baggageWeight;
-                generalAvAc->setPilotsCount(pilotsCount);
-                generalAvAc->setPassengersNumber(passengersNumber);
-                generalAvAc->setBaggageWeight(baggageWeight);
-                if (generalAvAc->isDataValid() == true)
-                    break;
-            }
-        }
-    }
-    if (ac->categoryMatch("fighter jet") == true)
-    {
-        //in this case, to obtain a result, the aircraft's parameters have been set to "dry power" values
-        //dry power = normal flight, similar to any other aircraft
-        auto fighterAc = std::dynamic_pointer_cast<FighterJet>(ac);
-        if (fighterAc)
-        {
-            int numberOfPilots;
-            int numberOfMissiles;
-            double missileWeight;
-            double cannonAmmoWeight;
-            while (true)
-            {
-                std::cout << "Number of pilots: ";
-                std::cin >> numberOfPilots;
-                std::cout << "Number of missiles: ";
-                std::cin >> numberOfMissiles;
-                std::cout << "Missile weight: ";
-                std::cin >> missileWeight;
-                std::cout << "Cannon ammo weight: ";
-                std::cin >> cannonAmmoWeight;
-                fighterAc->fighterJetInit(numberOfPilots, numberOfMissiles, missileWeight, cannonAmmoWeight);
-                if (fighterAc->isDataValid() == true)
-                    break;
-            }
-
-        }
+        ac->aircraftCategoryInit();
+        if (ac->isDataValid() == true)
+            break;
     }
     //cruising altitude selection
-    std::cout << "Cruise altitude: ";
-    std::string cruiseAlt;
-    int cruiseAltInput = 0;
-    std::cin >> cruiseAlt;
-    if (cruiseAlt != "auto")
-        cruiseAltInput = std::stoi(cruiseAlt);
+    int cruiseAltInput;
+    while (true)
+        if (readAutoFields("Cruise altitude: ", cruiseAltInput) == true)
+            break;
     //FuelManagement input data
     std::cout << "==================\n";
     std::cout << "== Fuel entries ==\n";
     std::cout << "==================\n";
-    std::cout << "Contingency: ";
-    std::string fieldEntry;
+
     double ctgPctInput;
-    std::cin >> fieldEntry;
-    if (fieldEntry != "auto")
-        ctgPctInput = std::stod(fieldEntry);
-    else
-        ctgPctInput = 0;
-    std::cout << "Reserve Time: ";
+    while (true)
+        if (readAutoFields("Contingency: ", ctgPctInput) == true)
+            break;
     int rsvTimeInput;
-    std::cin >> fieldEntry;
-    if (fieldEntry != "auto")
-        rsvTimeInput = std::stoi(fieldEntry);
-    else
-        rsvTimeInput = 0;
-    std::cout << "Taxi Fuel: ";
+    while (true)
+        if (readAutoFields("Reserve Time: ", rsvTimeInput) == true)
+            break;
     double txFuelInput;
-    std::cin >> fieldEntry;
-    if (fieldEntry != "auto")
-        txFuelInput = std::stod(fieldEntry);
-    else
-        txFuelInput = 0;
-    std::cout << "Block Fuel: ";
+    while (true)
+        if (readAutoFields("Taxi Fuel: ", txFuelInput) == true)
+            break;
     double blkFuelInput;
-    std::cin >> fieldEntry;
-    if (fieldEntry != "auto")
-        blkFuelInput = std::stod(fieldEntry);
-    else
-        blkFuelInput = 0;
+    while (true)
+        if (readAutoFields("Block Fuel: ", blkFuelInput) == true)
+            break;
     FuelManagement fuelPlanning{ctgPctInput, rsvTimeInput, txFuelInput, blkFuelInput};
     //performance calculation data init
     PerformanceCalculation perfCalc;
@@ -421,9 +311,51 @@ void Menu::mainMenu()
     std::cout << "\n\n\n";
 }
 
-void Menu::continuationConfirm() const
+void Menu::continuationConfirm()
 {
     std::cout << "\nPress Enter to continue...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cin.get();
 }
+bool Menu::readAutoFields(const std::string& displayMessage, int& field)
+{
+    std::cout << displayMessage;
+    std::string inputValue;
+    std::cin >> inputValue;
+    try
+    {
+        if (inputValue != "auto")
+            field = std::stoi(inputValue);
+        else
+            field = 0;
+        return true;
+    }
+    catch (const std::exception& err)
+    {
+        std::cerr << err.what() << '\n';
+        std::cerr << "Input error: enter <auto> or a number\n";
+        return false;
+    }
+}
+bool Menu::readAutoFields(const std::string& displayMessage, double& field)
+{
+    std::cout << displayMessage;
+    std::string inputValue;
+    std::cin >> inputValue;
+    try
+    {
+        if (inputValue != "auto")
+            field = std::stod(inputValue);
+        else
+            field = 0;
+        return true;
+    }
+    catch (const std::exception& err)
+    {
+        std::cerr << err.what() << '\n';
+        std::cerr << "Input error: enter <auto> or a number\n";
+        return false;
+    }
+}
+
+

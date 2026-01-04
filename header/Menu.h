@@ -17,11 +17,13 @@ private:
     void populateAirports(std::ifstream airportsJson);
     void populateWaypoints(std::ifstream waypointsJson);
     void populateAdjacencyList(std::ifstream waypointsAdjacencyJson);
-    void continuationConfirm() const;
+    static void continuationConfirm();
     void manualWaypointSelection(const std::string& departIcao, const std::string& arrivalIcao,
                                                     std::vector<Waypoint>& routeWaypoints);
     void automaticWaypointSelection(const std::string& departIcao, const std::string& arrivalIcao,
                                                     std::vector<Waypoint>& routeWaypoints);
+    bool readAutoFields(const std::string& displayMessage, int& field);
+    bool readAutoFields(const std::string& displayMessage, double& field);
 public:
     void initLocalData();
     void flpCreation();

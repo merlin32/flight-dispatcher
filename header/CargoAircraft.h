@@ -17,6 +17,7 @@ private:
     [[nodiscard]] double calculateFreight_() const override;
     void readFromJson_(const nlohmann::json& obj) override;
     void display(std::ostream &os) const override;
+    void aircraftCategoryInit_() override;
     [[nodiscard]] bool maxContainersNumExceeded() const;
     [[nodiscard]] bool maxContainerWeightExceeded() const;
     [[nodiscard]] bool isDataValid_() const override;
@@ -47,8 +48,6 @@ public:
              const int& crewCount_,
              const double& maxContainerWeight_);
     [[nodiscard]] std::shared_ptr<Aircraft> clone() const override;
-    void setContainersNum(const int& inputContainersNum);
-    void setContainersWeights(const std::vector<double>& inputValues);
 
 };
 #endif //CARGOAIRCRAFT_H

@@ -20,6 +20,7 @@ private:
     [[nodiscard]] double calculateFreight_() const override;
     void readFromJson_(const nlohmann::json& obj) override;
     void display(std::ostream &os) const override;
+    void aircraftCategoryInit_() override;
     [[nodiscard]] bool isDataValid_() const override;
     [[nodiscard]] bool maxPilotCountExceeded() const;
     [[nodiscard]] bool maxMissileCountExceeded() const;
@@ -53,8 +54,6 @@ public:
              const double& maxMissileWeight_,
              const double& maxCannonAmmoWeight_);
     [[nodiscard]] std::shared_ptr<Aircraft> clone() const override;
-    void fighterJetInit(const int& numberOfPilots_, const int& missileCount_, const double& weightPerMissile_,
-                        const double& cannonAmmoWeight_);
 };
 
 #endif //FIGHTERJET_H

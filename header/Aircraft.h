@@ -28,6 +28,7 @@ private:
     [[nodiscard]] virtual double calculateFreight_() const = 0;
     virtual void readFromJson_(const nlohmann::json& obj) = 0;
     virtual void display(std::ostream &) const {}
+    virtual void aircraftCategoryInit_() = 0;
     [[nodiscard]] virtual bool isDataValid_() const = 0;
     static void attributeValidation(const std::string& value, const std::string& attributeName);
     static void attributeValidation(const double& value, const std::string& attributeName);
@@ -59,6 +60,7 @@ public:
     [[nodiscard]] virtual std::shared_ptr<Aircraft> clone() const = 0;
     [[nodiscard]] double calculatePayload() const;
     [[nodiscard]] double calculateFreight() const;
+    void aircraftCategoryInit();
     [[nodiscard]] bool isDataValid() const;
     [[nodiscard]] double getEmptyWeight() const;
     [[nodiscard]] double getTakeoffReferenceDist() const;
@@ -89,7 +91,7 @@ public:
     [[nodiscard]] bool categoryMatch(const std::string& currentCategory) const;
     [[nodiscard]] bool aircraftTooWide(const double& runwayWidth) const;
     [[nodiscard]] static bool compareAircraftTypes(const std::shared_ptr<Aircraft>& plane1, const std::shared_ptr<Aircraft>& plane2);
-    [[nodiscard]] static bool validAircraft(const std::vector<std::shared_ptr<Aircraft>>& aircraftsList, const std::string& inputType,
+    [[nodiscard]] static bool findAircraft(const std::vector<std::shared_ptr<Aircraft>>& aircraftsList, const std::string& inputType,
                                             std::shared_ptr<Aircraft>& plane);
     void displayAircraftType();
 protected:

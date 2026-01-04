@@ -31,8 +31,6 @@ PassengerAircraft::PassengerAircraft(const std::string& category_,
              climbRate_, descentRate_, climbSpeed_, minimumFlightDuration_}, maxPassengerCount{maxPassengerCount_},
              crewCount{crewCount_}{}
 std::shared_ptr<Aircraft> PassengerAircraft::clone() const{return std::make_shared<PassengerAircraft>(*this);}
-void PassengerAircraft::setFreight(const int& inputFreight){ this->freight = inputFreight;}
-void PassengerAircraft::setPassengerNumber(const int& inputPassengerNumber){this->passengerNumber = inputPassengerNumber;}
 //on average, a person is estimated to weight around 75 kg
 double PassengerAircraft::calculatePayload_() const{return 75 * (passengerNumber + crewCount) + freight;}
 //on average, a person is estimated to have 10kg of baggage
@@ -62,6 +60,13 @@ bool PassengerAircraft::isDataValid_() const
         return false;
     }
     return true;
+}
+void PassengerAircraft::aircraftCategoryInit_()
+{
+    std::cout << "Freight: ";
+    std::cin >> freight;
+    std::cout << "Passengers: ";
+    std::cin >> passengerNumber;
 }
 
 

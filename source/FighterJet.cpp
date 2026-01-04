@@ -81,18 +81,21 @@ bool FighterJet::isDataValid_() const
     }
     return true;
 }
+void FighterJet::aircraftCategoryInit_()
+{
+    std::cout << "Number of pilots: ";
+    std::cin >> numberOfPilots;
+    std::cout << "Number of missiles: ";
+    std::cin >> missileCount;
+    std::cout << "Missile weight: ";
+    std::cin >> weightPerMissile;
+    std::cout << "Cannon ammo weight: ";
+    std::cin >> cannonAmmoWeight;
+}
 bool FighterJet::maxPilotCountExceeded() const {return numberOfPilots > maxNumberOfPilots;}
 bool FighterJet::maxMissileCountExceeded() const {return missileCount > maxMissileCount;}
 bool FighterJet::maxMissileWeightExceeded() const {return weightPerMissile > maxMissileWeight;}
 bool FighterJet::maxCannonAmmoWeightExceeded() const {return cannonAmmoWeight > maxCannonAmmoWeight;}
-void FighterJet::fighterJetInit(const int& numberOfPilots_, const int& missileCount_,
-                                const double& weightPerMissile_, const double& cannonAmmoWeight_)
-{
-    numberOfPilots = numberOfPilots_;
-    missileCount = missileCount_;
-    weightPerMissile = weightPerMissile_;
-    cannonAmmoWeight = cannonAmmoWeight_;
-}
 
 
 

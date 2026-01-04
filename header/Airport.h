@@ -25,7 +25,7 @@ public:
     [[nodiscard]] const Runway& getRunway(const std::string& runwayID) const;
     [[nodiscard]] int getElevation() const;
     [[nodiscard]] Metar getMetar() const;
-    [[nodiscard]] static bool validAirport (const std::vector<Airport>& airportsList, const std::string& candidate, Airport& ap);
+    [[nodiscard]] static bool findAirport(const std::vector<Airport>& airportsList, const std::string& candidate, Airport& ap);
     [[nodiscard]] static bool validRunway(const std::string& runwayCode, const Airport& ap);
     [[nodiscard]] static bool compareAirportsIcao(const Airport& ap1, const Airport& ap2);
     void displayIcaoCode() const;

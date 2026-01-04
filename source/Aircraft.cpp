@@ -159,6 +159,8 @@ double Aircraft::getMaxTakeoffWeight() const{return this->maxTakeoffWeight;}
 //virtual functions calls
 double Aircraft::calculateFreight() const{return calculateFreight_();}
 double Aircraft::calculatePayload() const{return calculatePayload_();}
+void Aircraft::aircraftCategoryInit(){aircraftCategoryInit_();}
+
 //validations
 bool Aircraft::isDataValid() const {return isDataValid_();}
 void Aircraft::readFromJson(const nlohmann::json& obj)
@@ -190,7 +192,7 @@ bool Aircraft::compareAircraftTypes(const std::shared_ptr<Aircraft>& plane1, con
 {
     return plane1->type < plane2->type;
 }
-bool Aircraft::validAircraft(const std::vector<std::shared_ptr<Aircraft>>& aircraftsList, const std::string& inputType,
+bool Aircraft::findAircraft(const std::vector<std::shared_ptr<Aircraft>>& aircraftsList, const std::string& inputType,
                                 std::shared_ptr<Aircraft>& plane)
 {
     auto position = std::lower_bound(aircraftsList.begin(), aircraftsList.end(), inputType,

@@ -68,6 +68,15 @@ bool GeneralAviationAircraft::isDataValid_() const
     }
     return true;
 }
+void GeneralAviationAircraft::aircraftCategoryInit_()
+{
+    std::cout << "Number of pilots: ";
+    std::cin >> pilotsCount;
+    std::cout << "Passengers: ";
+    std::cin >> passengersNumber;
+    std::cout << "Baggage quantity: ";
+    std::cin >> baggageWeight;
+}
 
 
 

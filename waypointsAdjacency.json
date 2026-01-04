@@ -6,5 +6,5 @@
     "MOBRA": ["LRCL", "EDETA", "SOKRU", "AKUPO"],
     "LRCL": ["MOBRA", "AKUPO"],
     "SOKRU": ["LROP","MOBRA", "EDETA"],
-    "AKUPO": ["LRCL", "MOBRA"]
+    "AKUPO": ["LRCL", "MOBRA", "EDETA"]
   }

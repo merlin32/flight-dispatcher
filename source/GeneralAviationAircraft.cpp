@@ -67,7 +67,7 @@ bool GeneralAviationAircraft::isDataValid_() const
 }
 void GeneralAviationAircraft::aircraftCategoryInit_()
 {
-    if (pilotsCount > 1)
+    if (maxPilotCount > 1)
     {
         std::cout << "Number of pilots: ";
         std::cin >> pilotsCount;

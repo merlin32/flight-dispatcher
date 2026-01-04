@@ -3,14 +3,99 @@
 
 Flight Dispatcher is a flight planning application inspired by SimBrief, the most popular online platform for creating
 flight plans for simulators. It is designed for aviation enthusiasts and flight simulator players, offering the ability to select 
-a departure and an arrival airport, as well as an alternate destination. The app supports automatic selection of existing waypoints
-or manual entry of custom waypoints, taking weather conditions into account as well. Flight Dispatcher is compatible with specific 
-aircraft types, including the A20n series (such as Airbus A320neo and A321neo) and the B748 (Boeing 747-800i, 
-also known as “The Queen of the Skies”). It can automatically calculate required fuel and onboard weight, 
+a departure and an arrival airport. The app supports automatic waypoint selection, taking weather conditions into account as well, and
+manual waypoint selection for custom routes.
+
+Flight Dispatcher is compatible with specific aircraft types, including the Airbus A320Neo, Boeing 747-8F, Beechcraft King Air 350 and the 
+F-16C Fighting Falcon. It can automatically calculate required fuel and onboard weight, 
 while also allowing manual input for flexibility.
 
 About SimBrief: [Official SimBrief Website](https://www.simbrief.com/home/?page=about)
 
+### Navigating though the app
+
+The app contains two menus: one to create a flight plan and one to show
+each created flight plan.
+
+ **Creating a new flight plan**
+
+When creating a new flight plan the user is asked to enter the following base parameters:
+
+| Parameter                                                                  | Description                                                                                             |
+|:---------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------|
+| Callsign | Airline ICAO ( or any combination of three letters) and a number                                        |
+| Departure                                                                  | The ICAO code for the departing airport (eg: LROP)                                                      |
+| Arrival                                                                    | The ICAO code for the arrival airport (eg: LRCL)                                                        |
+| Departing runway                                                           | The runway code (eg: RW08L) of the departing runway                                                     |
+| Arrival runway                                                             | The runway code (eg: RW07) of the arrival runway                                                        |
+| Waypoint selection (manual)                                                | The waypoint code (eg: BUKEL) for each selected waypoint. Mark the end of selection by typing **"end"** |
+| Aircraft type                                                              | The name of the aircraft (eg: Airbus A320Neo)                                                           |
+| Cruise altitude                                                            | The altitude achieved after climbing (in FT)                                                            |
+| Contingency                                                                | The percentage from the block fuel (eg: 0.2)                                                            |
+| Reserve Time                                                               | The amount of time the aircraft needs to mentain FL15 in case of an unexpected event  (in minutes)      |
+| Taxi Fuel                                                                  | Quantity of fuel needed to taxi (in KG)                                                                 |
+| Block Fuel                                                                 | The total fuel on board (in KG)                                                                         | 
+
+The values for **cruise altitude**, **contingency**, **reserve time**, **taxi fuel** and **block fuel**
+can be determined automatically. To select which parameter should be calculated by the app
+the user must type **"auto"** instead of a value.
+
+For each category of aircraft, the user must enter the following parameters:
+- **Passenger Aircraft**
+
+| Parameter | Description                           |
+|-----------|---------------------------------------|
+| Freight   | The amount of baggages loaded (in KG) |
+| Passenger | The total number of passengers        |
+
+- **Cargo Aircraft**
+
+| Parameter | Description                           |
+|-----------|---------------------------------------|
+|Number of containers | The total number of containers to be loaded |
+|Container's weight | The total weight of a container (in KG). Input needed for each container |
+
+- **General Aviation Aircraft** (this category includes prop and turboprop aircraft only)
+ 
+| Parameter | Description                           |
+|-----------|---------------------------------------|
+ |Number of pilots | The total number of pilots (input required only for planes which permit more than one pilot) |
+ | Passengers | The total number of passengers |
+| Baggage quantity | The total quantity of baggages (in KG) |
+
+- **Fighter Jet**
+
+| Parameter       | Description                                                                                  |
+|-----------------|----------------------------------------------------------------------------------------------|
+|Number of pilots | The total number of pilots (input required only for planes which permit more than one pilot) |
+|Number of missiles | The total number of missiles loaded on the wings                                             |
+|Missile weight   | The weight of each missile loaded (in KG)                                                    |
+|Cannon ammo weight | The quantity of cannon ammo loaded (in KG)                                                   |
+
+**Available aircraft types:**
+  - Airbus A320Neo (passenger aircraft)
+  - Boeing 747-8F (cargo aircraft)
+  - Beechcraft King Air 350 (general aviation aircraft)
+  - F-16C Fighting Falcon (fighter jet aircraft)
+  
+**Available waypoints:**
+  - BUKEL
+  - MOBRA
+  - EDETA
+  - SOKRU
+  - AKUPO
+
+**Available airports:**
+- LROP (Aeroportul International Henri Coanda)
+  - Runways:
+    - RW08R
+    - RW08L
+    - RW26L
+    - RW26R
+- LRCL (Aeroportul International Avram Iancu)
+  - Runways: 
+    - RW07
+    - RW25
 
 ### Important!
 

@@ -9,6 +9,8 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
+#include "../header/FighterJet.h"
+
 void Menu::populateAircrafts(std::ifstream aircraftsJson)
 {
     nlohmann::json data = nlohmann::json::parse(aircraftsJson);
@@ -211,6 +213,27 @@ void Menu::flpCreation()
         ac->aircraftCategoryInit();
         if (ac->isDataValid() == true)
             break;
+    }
+    if (ac->categoryMatch("fighter jet") == true)
+    {
+        auto fighterJet = std::dynamic_pointer_cast<FighterJet>(ac);
+        if (fighterJet)
+        {
+            std::cout << "Note that the values entered for payload and freight calculation might lead to an invalid flight plan!\n";
+            std::cout << "Reason: The aircraft's performance parameters are based on combat conditions.\n";
+            std::cout << "Suggestion: Enter lower values for long flights.\n";
+            std::cout << "Want to enter those values again?[y/n]: ";
+            char choice;
+            std::cin >> choice;
+            if (choice == 'y')
+                while (true)
+                {
+                    ac->aircraftCategoryInit();
+                    if (ac->isDataValid() == true)
+                        break;
+                }
+            std::cout << "Suggestion: for long flights, it is recommended to enter the values for contingency and reserve time!\n";
+        }
     }
     //cruising altitude selection
     int cruiseAltInput;

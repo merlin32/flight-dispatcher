@@ -83,8 +83,13 @@ bool FighterJet::isDataValid_() const
 }
 void FighterJet::aircraftCategoryInit_()
 {
-    std::cout << "Number of pilots: ";
-    std::cin >> numberOfPilots;
+    if (maxNumberOfPilots > 1)
+    {
+        std::cout << "Number of pilots: ";
+        std::cin >> numberOfPilots;
+    }
+    else
+        numberOfPilots = 1;
     std::cout << "Number of missiles: ";
     std::cin >> missileCount;
     std::cout << "Missile weight: ";

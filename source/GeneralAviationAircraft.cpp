@@ -70,8 +70,13 @@ bool GeneralAviationAircraft::isDataValid_() const
 }
 void GeneralAviationAircraft::aircraftCategoryInit_()
 {
-    std::cout << "Number of pilots: ";
-    std::cin >> pilotsCount;
+    if (pilotsCount > 1)
+    {
+        std::cout << "Number of pilots: ";
+        std::cin >> pilotsCount;
+    }
+    else
+        pilotsCount = 1;
     std::cout << "Passengers: ";
     std::cin >> passengersNumber;
     std::cout << "Baggage quantity: ";

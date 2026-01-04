@@ -51,9 +51,6 @@ void GeneralAviationAircraft::display(std::ostream &os) const
 }
 bool GeneralAviationAircraft::maxPilotCountExceeded() const{return pilotsCount > maxPilotCount;}
 bool GeneralAviationAircraft::maxPassengersNumberExceeded() const{return passengersNumber > maxPassengersNumber;}
-void GeneralAviationAircraft::setPilotsCount(const int& inputValue) {this->pilotsCount = inputValue;}
-void GeneralAviationAircraft::setPassengersNumber(const int& inputValue){this->passengersNumber = inputValue;}
-void GeneralAviationAircraft::setBaggageWeight(const double& inputValue){this->baggageWeight = inputValue;}
 bool GeneralAviationAircraft::isDataValid_() const
 {
     if (maxPilotCountExceeded() == true)

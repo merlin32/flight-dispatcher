@@ -46,9 +46,6 @@ public:
              const int& maxPilotCount_,
              const int& maxPassengersNumber_);
     [[nodiscard]] std::shared_ptr<Aircraft> clone() const override;
-    void setPilotsCount(const int& inputValue);
-    void setPassengersNumber(const int& inputValue);
-    void setBaggageWeight(const double& inputValue);
 };
 
 #endif //GENERALAVIATIONAIRCRAFT_H

@@ -83,10 +83,13 @@ RW08L
 RW07
 a
 F-16C Fighting Falcon
-1
 4
 100
 40
+y
+4
+80
+20
 auto
 0.05
 10

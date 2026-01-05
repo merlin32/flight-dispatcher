@@ -25,20 +25,20 @@ show each created flight plan.
 When creating a new flight plan, the user is asked to enter the 
 following base parameters:
 
-| Parameter | Description                                                                                               |
-|:---|:----------------------------------------------------------------------------------------------------------|
-| Callsign | Airline ICAO (or any combination of three letters) and a number                                           |
-| Departure | The ICAO code for the departing airport (e.g., LROP)                                                      |
-| Arrival | The ICAO code for the arrival airport (e.g., LRCL)                                                        |
-| Departing runway | The runway code (e.g., RW08L) of the departing runway                                                     |
-| Arrival runway | The runway code (e.g., RW07) of the arrival runway                                                        |
-| Waypoint selection (manual) | The waypoint code (e.g., BUKEL) for each selected waypoint. Mark the end of selection by typing **"end"** |
-| Aircraft type | The name of the aircraft (e.g., Airbus A320Neo)                                                           |
-| Cruise altitude | The altitude achieved after climbing (in FT)                                                              |
-| Contingency | The percentage of the block fuel (e.g., 0.2)                                                              |
-| Reserve Time | The amount of time the aircraft needs to maintain FL015 in case of an unexpected event (in minutes)      |
-| Taxi Fuel | Quantity of fuel needed to taxi (in KG)                                                                   |
-| Block Fuel | The total fuel on board (in KG)                                                                           | 
+| Parameter | Description                                                                                                       |
+|:---|:------------------------------------------------------------------------------------------------------------------|
+| Callsign | Airline ICAO (or any combination of three letters) and a number                                                   |
+| Departure | The ICAO code for the departing airport (e.g., LROP)                                                              |
+| Arrival | The ICAO code for the arrival airport (e.g., LRCL)                                                                |
+| Departing runway | The runway code (e.g., RW08L) of the departing runway                                                             |
+| Arrival runway | The runway code (e.g., RW07) of the arrival runway                                                                |
+| Waypoint selection (manual) | The waypoint code (e.g., BUKEL) for each selected waypoint. Mark the end of selection by typing **"end"**         |
+| Aircraft type | The name of the aircraft (e.g., Airbus A320Neo)                                                                   |
+| Cruise altitude | The altitude achieved after climbing (in FT)                                                                      |
+| Contingency | The percentage of the block fuel (e.g., 0.2)                                                                      |
+| Reserve Time | Required holding time for unexpected delays (in minutes)                                                          |
+| Taxi Fuel | Quantity of fuel needed to taxi (in KG)                                                                           |
+| Block Fuel | The total fuel on board (in KG)                                                                                   | 
 
 The values for **cruise altitude**, **contingency**, **reserve time**, **taxi fuel**, and **block fuel** can be determined automatically. To select which parameter should be calculated by the app, the user must type **"auto"** instead of a value.
 

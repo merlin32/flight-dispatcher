@@ -280,6 +280,7 @@ void Menu::flpCreation()
                 try
                 {
                     if (choice == "y")
+                    {
                         while (true)
                         {
                             ac->aircraftCategoryInit();
@@ -289,9 +290,11 @@ void Menu::flpCreation()
                                 break;
                             }
                         }
-                    else if (choice == "n")
                         break;
-                    else
+                    }
+                    if (choice == "n")
+                        break;
+                    if (choice != "y" && choice != "n")
                         throw AppException("Invalid option! Try again!");
                 }
                 catch (const AppException& err)

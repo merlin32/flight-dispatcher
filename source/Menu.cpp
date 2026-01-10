@@ -418,7 +418,6 @@ void Menu::continuationConfirm()
 {
     std::cout << "\nPress Enter to continue...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cin.get();
 }
 bool Menu::readAutoFields(const std::string& displayMessage, int& field)
 {

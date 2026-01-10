@@ -160,22 +160,22 @@ std::ostream& operator<<(std::ostream& os, const Route& rt)
     os << "=========================\n";
     os << "== Flight plan details ==\n";
     os << "=========================\n";
-    os << "Callsign: " << rt.callsign << "\n";
-    os << "Departure: ";
+    os << "CALLSIGN: " << rt.callsign << "\n";
+    os << "DEPARTURE: ";
     rt.departure.displayIcaoCode();
-    os << " (Runway: " << rt.departureRunway << ")\n";
-    os << "Arrival: ";
+    os << " (RUNWAY: " << rt.departureRunway << ")\n";
+    os << "ARRIVAL: ";
     rt.arrival.displayIcaoCode();
-    os << " (Runway: " << rt.arrivalRunway << ")\n";
-    os << "Cruising altitude: " << rt.cruisingAltitude << " FT\n";
-    os << "Route distance: " << rt.routeDistance << " NM\n";
-    os << "Block time: " << rt.blockTime << " MIN\n";
-    os << "Air time: " << rt.airTime << " MIN\n";
-    os << "Climb duration: " << rt.climbDuration << " MIN\n";
-    os << "Cruise duration: " << rt.cruiseDuration << " MIN\n";
-    os << "Descent duration: " << rt.descentDuration << " MIN\n";
+    os << " (RUNWAY: " << rt.arrivalRunway << ")\n";
+    os << "CRUISING ALTITUDE: " << rt.cruisingAltitude << " FT\n";
+    os << "ROUTE DISTANCE: " << rt.routeDistance << " NM\n";
+    os << "BLOCK TIME: " << rt.blockTime << " MIN\n";
+    os << "AIR TIME: " << rt.airTime << " MIN\n";
+    os << "CLIMB DURATION: " << rt.climbDuration << " MIN\n";
+    os << "CRUISE DURATION: " << rt.cruiseDuration << " MIN\n";
+    os << "DESCENT DURATION: " << rt.descentDuration << " MIN\n";
     os << "TOC: " << rt.TOC << " NM\n";
-    os << "TOD: " << rt.TOD << " NM\n";
+    os << "TOD: " << rt.TOD << " NM\n\n";
     os << "=========================\n";
     os << "===== Plane Details =====\n";
     os << "=========================\n";
@@ -183,12 +183,19 @@ std::ostream& operator<<(std::ostream& os, const Route& rt)
     os << rt.fuelPlanning << "\n";
     os << rt.perfCalc << "\n";
 
-    os << "Route:\n";
+    os << "ROUTE:\n";
     for (size_t i = 0; i < rt.waypoints.size(); ++i) {
         rt.waypoints[i].displayWaypointCode();
         if (i != rt.waypoints.size() - 1)
             os << " DCT ";
     }
+    os << "\n\n";
+    os << "METAR INFO: \n";
+    os << "\tDEPARTURE: ";
+    rt.departure.displayMetar();
+    os << '\n';
+    os << "\tARRIVAL: ";
+    rt.arrival.displayMetar();
     os << '\n';
     return os;
 }

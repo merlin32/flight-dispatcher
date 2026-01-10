@@ -1,35 +1,37 @@
 #include "../header/GeneralAviationAircraft.h"
 #include "../header/JsonUtils.h"
+#include "../header/VectorUtils.h"
 #include <iostream>
 
+
 GeneralAviationAircraft::GeneralAviationAircraft(const std::string& category_,
-             const std::string& type_,
-             const double& range_,
-             const double& cruisingSpeed_,
-             const double& wingspan_,
-             const double& maxTakeoffWeight_,
-             const double& maxPayload_,
-             const double& emptyWeight_,
-             const double& fuelCapacity_,
-             const double& fuelBurnClimb_,
-             const double& fuelBurnCruise_,
-             const double& fuelBurnDescent_,
-             const int& maxCruisingAltitude_,
-             const double& fuelBurnIdle_,
-             const double& fuelBurnLowAltitude_,
-             const double& maxFreight_,
-             const double& takeoffReferenceDist_,
-             const int& climbRate_,
-             const int& descentRate_,
-             const double& climbSpeed_,
-             const int& minimumFlightDuration_,
-             const int& maxPilotCount_ = 1,
-             const int& maxPassengersNumber_ = 0) : Aircraft{category_, type_, range_, cruisingSpeed_,
-             wingspan_, maxTakeoffWeight_, maxPayload_, emptyWeight_, fuelCapacity_,
-             fuelBurnClimb_, fuelBurnCruise_, fuelBurnDescent_, maxCruisingAltitude_,
-             fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,
-             climbRate_, descentRate_, climbSpeed_, minimumFlightDuration_},
-             maxPilotCount{maxPilotCount_}, maxPassengersNumber{maxPassengersNumber_}{}
+                                                 const std::string& type_,
+                                                 const double& range_,
+                                                 const double& cruisingSpeed_,
+                                                 const double& wingspan_,
+                                                 const double& maxTakeoffWeight_,
+                                                 const double& maxPayload_,
+                                                 const double& emptyWeight_,
+                                                 const double& fuelCapacity_,
+                                                 const double& fuelBurnClimb_,
+                                                 const double& fuelBurnCruise_,
+                                                 const double& fuelBurnDescent_,
+                                                 const int& maxCruisingAltitude_,
+                                                 const double& fuelBurnIdle_,
+                                                 const double& fuelBurnLowAltitude_,
+                                                 const double& maxFreight_,
+                                                 const double& takeoffReferenceDist_,
+                                                 const int& climbRate_,
+                                                 const int& descentRate_,
+                                                 const double& climbSpeed_,
+                                                 const int& minimumFlightDuration_,
+                                                 const int& maxPilotCount_ = 1,
+                                                 const int& maxPassengersNumber_ = 0) : Aircraft{category_, type_, range_, cruisingSpeed_,
+                                                                                            wingspan_, maxTakeoffWeight_, maxPayload_, emptyWeight_, fuelCapacity_,
+                                                                                            fuelBurnClimb_, fuelBurnCruise_, fuelBurnDescent_, maxCruisingAltitude_,
+                                                                                            fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,
+                                                                                            climbRate_, descentRate_, climbSpeed_, minimumFlightDuration_},
+                                                                                        maxPilotCount{maxPilotCount_}, maxPassengersNumber{maxPassengersNumber_}{}
 std::shared_ptr<Aircraft> GeneralAviationAircraft::clone() const{return std::make_shared<GeneralAviationAircraft>(*this);}
 double GeneralAviationAircraft::calculatePayload_() const
 {
@@ -68,16 +70,9 @@ bool GeneralAviationAircraft::isDataValid_() const
 void GeneralAviationAircraft::aircraftCategoryInit_()
 {
     if (maxPilotCount > 1)
-    {
-        std::cout << "Number of pilots: ";
-        std::cin >> pilotsCount;
-    }
-    else
-        pilotsCount = 1;
-    std::cout << "Passengers: ";
-    std::cin >> passengersNumber;
-    std::cout << "Baggage quantity: ";
-    std::cin >> baggageWeight;
+        validInputItem<int>("Number of pilots: ", pilotsCount);
+    validInputItem<int>("Passengers: ", passengersNumber);
+    validInputItem<double>("Baggage quantity: ", baggageWeight);
 }
 
 

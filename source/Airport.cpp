@@ -108,6 +108,10 @@ void Airport::displayRunways() const
         }
     std::cout << '\n';
 }
+void Airport::displayMetar() const
+{
+    std::cout << this->airportWeather;
+}
 
 
 

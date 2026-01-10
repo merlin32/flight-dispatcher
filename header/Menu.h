@@ -22,8 +22,8 @@ private:
                                                     std::vector<Waypoint>& routeWaypoints);
     void automaticWaypointSelection(const std::string& departIcao, const std::string& arrivalIcao,
                                                     std::vector<Waypoint>& routeWaypoints);
-    bool readAutoFields(const std::string& displayMessage, int& field);
-    bool readAutoFields(const std::string& displayMessage, double& field);
+    [[nodiscard]] static bool readAutoFields(const std::string& displayMessage, int& field);
+    [[nodiscard]] static bool readAutoFields(const std::string& displayMessage, double& field);
 public:
     void initLocalData();
     void flpCreation();

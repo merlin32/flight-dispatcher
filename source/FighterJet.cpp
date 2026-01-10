@@ -1,32 +1,33 @@
 #include "../header/FighterJet.h"
 #include "../header/JsonUtils.h"
+#include "../header/VectorUtils.h"
 #include <iostream>
 
 FighterJet::FighterJet(const std::string& category_,
-             const std::string& type_,
-             const double& range_,
-             const double& cruisingSpeed_,
-             const double& wingspan_,
-             const double& maxTakeoffWeight_,
-             const double& maxPayload_,
-             const double& emptyWeight_,
-             const double& fuelCapacity_,
-             const double& fuelBurnClimb_,
-             const double& fuelBurnCruise_,
-             const double& fuelBurnDescent_,
-             const int& maxCruisingAltitude_,
-             const double& fuelBurnIdle_,
-             const double& fuelBurnLowAltitude_,
-             const double& maxFreight_,
-             const double& takeoffReferenceDist_,
-             const int& climbRate_,
-             const int& descentRate_,
-             const double& climbSpeed_,
-             const int& minimumFlightDuration_,
-             const int& maxNumberOfPilots_,
-             const int& maxMissileCount_,
-             const double& maxMissileWeight_,
-             const double& maxCannonAmmoWeight_) :
+                       const std::string& type_,
+                       const double& range_,
+                       const double& cruisingSpeed_,
+                       const double& wingspan_,
+                       const double& maxTakeoffWeight_,
+                       const double& maxPayload_,
+                       const double& emptyWeight_,
+                       const double& fuelCapacity_,
+                       const double& fuelBurnClimb_,
+                       const double& fuelBurnCruise_,
+                       const double& fuelBurnDescent_,
+                       const int& maxCruisingAltitude_,
+                       const double& fuelBurnIdle_,
+                       const double& fuelBurnLowAltitude_,
+                       const double& maxFreight_,
+                       const double& takeoffReferenceDist_,
+                       const int& climbRate_,
+                       const int& descentRate_,
+                       const double& climbSpeed_,
+                       const int& minimumFlightDuration_,
+                       const int& maxNumberOfPilots_,
+                       const int& maxMissileCount_,
+                       const double& maxMissileWeight_,
+                       const double& maxCannonAmmoWeight_) :
                 Aircraft{category_, type_, range_, cruisingSpeed_,
                     wingspan_, maxTakeoffWeight_, maxPayload_, emptyWeight_, fuelCapacity_,
                     fuelBurnClimb_, fuelBurnCruise_, fuelBurnDescent_, maxCruisingAltitude_,
@@ -84,18 +85,12 @@ bool FighterJet::isDataValid_() const
 void FighterJet::aircraftCategoryInit_()
 {
     if (maxNumberOfPilots > 1)
-    {
-        std::cout << "Number of pilots: ";
-        std::cin >> numberOfPilots;
-    }
+        validInputItem<int>("Number of pilots: ", numberOfPilots);
     else
         numberOfPilots = 1;
-    std::cout << "Number of missiles: ";
-    std::cin >> missileCount;
-    std::cout << "Missile weight: ";
-    std::cin >> weightPerMissile;
-    std::cout << "Cannon ammo weight: ";
-    std::cin >> cannonAmmoWeight;
+    validInputItem<int>("Number of missiles: ", missileCount);
+    validInputItem<double>("Missile weight: ", weightPerMissile);
+    validInputItem<double>("Cannon ammo weight: ", cannonAmmoWeight);
 }
 bool FighterJet::maxPilotCountExceeded() const {return numberOfPilots > maxNumberOfPilots;}
 bool FighterJet::maxMissileCountExceeded() const {return missileCount > maxMissileCount;}

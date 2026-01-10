@@ -157,7 +157,8 @@ void Menu::flpCreation()
     std::cout << "================================\n";
     std::cout << "Callsign: ";
     std::string callSgn;
-    std::cin >> callSgn;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(std::cin, callSgn);
     //listing all available airports
     std::cout << "Available airports: \n";
     for (const auto& i : airportsList)
@@ -173,7 +174,7 @@ void Menu::flpCreation()
     while (true)
     {
         std::cout << "Departure: ";
-        std::cin >> departIcao;
+        std::getline(std::cin, departIcao);
         if (Airport::findAirport(airportsList, departIcao, depart) == true)
             break;
     }
@@ -183,7 +184,7 @@ void Menu::flpCreation()
     while (true)
     {
         std::cout << "Arrival: ";
-        std::cin >> arrivalIcao;
+        std::getline(std::cin, arrivalIcao);
         if (Airport::findAirport(airportsList, arrivalIcao, arrival) == true)
             break;
     }
@@ -195,7 +196,7 @@ void Menu::flpCreation()
     while (true)
     {
         std::cout << "Departing runway: ";
-        std::cin >> departRw;
+        std::getline(std::cin, departRw);
         if (Airport::validRunway(departRw, depart) == true)
             break;
     }
@@ -207,21 +208,36 @@ void Menu::flpCreation()
     while (true)
     {
         std::cout << "Arrival runway: ";
-        std::cin >> arrivalRw;
+        std::getline(std::cin, arrivalRw);
         if (Airport::validRunway(arrivalRw, arrival) == true)
             break;
     }
     //waypoint selection
     std::vector<Waypoint> routeWaypoints;
-    char option;
-    std::cout << "Waypoint selection: manual or automatic? [m/a]: ";
-    std::cin >> option;
-    if (option == 'm')
-        manualWaypointSelection(departIcao, arrivalIcao, routeWaypoints);
-    else if (option == 'a')
-        automaticWaypointSelection(departIcao, arrivalIcao, routeWaypoints);
-    else
-        throw AppException("Invalid option for waypoint selection");
+    while (true)
+    {
+        std::string option;
+        std::cout << "Waypoint selection: manual or automatic? [m/a]: ";
+        std::getline(std::cin, option);
+        try
+        {
+            if (option == "m")
+            {
+                manualWaypointSelection(departIcao, arrivalIcao, routeWaypoints);
+                break;
+            }
+            if (option == "a")
+            {
+                automaticWaypointSelection(departIcao, arrivalIcao, routeWaypoints);
+                break;
+            }
+            throw AppException("Invalid option for waypoint selection");
+        }
+        catch (const AppException& err)
+        {
+            std::cerr << err.what() << '\n';
+        }
+    }
     //displaying all the available planes
     std::cout << "Available planes: \n";
     for (const auto& i : aircraftsList)
@@ -236,8 +252,7 @@ void Menu::flpCreation()
     while (true)
     {
         std::cout << "Aircraft type: ";
-        std::string acType;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  //buffer clear
+        std::string acType;//buffer clear
         std::getline(std::cin, acType);
         if (Aircraft::findAircraft(aircraftsList, acType, ac) == true)
             break;
@@ -257,16 +272,33 @@ void Menu::flpCreation()
             std::cout << "Reason: The aircraft's performance parameters are based on combat conditions.\n";
             std::cout << "Suggestion: Enter lower values for long flights.\n";
             std::cout << "Want to enter those values again?[y/n]: ";
-            char choice;
-            std::cin >> choice;
-            if (choice == 'y')
-                while (true)
+            while (true)
+            {
+
+                std::string choice;
+                std::getline(std::cin, choice);
+                try
                 {
-                    ac->aircraftCategoryInit();
-                    if (ac->isDataValid() == true)
+                    if (choice == "y")
+                        while (true)
+                        {
+                            ac->aircraftCategoryInit();
+                            if (ac->isDataValid() == true)
+                            {
+                                std::cout << "Suggestion: for long flights, it is recommended to enter the values for contingency and reserve time!\n";
+                                break;
+                            }
+                        }
+                    else if (choice == "n")
                         break;
+                    else
+                        throw AppException("Invalid option! Try again!");
                 }
-            std::cout << "Suggestion: for long flights, it is recommended to enter the values for contingency and reserve time!\n";
+                catch (const AppException& err)
+                {
+                    std::cerr << err.what() << '\n';
+                }
+            }
         }
     }
     //cruising altitude selection
@@ -275,6 +307,7 @@ void Menu::flpCreation()
         if (readAutoFields("Cruise altitude: ", cruiseAltInput) == true)
             break;
     //FuelManagement input data
+    std::cout << '\n';
     std::cout << "==================\n";
     std::cout << "== Fuel entries ==\n";
     std::cout << "==================\n";
@@ -306,7 +339,7 @@ void Menu::flpCreation()
         departRw, arrivalRw,
              routeWaypoints, ac, fuelPlanning, perfCalc, cruiseAltInput};
         rt1.routeInit();
-        std::cout << rt1;
+        std::cout << '\n' << rt1;
         flightPlans.emplace_back(std::move(rt1));
         continuationConfirm();
     }
@@ -391,14 +424,25 @@ bool Menu::readAutoFields(const std::string& displayMessage, int& field)
 {
     std::cout << displayMessage;
     std::string inputValue;
-    std::cin >> inputValue;
+    std::getline(std::cin, inputValue);
     try
     {
         if (inputValue != "auto")
-            field = std::stoi(inputValue);
-        else
-            field = 0;
+        {
+            if (hasDigitsOnly<std::string>(inputValue, false) == true)
+            {
+                field = std::stoi(inputValue);
+                return true;
+            }
+            throw AppException("Invalid input! Try again!");
+        }
+        field = 0;
         return true;
+    }
+    catch (const AppException& err)
+    {
+        std::cerr << err.what() << '\n';
+        return false;
     }
     catch (const std::exception& err)
     {
@@ -411,14 +455,25 @@ bool Menu::readAutoFields(const std::string& displayMessage, double& field)
 {
     std::cout << displayMessage;
     std::string inputValue;
-    std::cin >> inputValue;
+    std::getline(std::cin, inputValue);
     try
     {
         if (inputValue != "auto")
-            field = std::stod(inputValue);
-        else
-            field = 0;
+        {
+            if (hasDigitsOnly<std::string>(inputValue, true) == true)
+            {
+                field = std::stod(inputValue);
+                return true;
+            }
+            throw AppException("Invalid input! Try again!");
+        }
+        field = 0;
         return true;
+    }
+    catch (const AppException& err)
+    {
+        std::cerr << err.what() << '\n';
+        return false;
     }
     catch (const std::exception& err)
     {

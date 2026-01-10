@@ -31,6 +31,7 @@ public:
     void displayIcaoCode() const;
     void readFromJson(const nlohmann::json& obj);
     void displayRunways() const;
+    void displayMetar() const;
 };
 
 #endif  //AIRPORT_H

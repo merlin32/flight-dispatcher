@@ -67,7 +67,7 @@ std::ostream& operator<<(std::ostream& os, const Metar& mt)
     os << mt.dewpoint << " ";
     os << "Q" << mt.qnh << " ";
     if (mt.additionalChanges != " ")
-        os << mt.additionalChanges << "\n";
+        os << mt.additionalChanges;
     return os;
 }
 void Metar::stringAttributesValidation(const std::string& value, const std::string& attributeName)

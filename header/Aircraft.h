@@ -19,7 +19,9 @@ private:
     double fuelBurnClimb, fuelBurnCruise, fuelBurnDescent;
     int maxCruisingAltitude;
     double fuelBurnIdle, fuelBurnLowAltitude;
+protected:
     double maxFreight;
+private:
     double takeoffReferenceDist;
     int climbRate, descentRate;
     double climbSpeed;
@@ -30,6 +32,8 @@ private:
     virtual void display(std::ostream &) const {}
     virtual void aircraftCategoryInit_() = 0;
     [[nodiscard]] virtual bool isDataValid_() const = 0;
+    virtual void readParamsFromJson_(const nlohmann::json& obj) = 0;
+    virtual void writeParamsToJson_(nlohmann::json& obj) = 0;
     static void attributeValidation(const std::string& value, const std::string& attributeName);
     static void attributeValidation(const double& value, const std::string& attributeName);
     static void attributeValidation(const int& value, const std::string& attributeName);
@@ -80,6 +84,8 @@ public:
     [[nodiscard]] double cruiseSpeedVsDescentRateRatio() const;
     [[nodiscard]] static int calculateDefaultTaxiTime();
     void readFromJson(const nlohmann::json& obj);
+    void readParamsFromJson(const nlohmann::json& obj);
+    void writeParamsToJson(nlohmann::json& obj);
     //check functions have been moved from FuelManagement, PerformanceCalculation and Route to get rid of some getters
     [[nodiscard]] bool fuelCapacityExceeded(const double& blockFuel) const;
     [[nodiscard]] bool maxPayloadExceeded(const double& payload) const;
@@ -94,6 +100,8 @@ public:
                                             std::shared_ptr<Aircraft>& plane);
     void displayAircraftType();
     friend bool operator<(const std::shared_ptr<Aircraft>& ac1, const std::shared_ptr<Aircraft>& ac2);
+    static void writeTypeToJson(nlohmann::json& obj, const std::shared_ptr<Aircraft>& plane);
+    void displayFuelCapacity() const;
 protected:
     Aircraft(const Aircraft& other) = default;
     Aircraft &operator=(const Aircraft& other) = default;

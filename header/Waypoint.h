@@ -58,6 +58,7 @@ public:
                                             const std::unordered_map<std::string, std::vector<std::string>>& waypointsAdjacencyList);
     friend std::ostream& operator<<(std::ostream& os, const Waypoint& wp);
     void readFromJson(const nlohmann::json& obj);
+    static void writeWpCodesToJson(nlohmann::json& obj, const std::vector<Waypoint>& waypoints);
 };
 
 #endif //WAYPOINT_H

@@ -1,6 +1,7 @@
 #include "../header/PassengerAircraft.h"
 #include "../header/JsonUtils.h"
 #include <iostream>
+#include <cmath>
 
 #include "../header/Exceptions.h"
 #include "../header/VectorUtils.h"
@@ -33,7 +34,7 @@ PassengerAircraft::PassengerAircraft(const std::string& category_,
                                                                       fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,
                                                                       climbRate_, descentRate_, climbSpeed_, minimumFlightDuration_}, maxPassengerCount{maxPassengerCount_},
                                                                   crewCount{crewCount_}{}
-std::shared_ptr<Aircraft> PassengerAircraft::clone() const{return std::make_shared<PassengerAircraft>(*this);}
+std::shared_ptr<Aircraft> PassengerAircraft::clone() const{return std::make_unique<PassengerAircraft>(*this);}
 //on average, a person is estimated to weight around 75 kg
 double PassengerAircraft::calculatePayload_() const{return 75 * (passengerNumber + crewCount) + freight;}
 //on average, a person is estimated to have 10kg of baggage
@@ -53,6 +54,9 @@ void PassengerAircraft::display(std::ostream &os) const
 {
     os << "Maximum passenger capacity: " << maxPassengerCount << '\n';
     os << "Crew count: " << crewCount << '\n';
+    os << '\n';
+    os << "Boarded passengers: " << passengerNumber << '\n';
+    os << "Loaded freight: " << freight << '\n';
 }
 bool PassengerAircraft::isDataValid_() const
 {
@@ -66,9 +70,23 @@ bool PassengerAircraft::isDataValid_() const
 }
 void PassengerAircraft::aircraftCategoryInit_()
 {
-    validInputItem<int>("Freight: ", freight);
-    validInputItem<int>("Passengers: ", passengerNumber);
+    char buf[8];
+    snprintf(buf, sizeof(buf), "%.2f", std::trunc(maxFreight * 100.0) / 100.0);
+    validInputItem<int>("Freight (KG) (MAX: " + std::string(buf) + " KG): ", freight);
+    validInputItem<int>("Passengers (MAX: " + std::to_string(maxPassengerCount) + "): ", passengerNumber);
 }
+void PassengerAircraft::readParamsFromJson_(const nlohmann::json& obj)
+{
+    freight = readAttribute<int>(obj, "freight");
+    passengerNumber = readAttribute<int>(obj, "passengerNumber");
+}
+void PassengerAircraft::writeParamsToJson_(nlohmann::json& obj)
+{
+    writeAttribute<int>(obj, "freight", freight);
+    writeAttribute<int>(obj, "passengerNumber", passengerNumber);
+}
+
+
 
 
 

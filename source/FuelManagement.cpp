@@ -2,7 +2,9 @@
 #include <iostream>
 
 #include "../header/Exceptions.h"
+#include "../header/JsonUtils.h"
 
+FuelManagement::FuelManagement() {}
 FuelManagement::FuelManagement(const double& contingencyPct_, const int& reserveTime_, const double& taxiFuel_, const double& blockFuel_)
 {
     //contingencyPct value needs to be 0.1 if auto is selected in the route initialization
@@ -102,6 +104,35 @@ std::ostream& operator<<(std::ostream& os, const FuelManagement& flm)
     os << "BLOCK FUEL: " << flm.blockFuel << " KG\n\n";
     return os;
 }
+void FuelManagement::readFromJson(const nlohmann::json& obj)
+{
+    tripFuel = readAttribute<double>(obj, "tripFuel");
+    contingencyPct = readAttribute<double>(obj, "contingencyPct");
+    contingencyFuel = readAttribute<double>(obj, "contingencyFuel");
+    reserveTime = readAttribute<int>(obj, "reserveTime");
+    reserveFuel = readAttribute<double>(obj, "reserveFuel");
+    taxiFuel = readAttribute<double>(obj, "taxiFuel");;
+    blockFuel = readAttribute<double>(obj, "blockFuel");;
+    calculatedBlockFuel = readAttribute<double>(obj, "calculatedBlockFuel");;
+    extraFuel = readAttribute<double>(obj, "extraFuel");;
+    minimumTakeoffFuel = readAttribute<double>(obj, "minimumTakeoffFuel");;
+    takeoffFuel = readAttribute<double>(obj, "takeoffFuel");;
+}
+void FuelManagement::writeToJson(nlohmann::json& obj) const
+{
+    writeAttribute<double>(obj, "tripFuel", tripFuel);
+    writeAttribute<double>(obj, "contingencyPct", contingencyPct);
+    writeAttribute<double>(obj, "contingencyFuel", contingencyFuel);
+    writeAttribute<int>(obj, "reserveTime", reserveTime);
+    writeAttribute<double>(obj, "reserveFuel", reserveFuel);
+    writeAttribute<double>(obj, "taxiFuel", taxiFuel);
+    writeAttribute<double>(obj, "blockFuel", blockFuel);
+    writeAttribute<double>(obj, "calculatedBlockFuel", calculatedBlockFuel);
+    writeAttribute<double>(obj, "extraFuel", extraFuel);
+    writeAttribute<double>(obj, "minimumTakeoffFuel", minimumTakeoffFuel);
+    writeAttribute<double>(obj, "takeoffFuel", takeoffFuel);
+}
+
 
 
 

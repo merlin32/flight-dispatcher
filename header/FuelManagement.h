@@ -20,6 +20,7 @@ private:
     double minimumTakeoffFuel = 0;
     double takeoffFuel = 0;
 public:
+    FuelManagement();
     explicit FuelManagement(const double& contingencyPct_, const int& reserveTime_, const double& taxiFuel_, const double& blockFuel_);
     ~FuelManagement();
 private:
@@ -37,6 +38,8 @@ public:
     void init(const double& climbDuration, const double& cruiseDuration, const double& descentDuration,
                             const std::shared_ptr<Aircraft>& plane);
     friend std::ostream& operator<<(std::ostream& os, const FuelManagement& flm);
+    void readFromJson(const nlohmann::json& obj);
+    void writeToJson(nlohmann::json& obj) const;
 };
 
 #endif //FUELMANAGEMENT_H

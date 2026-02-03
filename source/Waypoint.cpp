@@ -177,3 +177,10 @@ void Waypoint::readFromJson(const nlohmann::json& obj)
                              .isAirport(readAttribute<bool>(obj, "isAirport"))
                              .build();
 }
+void Waypoint::writeWpCodesToJson(nlohmann::json& obj, const std::vector<Waypoint>& waypoints)
+{
+    std::vector<std::string> codes;
+    for (const auto& i : waypoints)
+        codes.push_back(i.waypointCode);
+    writeAttribute<std::vector<std::string>>(obj, "selectedWaypoints", codes);
+}

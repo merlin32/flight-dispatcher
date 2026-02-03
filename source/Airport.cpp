@@ -112,6 +112,11 @@ void Airport::displayMetar() const
 {
     std::cout << this->airportWeather;
 }
+void Airport::writeIcaoToJson(nlohmann::json& obj, const std::string& key, const Airport& ap)
+{
+    writeAttribute(obj, key, ap.icaoCode);
+}
+
 
 
 

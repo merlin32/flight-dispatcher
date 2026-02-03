@@ -1,14 +1,15 @@
 #include "../header/Route.h"
 #include "../header/Exceptions.h"
+#include "../header/JsonUtils.h"
 
 Route::Route(std::string callsign_,
              const Airport& departure_, const Airport& arrival_, std::string departureRunway_, std::string arrivalRunway_,
-             const std::vector<Waypoint>& waypoints_, std::shared_ptr<Aircraft> plane_,
+             const std::vector<Waypoint>& waypoints_, const std::shared_ptr<Aircraft>& plane_,
              const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_,
              const int& cruisingAltitude_ = 1000):
                     callsign{std::move(callsign_)},
                     departure{departure_}, arrival{arrival_}, departureRunway{std::move(departureRunway_)},
-                    arrivalRunway{std::move(arrivalRunway_)}, waypoints{std::move(waypoints_)}, plane{std::move(plane_)},
+                    arrivalRunway{std::move(arrivalRunway_)}, waypoints{std::move(waypoints_)}, plane{plane_->clone()},
                     fuelPlanning{fuelPlanning_}, perfCalc{perfCalc_}, cruisingAltitude{cruisingAltitude_}
 {
     if (callsign.empty()) throw InvalidObjectCreation("Route", "callsign");
@@ -22,7 +23,7 @@ Route::Route(const Route& other) :
                     departureRunway{other.departureRunway},
                     arrivalRunway{other.arrivalRunway},
                     waypoints{other.waypoints},
-                    plane{other.plane},
+                    plane{other.plane ? other.plane->clone() : nullptr},
                     fuelPlanning{other.fuelPlanning},
                     perfCalc{other.perfCalc},
                     cruisingAltitude{other.cruisingAltitude}
@@ -207,5 +208,66 @@ void Route::displayShortInfo() const
     std::cout << ": ";
     plane->displayAircraftType();
     std::cout << '\n';
+}
+void Route::readFromJson(const nlohmann::json& obj,
+                         const std::vector<std::shared_ptr<Aircraft>>& aircraftsList,
+                         const std::vector<Airport>& airportsList,
+                         const std::vector<Waypoint>& waypointsList)
+{
+    routeDistance = readAttribute<double>(obj, "routeDistance");
+    callsign = readAttribute<std::string>(obj, "callsign");
+    departureRunway = readAttribute<std::string>(obj, "departureRunway");
+    arrivalRunway = readAttribute<std::string>(obj, "arrivalRunway");
+    blockTime = readAttribute<double>(obj, "blockTime");
+    airTime = readAttribute<double>(obj, "airTime");
+    climbDuration = readAttribute<double>(obj, "climbDuration");
+    cruiseDuration = readAttribute<double>(obj, "cruiseDuration");
+    descentDuration = readAttribute<double>(obj, "descentDuration");
+    TOC = readAttribute<double>(obj, "TOC");
+    TOD = readAttribute<double>(obj, "TOD");
+    cruisingAltitude = readAttribute<int>(obj, "cruisingAltitude");
+    fuelPlanning.readFromJson(obj);
+    perfCalc.readFromJson(obj);
+    std::string depIcao = readAttribute<std::string>(obj, "depIcao");
+    std::string arrIcao = readAttribute<std::string>(obj, "arrIcao");
+    std::string acType = readAttribute<std::string>(obj, "acType");
+    std::vector<std::string> selectedWaypoints = readAttribute<std::vector<std::string>>(obj, "selectedWaypoints");
+    if (Airport::findAirport(airportsList, depIcao, departure) == false)
+        throw InvalidFlightPlanParameters("Departure not found!");
+    if (Airport::findAirport(airportsList, arrIcao, arrival) == false)
+        throw InvalidFlightPlanParameters("Arrival not found!");
+    if (Aircraft::findAircraft(aircraftsList, acType, plane) == false)
+        throw InvalidFlightPlanParameters("Aircraft not found!");
+    plane->readParamsFromJson(obj);
+    for (const auto& wp : selectedWaypoints)
+    {
+        Waypoint temp {};
+        if (Waypoint::findWaypoint(waypointsList, wp, temp) == true)
+            waypoints.push_back(temp);
+        else
+            throw InvalidFlightPlanParameters("Waypoint not found!");
+    }
+}
+void Route::writeToJson(nlohmann::json& obj) const
+{
+    writeAttribute<double>(obj, "routeDistance", routeDistance);
+    writeAttribute<std::string>(obj, "callsign", callsign);
+    writeAttribute<std::string>(obj, "departureRunway", departureRunway);
+    writeAttribute<std::string>(obj, "arrivalRunway", arrivalRunway);
+    writeAttribute<double>(obj, "blockTime", blockTime);
+    writeAttribute<double>(obj, "airTime", airTime);
+    writeAttribute<double>(obj, "climbDuration", climbDuration);
+    writeAttribute<double>(obj, "cruiseDuration", cruiseDuration);
+    writeAttribute<double>(obj, "descentDuration", descentDuration);
+    writeAttribute<double>(obj, "TOC", TOC);
+    writeAttribute<double>(obj, "TOD", TOD);
+    writeAttribute<int>(obj, "cruisingAltitude", cruisingAltitude);
+    fuelPlanning.writeToJson(obj);
+    perfCalc.writeToJson(obj);
+    Airport::writeIcaoToJson(obj, "depIcao", departure);
+    Airport::writeIcaoToJson(obj, "arrIcao", arrival);
+    Aircraft::writeTypeToJson(obj, plane);
+    plane->writeParamsToJson(obj);
+    Waypoint::writeWpCodesToJson(obj, waypoints);
 }
 

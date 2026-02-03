@@ -2,6 +2,7 @@
 #include "../header/JsonUtils.h"
 #include "../header/VectorUtils.h"
 #include <iostream>
+#include <cmath>
 
 FighterJet::FighterJet(const std::string& category_,
                        const std::string& type_,
@@ -35,7 +36,7 @@ FighterJet::FighterJet(const std::string& category_,
                     climbRate_, descentRate_, climbSpeed_, minimumFlightDuration_},
                     maxNumberOfPilots{maxNumberOfPilots_}, maxMissileCount{maxMissileCount_},
                     maxMissileWeight{maxMissileWeight_},maxCannonAmmoWeight{maxCannonAmmoWeight_}{}
-std::shared_ptr<Aircraft> FighterJet::clone() const {return std::make_shared<FighterJet>(*this);}
+std::shared_ptr<Aircraft> FighterJet::clone() const {return std::make_unique<FighterJet>(*this);}
 double FighterJet::calculatePayload_() const
 {
     return numberOfPilots * PILOT_WEIGHT + missileCount * weightPerMissile + cannonAmmoWeight;
@@ -56,7 +57,11 @@ void FighterJet::display(std::ostream &os) const
     os << "Maximum number of pilots: " << maxNumberOfPilots << '\n';
     os << "Maximum missile count: " << maxMissileCount << '\n';
     os << "Maximum missile weight: " << maxMissileWeight << '\n';
-    os << "Maximum cannon ammo weight: " << maxCannonAmmoWeight << '\n';
+    os << "Maximum cannon ammo weight: " << maxCannonAmmoWeight << "\n\n";
+    os << "Number of pilots in charge: " << numberOfPilots << '\n';
+    os << "Number of missiles loaded: " << missileCount << '\n';
+    os << "Weight per missile: " << weightPerMissile << " KG\n";
+    os << "Cannon ammo weight: " << cannonAmmoWeight << " KG\n";
 }
 bool FighterJet::isDataValid_() const
 {
@@ -84,14 +89,32 @@ bool FighterJet::isDataValid_() const
 }
 void FighterJet::aircraftCategoryInit_()
 {
+    char buf[8];
+    snprintf(buf, sizeof(buf), "%.2f", std::trunc(maxMissileWeight * 100.0) / 100.0);
     if (maxNumberOfPilots > 1)
-        validInputItem<int>("Number of pilots: ", numberOfPilots);
+        validInputItem<int>("Number of pilots (MAX: " + std::to_string(maxNumberOfPilots) + "): ", numberOfPilots);
     else
         numberOfPilots = 1;
-    validInputItem<int>("Number of missiles: ", missileCount);
-    validInputItem<double>("Missile weight: ", weightPerMissile);
-    validInputItem<double>("Cannon ammo weight: ", cannonAmmoWeight);
+    validInputItem<int>("Number of missiles (MAX: " + std::to_string(maxMissileCount) + "): ", missileCount);
+    validInputItem<double>("Missile weight (MAX: " + std::string(buf) + " KG): ", weightPerMissile);
+    snprintf(buf, sizeof(buf), "%.2f", std::trunc(maxCannonAmmoWeight * 100.0) / 100.0);
+    validInputItem<double>("Cannon ammo weight (MAX: " + std::string(buf) + " KG): ", cannonAmmoWeight);
 }
+void FighterJet::readParamsFromJson_(const nlohmann::json& obj)
+{
+    numberOfPilots = readAttribute<int>(obj, "numberOfPilots");
+    missileCount = readAttribute<int>(obj, "missileCount");
+    weightPerMissile = readAttribute<double>(obj, "weightPerMissile");
+    cannonAmmoWeight = readAttribute<double>(obj, "cannonAmmoWeight");
+}
+void FighterJet::writeParamsToJson_(nlohmann::json& obj)
+{
+    writeAttribute<int>(obj, "numberOfPilots", numberOfPilots);
+    writeAttribute<int>(obj, "missileCount", missileCount);
+    writeAttribute<double>(obj, "weightPerMissile", weightPerMissile);
+    writeAttribute<double>(obj, "cannonAmmoWeight", cannonAmmoWeight);
+}
+
 bool FighterJet::maxPilotCountExceeded() const {return numberOfPilots > maxNumberOfPilots;}
 bool FighterJet::maxMissileCountExceeded() const {return missileCount > maxMissileCount;}
 bool FighterJet::maxMissileWeightExceeded() const {return weightPerMissile > maxMissileWeight;}

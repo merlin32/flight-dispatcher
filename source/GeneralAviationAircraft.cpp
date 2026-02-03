@@ -2,6 +2,7 @@
 #include "../header/JsonUtils.h"
 #include "../header/VectorUtils.h"
 #include <iostream>
+#include <cmath>
 
 
 GeneralAviationAircraft::GeneralAviationAircraft(const std::string& category_,
@@ -32,7 +33,7 @@ GeneralAviationAircraft::GeneralAviationAircraft(const std::string& category_,
                                                                                             fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,
                                                                                             climbRate_, descentRate_, climbSpeed_, minimumFlightDuration_},
                                                                                         maxPilotCount{maxPilotCount_}, maxPassengersNumber{maxPassengersNumber_}{}
-std::shared_ptr<Aircraft> GeneralAviationAircraft::clone() const{return std::make_shared<GeneralAviationAircraft>(*this);}
+std::shared_ptr<Aircraft> GeneralAviationAircraft::clone() const{return std::make_unique<GeneralAviationAircraft>(*this);}
 double GeneralAviationAircraft::calculatePayload_() const
 {
     return 75 * (pilotsCount + passengersNumber) + baggageWeight;
@@ -47,9 +48,10 @@ void GeneralAviationAircraft::readFromJson_(const nlohmann::json& obj)
 void GeneralAviationAircraft::display(std::ostream &os) const
 {
     os << "Maximum number of pilots: " << maxPilotCount << '\n';
-    os << "Maximum number of passengers: " << maxPassengersNumber << '\n';
+    os << "Maximum number of passengers: " << maxPassengersNumber << "\n\n";
     os << "Number of pilots in charge: " << pilotsCount << '\n';
     os << "Number of boarded passengers: " << passengersNumber << '\n';
+    os << "Total baggage weight: " << baggageWeight << " KG\n";
 }
 bool GeneralAviationAircraft::maxPilotCountExceeded() const{return pilotsCount > maxPilotCount;}
 bool GeneralAviationAircraft::maxPassengersNumberExceeded() const{return passengersNumber > maxPassengersNumber;}
@@ -69,11 +71,26 @@ bool GeneralAviationAircraft::isDataValid_() const
 }
 void GeneralAviationAircraft::aircraftCategoryInit_()
 {
+    char buf[8];
+    snprintf(buf, sizeof(buf), "%.2f", std::trunc(maxFreight * 100.0) / 100.0);
     if (maxPilotCount > 1)
-        validInputItem<int>("Number of pilots: ", pilotsCount);
-    validInputItem<int>("Passengers: ", passengersNumber);
-    validInputItem<double>("Baggage quantity: ", baggageWeight);
+        validInputItem<int>("Number of pilots (MAX: " + std::to_string(maxPilotCount) + "): ", pilotsCount);
+    validInputItem<int>("Passengers (MAX: " + std::to_string(maxPassengersNumber) + "): ", passengersNumber);
+    validInputItem<double>("Baggage quantity (MAX: " + std::string(buf) + " KG): ", baggageWeight);
 }
+void GeneralAviationAircraft::readParamsFromJson_(const nlohmann::json& obj)
+{
+    pilotsCount = readAttribute<int>(obj, "pilotsCount");
+    passengersNumber = readAttribute<int>(obj, "passengersNumber");
+    baggageWeight = readAttribute<double>(obj, "baggageWeight");
+}
+void GeneralAviationAircraft::writeParamsToJson_(nlohmann::json& obj)
+{
+    writeAttribute<int>(obj, "pilotsCount", pilotsCount);
+    writeAttribute<int>(obj, "passengersNumber", passengersNumber);
+    writeAttribute<double>(obj, "baggageWeight", baggageWeight);
+}
+
 
 
 

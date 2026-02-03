@@ -1,4 +1,5 @@
 #include "../header/PerformanceCalculation.h"
+#include "../header/JsonUtils.h"
 #include <iostream>
 
 #include "../header/Exceptions.h"
@@ -85,6 +86,29 @@ std::ostream& operator<<(std::ostream& os, const PerformanceCalculation& pfc)
     os << "LANDING DISTANCE: " << pfc.landingDistance << " M\n\n";
     return os;
 }
+void PerformanceCalculation::readFromJson(const nlohmann::json& obj)
+{
+    payload = readAttribute<double>(obj, "payload");
+    freight = readAttribute<double>(obj, "freight");
+    totalWeight = readAttribute<double>(obj, "totalWeight");
+    ZFW = readAttribute<double>(obj, "ZFW");
+    TOW = readAttribute<double>(obj, "TOW");
+    LDW = readAttribute<double>(obj, "LDW");
+    takeoffDistance = readAttribute<double>(obj, "takeoffDistance");
+    landingDistance = readAttribute<double>(obj, "landingDistance");
+}
+void PerformanceCalculation::writeToJson(nlohmann::json& obj) const
+{
+    writeAttribute<double>(obj, "payload", payload);
+    writeAttribute<double>(obj, "freight", freight);
+    writeAttribute<double>(obj, "totalWeight", totalWeight);
+    writeAttribute<double>(obj, "ZFW", ZFW);
+    writeAttribute<double>(obj, "TOW", TOW);
+    writeAttribute<double>(obj, "LDW", LDW);
+    writeAttribute<double>(obj, "takeoffDistance", takeoffDistance);
+    writeAttribute<double>(obj, "landingDistance", landingDistance);
+}
+
 
 
 

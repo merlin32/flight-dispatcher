@@ -25,11 +25,12 @@ private:
     std::shared_ptr<Aircraft> plane;
     FuelManagement fuelPlanning;
     PerformanceCalculation perfCalc;
-    int cruisingAltitude;
+    int cruisingAltitude = 0;
 public:
+    Route() = default;
     explicit Route(std::string callsign_,
                     const Airport& departure_, const Airport& arrival_, std::string departureRunway_, std::string arrivalRunway_,
-                    const std::vector<Waypoint>& waypoints_, std::shared_ptr<Aircraft> plane_,
+                    const std::vector<Waypoint>& waypoints_, const std::shared_ptr<Aircraft>& plane_,
                     const FuelManagement& fuelPlanning_, const PerformanceCalculation& perfCalc_,
                     const int& cruisingAltitude_);
     Route(const Route& other);
@@ -38,6 +39,11 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Route& rt);
     void routeInit();
     void displayShortInfo() const;
+    void readFromJson(const nlohmann::json& obj,
+                         const std::vector<std::shared_ptr<Aircraft>>& aircraftsList,
+                         const std::vector<Airport>& airportsList,
+                         const std::vector<Waypoint>& waypointsList);
+    void writeToJson(nlohmann::json& obj) const;
 private:
     void setRouteDistance();
     void setClimbDuration();

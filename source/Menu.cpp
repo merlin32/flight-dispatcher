@@ -63,6 +63,32 @@ void Menu::populateAdjacencyList(std::ifstream waypointsAdjacencyJson)
     }
     waypointsAdjacencyJson.close();
 }
+void Menu::populateRoutes(std::ifstream routesJson)
+{
+    nlohmann::json data = nlohmann::json::parse(routesJson);
+    for (const auto& i : data)
+    {
+        Route rt{};
+        rt.readFromJson(i, aircraftsList, airportsList, waypointsList);
+        flightPlans.push_back(rt);
+    }
+    routesJson.close();
+}
+void Menu::saveFlightPlans()
+{
+    std::ofstream routesJson("../routes.json", std::ios::out | std::ios::trunc);
+    if (!routesJson.is_open())
+        throw InvalidFile("routes.json");
+    nlohmann::json savedData = nlohmann::json::array();
+    for (const auto& rt : flightPlans)
+    {
+        nlohmann::json routeObj;
+        rt.writeToJson(routeObj);
+        savedData.push_back(routeObj);
+    }
+    routesJson << std::setw(4) << savedData;
+    routesJson.close();
+}
 
 
 void Menu::initLocalData()
@@ -71,10 +97,12 @@ void Menu::initLocalData()
     std::ifstream airportsJson;
     std::ifstream waypointsJson;
     std::ifstream waypointsAdjacencyJson;
+    std::ifstream routesJson;
     aircraftsJson.open("aircrafts.json");
     airportsJson.open("airports.json");
     waypointsJson.open("waypoints.json");
     waypointsAdjacencyJson.open("waypointsAdjacency.json");
+    routesJson.open("routes.json");
     if (!aircraftsJson.is_open())
         throw InvalidFile("aircrafts.json");
     if (!airportsJson.is_open())
@@ -83,10 +111,19 @@ void Menu::initLocalData()
         throw InvalidFile("waypoints.json");
     if (!waypointsAdjacencyJson.is_open())
         throw InvalidFile("waypointsAdjacency.json");
+    if (!routesJson.is_open())
+        throw InvalidFile("routes.json");
     populateAircrafts(std::move(aircraftsJson));
     populateAirports(std::move(airportsJson));
     populateWaypoints(std::move(waypointsJson));
     populateAdjacencyList(std::move(waypointsAdjacencyJson));
+    if (routesJson.peek() != std::ifstream::traits_type::eof()) {
+        populateRoutes(std::move(routesJson));
+    } else {
+        routesJson.close();
+    }
+
+
 }
 void Menu::manualWaypointSelection(const std::string& departIcao, const std::string& arrivalIcao,
                                     std::vector<Waypoint>& routeWaypoints)
@@ -307,9 +344,10 @@ void Menu::flpCreation()
     //cruising altitude selection
     int cruiseAltInput;
     while (true)
-        if (readAutoFields("Cruise altitude: ", cruiseAltInput) == true)
+        if (readAutoFields("Cruise altitude (FT): ", cruiseAltInput) == true)
             break;
     //FuelManagement input data
+    ac->displayFuelCapacity();
     std::cout << '\n';
     std::cout << "==================\n";
     std::cout << "== Fuel entries ==\n";
@@ -317,19 +355,19 @@ void Menu::flpCreation()
 
     double ctgPctInput;
     while (true)
-        if (readAutoFields("Contingency: ", ctgPctInput) == true)
+        if (readAutoFields("Contingency (PCT): ", ctgPctInput) == true)
             break;
     int rsvTimeInput;
     while (true)
-        if (readAutoFields("Reserve Time: ", rsvTimeInput) == true)
+        if (readAutoFields("Reserve Time (MIN): ", rsvTimeInput) == true)
             break;
     double txFuelInput;
     while (true)
-        if (readAutoFields("Taxi Fuel: ", txFuelInput) == true)
+        if (readAutoFields("Taxi Fuel (KG): ", txFuelInput) == true)
             break;
     double blkFuelInput;
     while (true)
-        if (readAutoFields("Block Fuel: ", blkFuelInput) == true)
+        if (readAutoFields("Block Fuel (KG): ", blkFuelInput) == true)
             break;
     FuelManagement fuelPlanning{ctgPctInput, rsvTimeInput, txFuelInput, blkFuelInput};
     //performance calculation data init
@@ -352,10 +390,10 @@ void Menu::flpCreation()
     }
 }
 
-void Menu::flpSelection()
+void Menu::flpDisplay()
 {
     std::cout << "=======================================\n";
-    std::cout << "===== Flight Plan Selection Menu  =====\n";
+    std::cout << "========= Saved Flight Plans  =========\n";
     std::cout << "=======================================\n\n";
     for (size_t i = 0; i < flightPlans.size(); i++)
     {
@@ -363,6 +401,11 @@ void Menu::flpSelection()
         flightPlans[i].displayShortInfo();
     }
     std::cout << flightPlans.size() + 1 << ") Back\n\n";
+}
+
+void Menu::flpSelection()
+{
+    flpDisplay();
     std::cout << "|>";
     size_t option;
     std::cin >> option;
@@ -381,16 +424,38 @@ void Menu::flpSelection()
         std::cerr << err.what() << '\n';
     }
 }
+void Menu::deleteFlightPlan()
+{
+    flpDisplay();
+    std::cout << "Flight plan to be deleted or go back: ";
+    size_t option;
+    std::cin >> option;
+    try
+    {
+        if (option > flightPlans.size() + 1)
+            throw AppException("No such option available");
+        if (option == flightPlans.size() + 1)
+            return;
 
+        flightPlans.erase(flightPlans.begin() + (option - 1));
+        std::cout << "Flight plan deleted successfully!\n";
+        continuationConfirm();
+    }
+    catch (const AppException& err)
+    {
+        std::cerr << err.what() << '\n';
+    }
+}
 
-void Menu::mainMenu()
+void Menu::mainMenu(bool& sessionTerminated)
 {
     std::cout << "=======================================\n";
     std::cout << "==== Flight Dispatcher - Main Menu ====\n";
     std::cout << "=======================================\n\n";
     std::cout << "\t1) Create new flight plan\n";
     std::cout << "\t2) Open existing flight plan\n";
-    std::cout << "\t3) Exit\n";
+    std::cout << "\t3) Delete an existing flight plan\n";
+    std::cout << "\t4) Exit\n";
     std::cout << "|>";
     try
     {
@@ -403,10 +468,11 @@ void Menu::mainMenu()
         }
         switch (option)
         {
-        case 1: flpCreation(); break;
-        case 2: flpSelection(); break;
-        case 3: exit(0);
-        default: std::cerr << "Unknown option! Please enter a valid option!\n"; break;
+            case 1: flpCreation(); break;
+            case 2: flpSelection(); break;
+            case 3: deleteFlightPlan(); break;
+            case 4: {saveFlightPlans(); sessionTerminated = true; break;}
+            default: std::cerr << "Unknown option! Please enter a valid option!\n"; break;
         }
         std::cout << "\n\n\n";
     }

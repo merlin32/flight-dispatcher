@@ -161,6 +161,8 @@ double Aircraft::getMaxTakeoffWeight() const{return this->maxTakeoffWeight;}
 double Aircraft::calculateFreight() const{return calculateFreight_();}
 double Aircraft::calculatePayload() const{return calculatePayload_();}
 void Aircraft::aircraftCategoryInit(){aircraftCategoryInit_();}
+void Aircraft::readParamsFromJson(const nlohmann::json& obj) {readParamsFromJson_(obj);}
+void Aircraft::writeParamsToJson(nlohmann::json& obj) {writeParamsToJson_(obj);}
 
 //validations
 bool Aircraft::isDataValid() const {return isDataValid_();}
@@ -222,6 +224,16 @@ void Aircraft::attributeValidation(const int& value, const std::string& attribut
 }
 //others
 void Aircraft::displayAircraftType() {std::cout << type;}
+void Aircraft::writeTypeToJson(nlohmann::json& obj, const std::shared_ptr<Aircraft>& plane)
+{
+    writeAttribute(obj, "acType", plane->type);
+}
+void Aircraft::displayFuelCapacity() const
+{
+    std::cout << "The fuel capacity of the selected aircraft is: " << std::trunc(fuelCapacity * 100) / 100 << " KG\n\n";
+}
+
+
 
 
 

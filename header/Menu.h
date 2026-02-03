@@ -17,6 +17,10 @@ private:
     void populateAirports(std::ifstream airportsJson);
     void populateWaypoints(std::ifstream waypointsJson);
     void populateAdjacencyList(std::ifstream waypointsAdjacencyJson);
+    void populateRoutes(std::ifstream routesJson);
+    void saveFlightPlans();
+    void deleteFlightPlan();
+    void flpDisplay();
     static void continuationConfirm();
     void manualWaypointSelection(const std::string& departIcao, const std::string& arrivalIcao,
                                                     std::vector<Waypoint>& routeWaypoints);
@@ -28,7 +32,7 @@ public:
     void initLocalData();
     void flpCreation();
     void flpSelection();
-    void mainMenu();
+    void mainMenu(bool& sessionTerminated);
 };
 
 #endif //MENU_H

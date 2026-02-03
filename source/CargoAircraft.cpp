@@ -2,6 +2,7 @@
 #include "../header/JsonUtils.h"
 #include "../header/VectorUtils.h"
 #include <iostream>
+#include <cmath>
 
 CargoAircraft::CargoAircraft(const std::string& category_,
                              const std::string& type_,
@@ -32,7 +33,7 @@ CargoAircraft::CargoAircraft(const std::string& category_,
                                                                           fuelBurnIdle_, fuelBurnLowAltitude_, maxFreight_, takeoffReferenceDist_,
                                                                           climbRate_, descentRate_, climbSpeed_, minimumFlightDuration_}, maxContainersNum{maxContainersNum_},
                                                                       crewCount{crewCount_}, maxContainerWeight{maxContainerWeight_}{}
-std::shared_ptr<Aircraft> CargoAircraft::clone() const{return std::make_shared<CargoAircraft>(*this);}
+std::shared_ptr<Aircraft> CargoAircraft::clone() const{return std::make_unique<CargoAircraft>(*this);}
 double CargoAircraft::calculatePayload_() const
 {
     return 75 * crewCount + calculateFreight_();
@@ -55,11 +56,11 @@ void CargoAircraft::display(std::ostream &os) const
 {
     os << "Maximum containers available to load: " << maxContainersNum << '\n';
     os << "Crew count: " << crewCount << '\n';
+    os << "Maximum allowed container's weight: " << maxContainerWeight << " KG\n\n";
     os << "Containers loaded: " << containersNum << '\n';
-    os << "Maximum allowed container's weight: " << maxContainerWeight << '\n';
     os << "Each container's weight: \n";
     for (int i = 0; i < containersNum; i++)
-        os << "\tContainer " << i << ": " << containersWeights[i] << '\n';
+        os << "\tContainer " << i + 1 << ": " << containersWeights[i] << " KG\n";
 }
 bool CargoAircraft::maxContainersNumExceeded() const {return containersNum > maxContainersNum;}
 bool CargoAircraft::maxContainerWeightExceeded() const
@@ -85,10 +86,25 @@ bool CargoAircraft::isDataValid_() const
 }
 void CargoAircraft::aircraftCategoryInit_()
 {
-    validInputItem<int>("Number of containers: ", containersNum);
-    std::cout << "Enter each container's weight: \n";
+    char buf[8];
+    snprintf(buf, sizeof(buf), "%.2f", std::trunc(maxContainerWeight * 100.0) / 100.0);
+    validInputItem<int>("Number of containers (MAX: " + std::to_string(maxContainersNum) + "): ", containersNum);
+    std::cout << "Enter each container's weight (MAX: " + std::string(buf) + " KG): \n";
+    containersWeights.clear();
     validInputVector<double>("Container ", containersWeights, containersNum);
 }
+void CargoAircraft::readParamsFromJson_(const nlohmann::json& obj)
+{
+    containersNum = readAttribute<int>(obj, "containersNum");
+    containersWeights = readAttribute<std::vector<double>>(obj, "containersWeights");
+}
+void CargoAircraft::writeParamsToJson_(nlohmann::json& obj)
+{
+    writeAttribute<int>(obj, "containersNum", containersNum);
+    writeAttribute<std::vector<double>>(obj, "containersWeights", containersWeights);
+}
+
+
 
 
 

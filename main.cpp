@@ -6,8 +6,13 @@ int main() {
     {
         Menu flightDispatcher;
         flightDispatcher.initLocalData();
+        bool sessionTerminated = false;
         while (true)
-            flightDispatcher.mainMenu();
+        {
+            flightDispatcher.mainMenu(sessionTerminated);
+            if (sessionTerminated)
+                break;
+        }
     }
     catch (const InvalidFile& err)
     {
@@ -20,6 +25,10 @@ int main() {
     catch (const InvalidObjectCreation& err)
     {
         std::cerr << "Error creating object: " << err.what() << '\n';
+    }
+    catch (const InvalidFlightPlanParameters& err)
+    {
+        std::cerr << "Flight plan parameter error: " << err.what() << '\n';
     }
     catch (const AppException& err)
     {

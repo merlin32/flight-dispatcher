@@ -15,6 +15,8 @@ private:
     void readFromJson_(const nlohmann::json& obj) override;
     void display(std::ostream &os) const override;
     void aircraftCategoryInit_() override;
+    void readParamsFromJson_(const nlohmann::json& obj) override;
+    void writeParamsToJson_(nlohmann::json& obj) override;
     [[nodiscard]] bool isDataValid_() const override;
 public:
     PassengerAircraft() = default;

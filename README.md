@@ -17,8 +17,9 @@ About SimBrief: [Official SimBrief Website](https://www.simbrief.com/home/?page=
 
 ### Navigating through the app
 
-The app contains two menus: one to create a flight plan and one to 
-show each created flight plan.
+The app contains three menus: one to create a flight plan, one to 
+show each created flight plan and one to delete flight plans the user has
+created.
 
 **Creating a new flight plan**
 

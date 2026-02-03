@@ -32,6 +32,7 @@ public:
     void readFromJson(const nlohmann::json& obj);
     void displayRunways() const;
     void displayMetar() const;
+    static void writeIcaoToJson(nlohmann::json& obj, const std::string& key, const Airport& ap);
 };
 
 #endif  //AIRPORT_H

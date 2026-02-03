@@ -32,6 +32,8 @@ public:
     void init(const std::shared_ptr<Aircraft>& plane, const FuelManagement& fuelPlanning, const Airport& departure,
                                   const Airport& arrival, const std::string& arrivalRunway);
     friend std::ostream& operator<<(std::ostream& os, const PerformanceCalculation& pfc);
+    void readFromJson(const nlohmann::json& obj);
+    void writeToJson(nlohmann::json& obj) const;
 };
 
 #endif //PERFORMANCECALCULATION_H

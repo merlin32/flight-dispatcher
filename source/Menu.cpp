@@ -76,7 +76,7 @@ void Menu::populateRoutes(std::ifstream routesJson)
 }
 void Menu::saveFlightPlans()
 {
-    std::ofstream routesJson("../routes.json", std::ios::out | std::ios::trunc);
+    std::ofstream routesJson("routes.json", std::ios::out | std::ios::trunc);
     if (!routesJson.is_open())
         throw InvalidFile("routes.json");
     nlohmann::json savedData = nlohmann::json::array();
@@ -112,7 +112,15 @@ void Menu::initLocalData()
     if (!waypointsAdjacencyJson.is_open())
         throw InvalidFile("waypointsAdjacency.json");
     if (!routesJson.is_open())
+    {
+        std::ofstream tempCreator("routes.json");
+        tempCreator << "[]";
+        routesJson.clear();
+        routesJson.open("routes.json");
+    }
+    if (!routesJson.is_open())
         throw InvalidFile("routes.json");
+
     populateAircrafts(std::move(aircraftsJson));
     populateAirports(std::move(airportsJson));
     populateWaypoints(std::move(waypointsJson));

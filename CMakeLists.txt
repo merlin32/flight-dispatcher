@@ -113,6 +113,6 @@ if(APPLE)
 endif()
 
 copy_files(FILES tastatura.txt airports.json waypoints.json aircrafts.json
-            waypointsAdjacency.json routes.json COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
+            waypointsAdjacency.json COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
 # copy_files(FILES tastatura.txt config.json DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
 # copy_files(DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
